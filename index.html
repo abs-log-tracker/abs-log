@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>継続型 腹筋引き締めLOG</title>
+  <!-- Chart.js 読み込み -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bg-color: #121212;
+      --card-bg: #1e1e1e;
+      --accent-color: #ff5722;
+      --accent-gold: #ffd700;
+      --text-color: #f5f5f5;
+      --text-dim: #aaa;
+      --border-color: #333;
+      --success-color: #4caf50;
+      --rest-color: #2196f3;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      padding: 12px;
+      padding-bottom: 40px;
+      line-height: 1.5;
+    }
+
+    .app-header {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .app-header h1 {
+      font-size: 1.3rem;
+      color: var(--accent-color);
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 8px;
+    }
+
+    .recommend-banner {
+      background: rgba(255, 87, 34, 0.15);
+      border: 1px solid var(--accent-color);
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 0.8rem;
+      color: #fff;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .rest-banner {
+      background: rgba(33, 150, 243, 0.15);
+      border: 1px solid var(--rest-color);
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 0.8rem;
+      color: #fff;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .recipe-box {
+      background: #252525;
+      border-left: 4px solid var(--accent-gold);
+      padding: 10px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      font-size: 0.82rem;
+    }
+
+    .recipe-title {
+      font-weight: bold;
+      color: var(--accent-gold);
+      margin-bottom: 4px;
+    }
+
+    .time-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .time-tab {
+      flex: 1;
+      padding: 10px;
+      text-align: center;
+      background: #2a2a2a;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      cursor: pointer;
+    }
+
+    .time-tab.active {
+      background: linear-gradient(135deg, #ff5722, #e64a19);
+      color: #fff;
+      border-color: var(--accent-color);
+    }
+
+    .level-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .level-badge {
+      background: linear-gradient(135deg, #ff5722, #f44336);
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.85rem;
+      padding: 6px 12px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .progress-bar-bg {
+      flex: 1;
+      height: 12px;
+      background-color: #333;
+      border-radius: 6px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ff9800, #ffd700);
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      margin-top: 10px;
+      margin-bottom: 4px;
+    }
+
+    input[type="date"], input[type="number"], select {
+      width: 100%;
+      padding: 10px;
+      background-color: #2a2a2a;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .video-container {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%;
+      background: #000;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 12px;
+    }
+
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .video-status {
+      margin-top: 8px;
+      padding: 8px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      text-align: center;
+      font-weight: bold;
+      background: #2a2a2a;
+      color: var(--text-dim);
+    }
+
+    .video-status.completed {
+      background: rgba(76, 175, 80, 0.2);
+      color: var(--success-color);
+      border: 1px solid var(--success-color);
+    }
+
+    .reps-inputs {
+      display: none;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .checkbox-group {
+      margin-top: 12px;
+    }
+
+    .checkbox-group label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: #fff;
+      cursor: pointer;
+      margin-top: 6px;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent-color);
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: linear-gradient(135deg, #ff5722, #e64a19);
+      color: #fff;
+      border: none;
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 800;
+      margin-top: 16px;
+      cursor: pointer;
+    }
+
+    .btn-submit:disabled {
+      background: #444;
+      color: #888;
+      cursor: not-allowed;
+    }
+
+    .chart-container {
+      position: relative;
+      width: 100%;
+      height: 200px;
+      margin-top: 10px;
+    }
+
+    /* 月選択ヘッダー */
+    .month-selector {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .month-btn {
+      background: #2a2a2a;
+      border: 1px solid var(--border-color);
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: bold;
+    }
+
+    .month-title {
+      font-size: 0.95rem;
+      font-weight: bold;
+      color: var(--accent-gold);
+    }
+
+    .month-summary {
+      display: flex;
+      justify-content: space-around;
+      background: #252525;
+      padding: 6px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      margin-bottom: 10px;
+      border: 1px solid #333;
+    }
+
+    .stamp-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+    }
+
+    .stamp-box {
+      background: #252525;
+      border: 1px solid #333;
+      border-radius: 6px;
+      padding: 4px 2px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      min-height: 72px;
+    }
+
+    .stamp-day-title {
+      font-weight: bold;
+      color: #bbb;
+      margin-bottom: 2px;
+    }
+
+    .stamp-slot-container {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      width: 100%;
+      align-items: center;
+    }
+
+    .stamp-slot {
+      width: 100%;
+      height: 20px;
+      border-radius: 4px;
+      background: #1e1e1e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      border: 1px dashed #444;
+    }
+
+    .stamp-slot.m-done {
+      background: rgba(255, 152, 0, 0.25);
+      border: 1px solid #ff9800;
+    }
+
+    .stamp-slot.n-done {
+      background: rgba(33, 150, 243, 0.25);
+      border: 1px solid #2196f3;
+    }
+
+    .stamp-info {
+      font-size: 0.55rem;
+      color: #fff;
+      text-align: center;
+      margin-top: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-header">
+    <h1>🔥 継続型 腹筋引き締めLOG</h1>
+  </div>
+
+  <!-- 累計・レベルエリア -->
+  <div class="card">
+    <div class="level-container">
+      <div class="level-badge" id="levelBadge">Lv.1 継続ビギナー</div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progressFill"></div>
+      </div>
+    </div>
+    <div style="font-size: 0.75rem; color: var(--text-dim); text-align: right;" id="stampCounter">
+      累計獲得スタンプ: 0 個
+    </div>
+  </div>
+
+  <!-- トレーニング＆食事サポートエリア -->
+  <div class="card">
+    <div class="card-title">
+      <span>📝 今日のトレーニング＆食事サポート</span>
+    </div>
+
+    <div class="rest-banner" id="restBanner" style="display: none;">
+      <span>🟢</span>
+      <span id="restMsg">【レストデー推奨】連続トレーニングお疲れ様です！本日は軽めのストレッチにして体を休めましょう。</span>
+    </div>
+
+    <div class="recommend-banner" id="recommendBanner">
+      <span>🤖</span>
+      <span id="recommendMsg">本日の最適メニューを自動判定中...</span>
+    </div>
+
+    <div class="recipe-box">
+      <div class="recipe-title" id="recipeTitle">💡 本日の高タンパク・低脂質レシピ提案</div>
+      <div id="recipeDesc">鶏むね肉のレンジしっとり塩レモン蒸し（油不使用でPFCバッチリ）</div>
+    </div>
+
+    <div class="time-tabs">
+      <div class="time-tab active" id="tabMorning" onclick="switchTimeMode('morning')">🌅 朝用メニュー</div>
+      <div class="time-tab" id="tabNight" onclick="switchTimeMode('night')">🌃 夜用メニュー</div>
+    </div>
+
+    <label>日付</label>
+    <input type="date" id="logDate">
+
+    <label>体重 (kg) <span style="font-size: 0.75rem; color: #888;">※朝の入力推奨</span></label>
+    <input type="number" id="weight" step="0.1" placeholder="例: 65.0" onchange="evaluateDaySupport()">
+
+    <label>運動コース選択</label>
+    <select id="workoutCourse" onchange="onCourseChange()"></select>
+
+    <div class="video-container">
+      <div id="player"></div>
+    </div>
+
+    <div class="video-status" id="videoStatus">
+      ▶️ 動画を最後まで再生すると完走認証されます
+    </div>
+
+    <div class="reps-inputs" id="repsInputs">
+      <div>
+        <label>スクワット(回)</label>
+        <input type="number" id="sqReps" placeholder="30">
+      </div>
+      <div>
+        <label>腕立て伏せ(回)</label>
+        <input type="number" id="puReps" placeholder="20">
+      </div>
+    </div>
+
+    <div class="checkbox-group">
+      <label><input type="checkbox" id="checkFast"> 21時以降の固形物断食達成</label>
+      <label><input type="checkbox" id="checkOil"> 調理油不使用 / 脱脂徹底</label>
+    </div>
+
+    <button class="btn-submit" id="btnSubmit" onclick="saveLog()" disabled>
+      🔒 動画完走でスタンプ獲得 💮
+    </button>
+  </div>
+
+  <!-- 体重グラフカード -->
+  <div class="card">
+    <div class="card-title">
+      <span>📈 体重推移グラフ</span>
+    </div>
+    <div class="chart-container">
+      <canvas id="weightChart"></canvas>
+    </div>
+  </div>
+
+  <!-- 月別朝夜スタンプカレンダー -->
+  <div class="card">
+    <div class="card-title">
+      <span>💮 月別スタンプカレンダー (朝/夜)</span>
+    </div>
+    <div class="month-selector">
+      <button class="month-btn" onclick="changeMonth(-1)">◀ 前の月</button>
+      <div class="month-title" id="monthTitle">2026年 10月</div>
+      <button class="month-btn" onclick="changeMonth(1)">次の月 ▶</button>
+    </div>
+
+    <div class="month-summary">
+      <span id="mCount">🌅 朝達成: 0日</span>
+      <span id="nCount">🌃 夜達成: 0日</span>
+    </div>
+
+    <div class="stamp-grid" id="stampGrid"></div>
+  </div>
+
+  <!-- YouTube Iframe API Script -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script>
+    const courseData = {
+      morning: [
+        { id: "m_A", name: "🌅 朝A：カズハ7分 腹筋＆ヒップ", videoId: "USJgKSLxDRc", needReps: false },
+        { id: "m_B", name: "🌅 朝B：基本スクワット＆腕立て伏せ", videoId: "E5rbpDjYwDo", needReps: true },
+        { id: "m_C", name: "🌅 朝C：全身脂肪燃焼スペシャル", videoId: "6gHwh1eZ0yY", needReps: false }
+      ],
+      night: [
+        { id: "n_A", name: "🌃 夜A：下腹足上げキープ（2分・静音）", videoId: "VboGgLR4l7A", needReps: false },
+        { id: "n_B", name: "🌃 夜B：地獄のプランクバリエーション", videoId: "o5vb430_m38", needReps: false },
+        { id: "n_C", name: "🌃 夜C：ぽっこりお腹撃退＆体幹ケア", videoId: "LTsAhtk4QQM", needReps: false }
+      ]
+    };
+
+    const recipeList = [
+      { title: "🍋 鶏むね肉のレンジ塩レモン蒸し", desc: "フォークで穴を刺した鶏むね肉に酒と塩レモンをかけ、レンジでチンするだけ。油ゼロで高タンパク！" },
+      { title: "🍳 豆腐と鶏肉のヘルシーチャンプルー", desc: "水切りした木綿豆腐と鶏肉、卵をテフロンフライパンで油を使わずに炒め合わせるボリュームおかず。" },
+      { title: "🌶️ 鶏むね肉のピリ辛キムチスープ", desc: "カットした鶏むね肉とキムチ、お湯と鶏ガラスープの素で作る代謝アップスープ。夜の温活にも最適。" },
+      { title: "🥗 鶏ささみ（またはむね肉）のノンオイル和え", desc: "茹でたお肉をきゅうりやワカメと合わせ、ポン酢と少量のラカントや醤油でさっぱり仕上げる一品。" }
+    ];
+
+    let currentTimeMode = "morning";
+    let player;
+    let isVideoFinished = false;
+    let weightChartInstance = null;
+    let currentDisplayDate = new Date();
+
+    document.getElementById('logDate').value = new Date().toISOString().split('T')[0];
+
+    populateCourseOptions();
+    setDailyRecipe();
+
+    function populateCourseOptions() {
+      const select = document.getElementById('workoutCourse');
+      select.innerHTML = '';
+      courseData[currentTimeMode].forEach(course => {
+        const opt = document.createElement('option');
+        opt.value = course.id;
+        opt.innerText = course.name;
+        select.appendChild(opt);
+      });
+    }
+
+    function switchTimeMode(mode) {
+      currentTimeMode = mode;
+      document.getElementById('tabMorning').classList.toggle('active', mode === 'morning');
+      document.getElementById('tabNight').classList.toggle('active', mode === 'night');
+      
+      populateCourseOptions();
+      evaluateDaySupport();
+      onCourseChange();
+    }
+
+    function getCurrentCourseObj() {
+      const selectedId = document.getElementById('workoutCourse').value;
+      return courseData[currentTimeMode].find(c => c.id === selectedId) || courseData[currentTimeMode][0];
+    }
+
+    function setDailyRecipe() {
+      const dayIndex = new Date().getDate() % recipeList.length;
+      const recipe = recipeList[dayIndex];
+      document.getElementById('recipeTitle').innerText = "💡 本日の高タンパク・低脂質レシピ：" + recipe.title;
+      document.getElementById('recipeDesc').innerText = recipe.desc;
+    }
+
+    function evaluateDaySupport() {
+      const logData = JSON.parse(localStorage.getItem('abs_workout_logs') || '{}');
+      const dates = Object.keys(logData).sort();
+      
+      let consecutiveWorkouts = 0;
+      for (let i = dates.length - 1; i >= 0; i--) {
+        const day = logData[dates[i]];
+        if ((day.morning && day.morning.done) || (day.night && day.night.done)) {
+          consecutiveWorkouts++;
+        } else {
+          break;
+        }
+      }
+
+      const restBanner = document.getElementById('restBanner');
+      if (consecutiveWorkouts >= 5) {
+        restBanner.style.display = 'flex';
+        document.getElementById('restMsg').innerText = `【レストデー推奨】${consecutiveWorkouts}日連続トレーニング達成中！今日は軽めのストレッチにして体を休めましょう。`;
+      } else {
+        restBanner.style.display = 'none';
+      }
+
+      const weights = [];
+      dates.forEach(d => {
+        if (logData[d] && logData[d].weight) weights.push(logData[d].weight);
+      });
+      const currentInput = document.getElementById('weight').value;
+      if (currentInput) weights.push(parseFloat(currentInput));
+
+      const msgEl = document.getElementById('recommendMsg');
+      if (weights.length >= 2) {
+        const diff = weights[weights.length - 1] - weights[weights.length - 2];
+        if (diff > 0.2) {
+          msgEl.innerText = `【代謝ブースト推奨】前回比+${diff.toFixed(1)}kg：スクワットや全身運動で燃焼させましょう！`;
+        } else if (diff <= -0.2) {
+          msgEl.innerText = `【順調減量モード】前回比${diff.toFixed(1)}kg：絶好調です！この調子で腹筋ラインを出していきましょう！`;
+        } else {
+          msgEl.innerText = "【安定キープ中】良いリズムです！本日も目標メニューを完走しましょう。";
+        }
+      } else {
+        msgEl.innerText = "【継続は力なり】毎日の朝の体重測定と動画完走で理想のシックスパックへ！";
+      }
+    }
+
+    function onYouTubeIframeAPIReady() {
+      const courseObj = getCurrentCourseObj();
+      player = new YT.Player('player', {
+        videoId: courseObj.videoId,
+        playerVars: { 'playsinline': 1, 'rel': 0, 'modestbranding': 1 },
+        events: { 'onStateChange': onPlayerStateChange }
+      });
+    }
+
+    function onPlayerStateChange(event) {
+      if (event.data === YT.PlayerState.ENDED) {
+        isVideoFinished = true;
+        const statusEl = document.getElementById('videoStatus');
+        statusEl.innerText = "🎉 動画完走認証完了！スタンプを押せます";
+        statusEl.classList.add('completed');
+        
+        const btn = document.getElementById('btnSubmit');
+        btn.disabled = false;
+        btn.innerText = `記録して${currentTimeMode === 'morning' ? '☀️朝' : '🌙夜'}スタンプを押す 💮`;
+      }
+    }
+
+    function onCourseChange() {
+      const courseObj = getCurrentCourseObj();
+      const repsInputs = document.getElementById('repsInputs');
+      repsInputs.style.display = courseObj.needReps ? 'grid' : 'none';
+
+      isVideoFinished = false;
+      const statusEl = document.getElementById('videoStatus');
+      statusEl.innerText = "▶️ 動画を最後まで再生すると完走認証されます";
+      statusEl.classList.remove('completed');
+
+      const btn = document.getElementById('btnSubmit');
+      btn.disabled = true;
+      btn.innerText = "🔒 動画完走でスタンプ獲得 💮";
+
+      if (player && player.loadVideoById) {
+        player.loadVideoById(courseObj.videoId);
+      }
+    }
+
+    function saveLog() {
+      if (!isVideoFinished) {
+        alert("動画を最後まで再生するとスタンプが押せるようになります！");
+        return;
+      }
+
+      const date = document.getElementById('logDate').value;
+      const weight = document.getElementById('weight').value;
+      const checkFast = document.getElementById('checkFast').checked;
+      const checkOil = document.getElementById('checkOil').checked;
+      const sqReps = document.getElementById('sqReps').value;
+      const puReps = document.getElementById('puReps').value;
+      const courseObj = getCurrentCourseObj();
+
+      if (!date) {
+        alert("日付を選択してください");
+        return;
+      }
+
+      const logData = JSON.parse(localStorage.getItem('abs_workout_logs') || '{}');
+      if (!logData[date]) {
+        logData[date] = { morning: null, night: null, weight: null };
+      }
+
+      logData[date][currentTimeMode] = {
+        courseName: courseObj.name,
+        checkFast,
+        checkOil,
+        sqReps: courseObj.needReps ? sqReps : null,
+        puReps: courseObj.needReps ? puReps : null,
+        done: true
+      };
+
+      if (weight) {
+        logData[date].weight = parseFloat(weight);
+      }
+
+      localStorage.setItem('abs_workout_logs', JSON.stringify(logData));
+      alert(`${currentTimeMode === 'morning' ? '☀️朝' : '🌙夜'}のトレーニングを記録しました！お疲れ様でした💮`);
+      
+      renderApp();
+    }
+
+    function changeMonth(direction) {
+      currentDisplayDate.setMonth(currentDisplayDate.getMonth() + direction);
+      renderApp();
+    }
+
+    function renderApp() {
+      const logData = JSON.parse(localStorage.getItem('abs_workout_logs') || '{}');
+      
+      let totalStamps = 0;
+      Object.keys(logData).forEach(d => {
+        if (logData[d].morning && logData[d].morning.done) totalStamps++;
+        if (logData[d].night && logData[d].night.done) totalStamps++;
+      });
+
+      document.getElementById('stampCounter').innerText = `累計獲得スタンプ: ${totalStamps} 個`;
+      
+      const levelBadge = document.getElementById('levelBadge');
+      const progressFill = document.getElementById('progressFill');
+
+      const currentLevel = Math.floor(totalStamps / 30) + 1;
+      const levelNames = ["継続ビギナー", "ウエストシーカー", "アブアスリート", "シックスパックマスター", "鉄人トレーニー"];
+      levelBadge.innerText = `Lv.${currentLevel} ${levelNames[Math.min(currentLevel - 1, levelNames.length - 1)]}`;
+      
+      const progressPercent = ((totalStamps % 30) / 30) * 100;
+      progressFill.style.width = `${progressPercent}%`;
+
+      const year = currentDisplayDate.getFullYear();
+      const month = currentDisplayDate.getMonth();
+      document.getElementById('monthTitle').innerText = `${year}年 ${month + 1}月`;
+
+      const grid = document.getElementById('stampGrid');
+      grid.innerHTML = '';
+
+      const lastDay = new Date(year, month + 1, 0);
+      const daysInMonth = lastDay.getDate();
+
+      let morningMonthCount = 0;
+      let nightMonthCount = 0;
+
+      const chartLabels = [];
+      const chartWeights = [];
+
+      const allDates = Object.keys(logData).sort();
+      allDates.forEach(d => {
+        if (logData[d].weight) {
+          chartLabels.push(d.slice(5).replace('-', '/'));
+          chartWeights.push(logData[d].weight);
+        }
+      });
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const mStr = String(month + 1).padStart(2, '0');
+        const dStr = String(day).padStart(2, '0');
+        const dateKey = `${year}-${mStr}-${dStr}`;
+
+        const dayData = logData[dateKey] || {};
+        const hasMorning = dayData.morning && dayData.morning.done;
+        const hasNight = dayData.night && dayData.night.done;
+
+        if (hasMorning) morningMonthCount++;
+        if (hasNight) nightMonthCount++;
+
+        const box = document.createElement('div');
+        box.className = 'stamp-box';
+
+        let weightText = dayData.weight ? `${dayData.weight}k` : '';
+
+        box.innerHTML = `
+          <div class="stamp-day-title">${day}日</div>
+          <div class="stamp-slot-container">
+            <div class="stamp-slot ${hasMorning ? 'm-done' : ''}">${hasMorning ? '☀️' : ''}</div>
+            <div class="stamp-slot ${hasNight ? 'n-done' : ''}">${hasNight ? '🌙' : ''}</div>
+          </div>
+          <div class="stamp-info">${weightText}</div>
+        `;
+        grid.appendChild(box);
+      }
+
+      document.getElementById('mCount').innerText = `🌅 朝達成: ${morningMonthCount}日`;
+      document.getElementById('nCount').innerText = `🌃 夜達成: ${nightMonthCount}日`;
+
+      renderWeightChart(chartLabels, chartWeights);
+      evaluateDaySupport();
+    }
+
+    function renderWeightChart(labels, weights) {
+      const ctx = document.getElementById('weightChart').getContext('2d');
+
+      if (weightChartInstance) {
+        weightChartInstance.destroy();
+      }
+
+      weightChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: '体重 (kg)',
+            data: weights,
+            borderColor: '#ff5722',
+            backgroundColor: 'rgba(255, 87, 34, 0.1)',
+            borderWidth: 3,
+            pointBackgroundColor: '#ffd700',
+            pointRadius: 5,
+            fill: true,
+            tension: 0.3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { ticks: { color: '#aaa', font: { size: 10 } }, grid: { color: '#2a2a2a' } },
+            y: { ticks: { color: '#aaa', font: { size: 10 } }, grid: { color: '#2a2a2a' } }
+          }
+        }
+      });
+    }
+
+    renderApp();
+  </script>
+</body>
+</html>
