@@ -17,7 +17,6 @@
       --border-color: #333;
       --success-color: #4caf50;
       --rest-color: #2196f3;
-      --brave-color: #fb542b;
     }
 
     * {
@@ -205,23 +204,6 @@
       border: 0;
     }
 
-    /* Brave起動ボタン */
-    .btn-brave {
-      display: block;
-      width: 100%;
-      background: linear-gradient(135deg, #ff3838, #ff5722);
-      color: #fff;
-      text-align: center;
-      text-decoration: none;
-      padding: 10px;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      font-weight: bold;
-      margin-top: 8px;
-      box-shadow: 0 2px 6px rgba(255, 87, 34, 0.3);
-      cursor: pointer;
-    }
-
     .video-status {
       margin-top: 8px;
       padding: 8px;
@@ -292,7 +274,6 @@
       margin-top: 10px;
     }
 
-    /* 月選択ヘッダー */
     .month-selector {
       display: flex;
       justify-content: space-between;
@@ -449,11 +430,6 @@
       <div id="player"></div>
     </div>
 
-    <!-- 広告ブロック(Brave)で開くボタン -->
-    <a href="#" id="braveLink" class="btn-brave" target="_blank" rel="noopener noreferrer">
-      🦁 広告ブロック(Brave)で動画を開いて集中視聴する
-    </a>
-
     <div class="video-status" id="videoStatus">
       ▶️ 動画を最後まで再生すると完走認証されます
     </div>
@@ -511,6 +487,7 @@
   <!-- YouTube Iframe API Script -->
   <script src="https://www.youtube.com/iframe_api"></script>
   <script>
+    // コース選択肢を A → B → C の順に定義
     const courseData = {
       morning: [
         { id: "m_A", name: "🌅 朝A：カズハ7分 腹筋＆ヒップ", videoId: "USJgKSLxDRc", needReps: false },
@@ -551,7 +528,6 @@
         opt.innerText = course.name;
         select.appendChild(opt);
       });
-      updateBraveLink();
     }
 
     function switchTimeMode(mode) {
@@ -567,12 +543,6 @@
     function getCurrentCourseObj() {
       const selectedId = document.getElementById('workoutCourse').value;
       return courseData[currentTimeMode].find(c => c.id === selectedId) || courseData[currentTimeMode][0];
-    }
-
-    function updateBraveLink() {
-      const courseObj = getCurrentCourseObj();
-      const braveLink = document.getElementById('braveLink');
-      braveLink.href = `https://www.youtube.com/watch?v=${courseObj.videoId}`;
     }
 
     function setDailyRecipe() {
@@ -652,8 +622,6 @@
       const courseObj = getCurrentCourseObj();
       const repsInputs = document.getElementById('repsInputs');
       repsInputs.style.display = courseObj.needReps ? 'grid' : 'none';
-
-      updateBraveLink();
 
       isVideoFinished = false;
       const statusEl = document.getElementById('videoStatus');
