@@ -388,7 +388,7 @@
       line-height: 1.1;
     }
 
-    .backup-section { 
+    .backup-section {
       display: flex;
       gap: 10px;
       margin-top: 10px;
@@ -531,7 +531,7 @@
     </div>
     <div class="backup-section">
       <button class="backup-btn" onclick="exportData()">📤 データをダウンロード</button>
-      <button class="backup-btn" onclick="exportData(), exportData()">📥 データを復元（読み込み）</button>
+      <button class="backup-btn" onclick="importData()">📥 データを復元（読み込み）</button>
       <input type="file" id="importFile" style="display:none;" accept=".json" onchange="handleFileSelect(event)">
     </div>
   </div>
@@ -539,7 +539,7 @@
   <!-- YouTube Iframe API Script -->
   <script src="https://www.youtube.com/iframe_api"></script>
   <script>
-    // コースデータ（おすすめ理由・解説コメント付き）
+    // コースデータ（夜Dを別内容の消防士トレに変更）
     const courseData = {
       morning: [
         { 
@@ -568,7 +568,7 @@
           name: "👨‍🚒 朝D：話題の消防士腹筋リズムトレ（30秒）", 
           videoId: "XXrMazQerwU", 
           needReps: false,
-          comment: "👨‍🚒【短時間で一気にお腹を覚醒】30秒間集中で体幹と腹直筋を激震させる消防士式トレ！時間がない朝でも確実に追い込めます。"
+          comment: "👨‍🚒【短時間で一気にお腹を覚醒】音楽に合わせて30秒間集中！体幹と腹直筋を激震させる話題の消防士式リズムトレです。"
         }
       ],
       night: [
@@ -595,10 +595,10 @@
         },
         { 
           id: "n_D", 
-          name: "👨‍🚒 夜D：超ハード消防式 腹筋チャレンジ", 
-          videoId: "UXMWNrYH2Bw", 
+          name: "👨‍🚒 夜D：元消防士が教える下っ腹撃退トレ", 
+          videoId: "r2S4KLYQ1hw", 
           needReps: false,
-          comment: "🔥【高強度で限界突破】消防隊員が実践する究極の腹筋アタック！一日のエネルギーを全て使い切ってお腹を劇的に割りたい時に！"
+          comment: "🧑‍🚒【夜の下腹集中トレーニング】元消防士直伝のぽっこりお腹撃退メニュー！1日の終わりに下腹部をしっかり効かせて絞り込みます。"
         }
       ]
     };
