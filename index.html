@@ -1,0 +1,1653 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>継続型 腹筋引き締めLOG ＆ 世界横断フィットネス旅</title>
+  <!-- Chart.js 読み込み -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bg-color: #0b0f19;
+      --card-bg: #131c2e;
+      --card-bg-gradient: linear-gradient(145deg, #162238, #101726);
+      --accent-color: #ff5722;
+      --accent-gold: #fbbf24;
+      --text-color: #f3f4f6;
+      --text-dim: #9ca3af;
+      --border-color: #1e293b;
+      --border-highlight: #334155;
+      --success-color: #10b981;
+      --rest-color: #3b82f6;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      padding: 14px;
+      padding-bottom: 50px;
+      line-height: 1.6;
+    }
+
+    .app-header {
+      text-align: center;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      background: var(--card-bg-gradient);
+      padding: 14px 18px;
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .app-header h1 {
+      font-size: 1.15rem;
+      background: linear-gradient(90deg, #ff7a45, #ffd700);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    .header-btns {
+      display: flex;
+      gap: 8px;
+    }
+
+    .menu-link-btn {
+      background: #1e293b;
+      border: 1px solid var(--border-highlight);
+      color: var(--accent-gold);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .menu-link-btn:active {
+      transform: scale(0.96);
+    }
+
+    .card {
+      background: var(--card-bg-gradient);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+    }
+
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+      color: #fff;
+    }
+
+    /* 旅マップカード */
+    .travel-card {
+      background: linear-gradient(135deg, #1a2942, #0d1524);
+      border: 1px solid #283c5e;
+      position: relative;
+    }
+
+    .loop-badge-header {
+      background: linear-gradient(135deg, #fbbf24, #d97706);
+      color: #000;
+      font-size: 0.75rem;
+      font-weight: 900;
+      padding: 2px 8px;
+      border-radius: 12px;
+      margin-left: 6px;
+    }
+
+    .travel-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.88rem;
+      margin-bottom: 10px;
+    }
+
+    .travel-spot-name {
+      color: #60a5fa;
+      font-weight: bold;
+      font-size: 1.05rem;
+    }
+
+    .travel-progress-bar-bg {
+      height: 12px;
+      background: #0f172a;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 10px;
+      border: 1px solid #334155;
+    }
+
+    .travel-progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd);
+      width: 0%;
+      transition: width 0.5s ease;
+    }
+
+    .travel-subtext {
+      font-size: 0.78rem;
+      color: #94a3b8;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .trophy-container {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      background: rgba(15, 23, 42, 0.6);
+      padding: 8px;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+
+    .trophy-badge {
+      font-size: 0.72rem;
+      background: #1e293b;
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid #334155;
+      color: #94a3b8;
+      white-space: nowrap;
+    }
+
+    .trophy-badge.unlocked {
+      background: rgba(251, 191, 36, 0.15);
+      border-color: #fbbf24;
+      color: #fbbf24;
+      font-weight: bold;
+    }
+
+    .recommend-banner {
+      background: rgba(255, 87, 34, 0.12);
+      border: 1px solid rgba(255, 87, 34, 0.4);
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 0.83rem;
+      color: #fed7aa;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .rest-banner {
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 0.83rem;
+      color: #bfdbfe;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .video-comment-box {
+      background: #0f172a;
+      border-left: 4px solid var(--accent-color);
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 12px;
+      margin-bottom: 12px;
+      font-size: 0.85rem;
+      border-top: 1px solid #1e293b;
+      border-right: 1px solid #1e293b;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    .video-comment-title {
+      font-weight: bold;
+      color: var(--accent-color);
+      margin-bottom: 6px;
+    }
+
+    .recipe-box {
+      background: #0f172a;
+      border-left: 4px solid var(--accent-gold);
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 14px;
+      font-size: 0.85rem;
+      border-top: 1px solid #1e293b;
+      border-right: 1px solid #1e293b;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    .recipe-title {
+      font-weight: bold;
+      color: var(--accent-gold);
+      margin-bottom: 6px;
+    }
+
+    .time-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .time-tab {
+      flex: 1;
+      padding: 12px;
+      text-align: center;
+      background: #1a2234;
+      border: 1px solid var(--border-highlight);
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 0.92rem;
+      color: var(--text-dim);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .time-tab.active {
+      background: linear-gradient(135deg, #ff5722, #ea580c);
+      color: #fff;
+      border-color: #f97316;
+      box-shadow: 0 4px 12px rgba(255, 87, 34, 0.3);
+    }
+
+    .level-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .level-badge {
+      background: linear-gradient(135deg, #ff5722, #dc2626);
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.85rem;
+      padding: 6px 14px;
+      border-radius: 20px;
+      white-space: nowrap;
+      box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4);
+    }
+
+    .progress-bar-bg {
+      flex: 1;
+      height: 12px;
+      background-color: #0f172a;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid #334155;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #f59e0b, #fbbf24);
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      margin-top: 12px;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    input[type="date"], input[type="number"], select {
+      width: 100%;
+      padding: 12px;
+      background-color: #0f172a;
+      border: 1px solid var(--border-highlight);
+      border-radius: 10px;
+      color: #fff;
+      font-size: 0.98rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input[type="date"]:focus, input[type="number"]:focus, select:focus {
+      border-color: var(--accent-color);
+    }
+
+    /* 埋め込み動画コンテナ */
+    .video-container {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%;
+      background: #000;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 14px;
+      border: 1px solid var(--border-highlight);
+    }
+
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .video-status {
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      text-align: center;
+      font-weight: bold;
+      background: #1a2234;
+      color: var(--text-dim);
+      border: 1px solid var(--border-highlight);
+    }
+
+    .video-status.completed {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--success-color);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+
+    .video-status.rest-mode {
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--rest-color);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+    }
+
+    .reps-inputs {
+      display: none;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .checkbox-group {
+      margin-top: 16px;
+      background: #0f172a;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #1e293b;
+    }
+
+    .checkbox-group label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.88rem;
+      color: #e2e8f0;
+      cursor: pointer;
+      margin-top: 8px;
+      margin-bottom: 8px;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--accent-color);
+      cursor: pointer;
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: linear-gradient(135deg, #ff5722, #ea580c);
+      color: #fff;
+      border: none;
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      margin-top: 18px;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(255, 87, 34, 0.4);
+      transition: all 0.2s;
+    }
+
+    .btn-submit.rest-btn {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
+    }
+
+    .btn-submit:active {
+      transform: scale(0.98);
+    }
+
+    .btn-submit:disabled {
+      background: #334155;
+      color: #64748b;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .chart-container {
+      position: relative;
+      width: 100%;
+      height: 220px;
+      margin-top: 12px;
+    }
+
+    .month-selector {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .month-btn {
+      background: #1a2234;
+      border: 1px solid var(--border-highlight);
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+
+    .month-btn:active {
+      background: #334155;
+    }
+
+    .month-title {
+      font-size: 1.05rem;
+      font-weight: bold;
+      color: var(--accent-gold);
+    }
+
+    .month-summary {
+      display: flex;
+      justify-content: space-around;
+      background: #0f172a;
+      padding: 8px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      margin-bottom: 14px;
+      border: 1px solid #1e293b;
+      font-weight: 600;
+    }
+
+    .stamp-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+    }
+
+    .stamp-box {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 6px 3px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      min-height: 80px;
+    }
+
+    .stamp-day-title {
+      font-weight: bold;
+      color: #cbd5e1;
+      margin-bottom: 4px;
+    }
+
+    .stamp-slot-container {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      width: 100%;
+      align-items: center;
+    }
+
+    .stamp-slot {
+      width: 100%;
+      height: 22px;
+      border-radius: 6px;
+      background: #162032;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      border: 1px dashed #334155;
+    }
+
+    .stamp-slot.m-done {
+      background: rgba(245, 158, 11, 0.2);
+      border: 1px solid #f59e0b;
+    }
+
+    .stamp-slot.m-rest {
+      background: rgba(59, 130, 246, 0.2);
+      border: 1px solid #3b82f6;
+    }
+
+    .stamp-slot.n-done {
+      background: rgba(59, 130, 246, 0.2);
+      border: 1px solid #3b82f6;
+    }
+
+    .stamp-slot.n-rest {
+      background: rgba(168, 85, 247, 0.2);
+      border: 1px solid #a855f7;
+    }
+
+    .stamp-info {
+      font-size: 0.58rem;
+      color: #94a3b8;
+      text-align: center;
+      margin-top: 4px;
+      line-height: 1.2;
+    }
+
+    .backup-section {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .backup-btn {
+      flex: 1;
+      padding: 10px;
+      background: #1a2234;
+      border: 1px solid var(--border-highlight);
+      color: #cbd5e1;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .backup-btn:active {
+      background: #334155;
+    }
+
+    /* モーダル */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      padding: 16px;
+      overflow-y: auto;
+    }
+
+    .modal-content {
+      background: var(--card-bg);
+      border-radius: 18px;
+      padding: 24px;
+      max-width: 640px;
+      margin: 30px auto;
+      border: 1px solid var(--border-highlight);
+      box-shadow: 0 12px 36px rgba(0,0,0,0.5);
+    }
+
+    .modal-close {
+      float: right;
+      background: #1e293b;
+      color: #fff;
+      border: 1px solid var(--border-highlight);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    .recipe-eval-box {
+      background: rgba(251, 191, 36, 0.1);
+      border: 1px solid rgba(251, 191, 36, 0.4);
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      color: #fde68a;
+      margin-bottom: 14px;
+      line-height: 1.4;
+    }
+
+    .recipe-card-week {
+      background: #0f172a;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+      border-left: 4px solid var(--accent-gold);
+      border-top: 1px solid #1e293b;
+      border-right: 1px solid #1e293b;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    .recipe-card-week h3 {
+      font-size: 1rem;
+      color: var(--accent-gold);
+      margin-bottom: 6px;
+    }
+
+    .recipe-card-week p {
+      font-size: 0.85rem;
+      color: #cbd5e1;
+    }
+
+    .howto-toggle-btn {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 6px 12px;
+      background: #1e293b;
+      border: 1px solid var(--border-highlight);
+      color: var(--accent-gold);
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .recipe-howto-box {
+      display: none;
+      margin-top: 10px;
+      padding: 10px;
+      background: #131c2e;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      color: #e2e8f0;
+      line-height: 1.5;
+      border: 1px dashed #334155;
+    }
+
+    /* アルバムフォトカード・グリッド */
+    .album-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .album-card {
+      background: #0f172a;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid #1e293b;
+      position: relative;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .album-card.unlocked {
+      border-color: #3b82f6;
+    }
+
+    .album-card.locked {
+      filter: grayscale(100%) brightness(0.6);
+    }
+
+    .album-img-wrapper {
+      position: relative;
+      width: 100%;
+      height: 120px;
+      background: #1a2436;
+      overflow: hidden;
+    }
+
+    .album-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .album-badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(15, 23, 42, 0.85);
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.68rem;
+      color: var(--accent-gold);
+      border: 1px solid rgba(251, 191, 36, 0.5);
+      font-weight: bold;
+      backdrop-filter: blur(2px);
+    }
+
+    .album-body {
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+    }
+
+    .album-title {
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .album-desc {
+      font-size: 0.72rem;
+      color: #94a3b8;
+      line-height: 1.3;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-header">
+    <h1>🔥 継続型 腹筋引き締めLOG</h1>
+    <div class="header-btns">
+      <button class="menu-link-btn" onclick="openAlbumModal()">📸 旅アルバム</button>
+      <button class="menu-link-btn" onclick="openRecipeModal()">🍽️ 1週間献立</button>
+    </div>
+  </div>
+
+  <!-- ✈️ 北九州発！世界横断フィットネス旅マップカード -->
+  <div class="card travel-card">
+    <div class="card-title" style="border-bottom: none; padding-bottom: 0;">
+      <span>✈️ 世界横断フィットネス旅 <span class="loop-badge-header" id="loopBadge">1周目</span></span>
+      <span style="font-size:0.78rem; color:#60a5fa; font-weight:600;" id="travelVehicle">🚶 徒歩＆ランニング</span>
+    </div>
+    <div class="travel-info" style="margin-top: 10px;">
+      <div>現在地: <span class="travel-spot-name" id="travelCurrentSpot">北九州（小倉・門司港）</span></div>
+      <div style="color: var(--accent-gold); font-weight: bold; font-size: 1.1rem;" id="travelTotalKm">0 km</div>
+    </div>
+    <div class="travel-progress-bar-bg">
+      <div class="travel-progress-bar-fill" id="travelProgressFill"></div>
+    </div>
+    <div class="travel-subtext">
+      <span id="travelNextSpot">次の目的地: 山口 (角島・下関)</span>
+      <span id="travelRemainKm">あと 15 km</span>
+    </div>
+
+    <!-- 獲得済制覇トロフィーバッジ -->
+    <div class="trophy-container" id="trophyContainer"></div>
+  </div>
+
+  <!-- 累計・レベルエリア -->
+  <div class="card">
+    <div class="level-container">
+      <div class="level-badge" id="levelBadge">Lv.1 継続ビギナー</div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progressFill"></div>
+      </div>
+    </div>
+    <div style="font-size: 0.78rem; color: var(--text-dim); text-align: right; margin-top: 6px;" id="stampCounter">
+      累計獲得スタンプ: 0 個
+    </div>
+  </div>
+
+  <!-- トレーニング＆食事サポートエリア -->
+  <div class="card">
+    <div class="card-title">
+      <span>📝 今日のトレーニング＆食事サポート</span>
+    </div>
+
+    <div class="rest-banner" id="restBanner" style="display: none;">
+      <span>🟢</span>
+      <span id="restMsg">【レストデー推奨】連続トレーニングお疲れ様です！本日は軽めのストレッチにして体を休めましょう。</span>
+    </div>
+
+    <div class="recommend-banner" id="recommendBanner">
+      <span>🤖</span>
+      <span id="recommendMsg">本日の最適メニューを自動判定中...</span>
+    </div>
+
+    <div class="recipe-box">
+      <div class="recipe-title" id="recipeTitle">💡 本日の高タンパク・低脂質レシピ提案</div>
+      <div id="recipeDesc">鶏むね肉のレンジしっとり塩レモン蒸し</div>
+      <button class="howto-toggle-btn" onclick="toggleMainRecipeHowto()">📖 分量・作り方を見る</button>
+      <div class="recipe-howto-box" id="mainRecipeHowtoBox"></div>
+    </div>
+
+    <div class="time-tabs">
+      <div class="time-tab active" id="tabMorning" onclick="switchTimeMode('morning')">🌅 朝用メニュー</div>
+      <div class="time-tab" id="tabNight" onclick="switchTimeMode('night')">🌃 夜用メニュー</div>
+    </div>
+
+    <label>日付</label>
+    <input type="date" id="logDate" onchange="loadDateWeightData()">
+
+    <label id="weightLabel">体重 (kg) <span style="font-size: 0.78rem; color: #888;">※朝の入力推奨</span></label>
+    <input type="number" id="weight" step="0.1" placeholder="例: 65.0" onchange="evaluateDaySupport()">
+
+    <label>運動コース選択</label>
+    <select id="workoutCourse" onchange="onCourseChange()"></select>
+
+    <!-- 動画コメント表示エリア -->
+    <div class="video-comment-box" id="videoCommentBox">
+      <div class="video-comment-title" id="videoCommentTitle">🎯 この動画のおすすめポイント</div>
+      <div id="videoCommentDesc">---</div>
+    </div>
+
+    <!-- 埋め込み動画再生エリア -->
+    <div class="video-container" id="videoWrapper">
+      <div id="player"></div>
+    </div>
+
+    <div class="video-status" id="videoStatus">
+      ▶️ 動画を最後まで再生すると完走認証されます
+    </div>
+
+    <div class="reps-inputs" id="repsInputs">
+      <div>
+        <label>スクワット(回)</label>
+        <input type="number" id="sqReps" placeholder="30">
+      </div>
+      <div>
+        <label>腕立て伏せ(回)</label>
+        <input type="number" id="puReps" placeholder="20">
+      </div>
+    </div>
+
+    <div class="checkbox-group">
+      <label><input type="checkbox" id="checkFast"> 21時以降の固形物断食達成</label>
+      <label><input type="checkbox" id="checkOil"> 調理油不使用 / 脱脂徹底</label>
+    </div>
+
+    <button class="btn-submit" id="btnSubmit" onclick="saveLog()" disabled>
+      🔒 動画完走でスタンプ獲得 💮
+    </button>
+  </div>
+
+  <!-- 体重グラフカード -->
+  <div class="card">
+    <div class="card-title">
+      <span>📈 体重推移グラフ</span>
+    </div>
+    <div class="chart-container">
+      <canvas id="weightChart"></canvas>
+    </div>
+  </div>
+
+  <!-- 月別朝夜スタンプカレンダー -->
+  <div class="card">
+    <div class="card-title">
+      <span>💮 月別スタンプカレンダー (朝/夜)</span>
+    </div>
+    <div class="month-selector">
+      <button class="month-btn" onclick="changeMonth(-1)">◀ 前の月</button>
+      <div class="month-title" id="monthTitle">2026年 10月</div>
+      <button class="month-btn" onclick="changeMonth(1)">次の月 ▶</button>
+    </div>
+
+    <div class="month-summary">
+      <span id="mCount">🌅 朝達成: 0日</span>
+      <span id="nCount">🌃 夜達成: 0日</span>
+    </div>
+
+    <div class="stamp-grid" id="stampGrid"></div>
+  </div>
+
+  <!-- データ管理・バックアップエリア -->
+  <div class="card">
+    <div class="card-title">
+      <span>💾 データの保存・復元（リセット対策）</span>
+    </div>
+    <div class="backup-section">
+      <button class="backup-btn" onclick="exportData()">📤 データをダウンロード</button>
+      <button class="backup-btn" onclick="importData()">📥 データを復元</button>
+      <input type="file" id="importFile" style="display:none;" accept=".json" onchange="handleFileSelect(event)">
+    </div>
+  </div>
+
+  <!-- 土曜始まり1週間献立モーダル -->
+  <div class="modal" id="recipeModal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeRecipeModal()">✕ 閉じる</button>
+      <h2 style="color: var(--accent-gold); font-size: 1.15rem; margin-bottom: 6px;">🛒 1週間晩御飯献立（体重連動・買い物リスト付き）</h2>
+      <div style="font-size: 0.78rem; color: #94a3b8; margin-bottom: 12px;" id="weekPeriodText">※毎週金曜日 12:00 に直近7日間の体重推移から翌週メニューを自動選定</div>
+      
+      <!-- 体重変化評価表示エリア -->
+      <div class="recipe-eval-box" id="recipeEvalBox">📊 直近1週間の体重データを分析中...</div>
+
+      <div id="weekRecipeList"></div>
+    </div>
+  </div>
+
+  <!-- 📸 旅のアルバムモーダル -->
+  <div class="modal" id="albumModal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeAlbumModal()">✕ 閉じる</button>
+      <h2 style="color: #60a5fa; font-size: 1.15rem; margin-bottom: 6px;">📸 世界横断フィットネス旅 ご当地フォトギャラリー</h2>
+      <div style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 14px;">毎日のトレーニングで移動距離を延ばし、世界各地の絶景フォトカードをGETしよう！</div>
+      <div class="album-grid" id="albumGrid"></div>
+    </div>
+  </div>
+
+  <!-- YouTube Iframe API Script -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script>
+    const LOOP_MAX_KM = 6500; // 1周の最大距離
+
+    // 厳選された高画質ご当地フォトギャラリー定義
+    const travelSpots = [
+      { id: 0, name: "北九州（小倉・門司港）", targetKm: 0, icon: "🌉", img: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=500&auto=format&fit=crop&q=80", desc: "【スタート】関門海峡とノスタルジックな門司港レトロの歴史的な街並み。" },
+      { id: 1, name: "山口 (角島・下関)", targetKm: 15, icon: "🐡", img: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=500&auto=format&fit=crop&q=80", desc: "【本州上陸】コバルトブルーの海に一直線に伸びる美しい角島大橋。" },
+      { id: 2, name: "広島 (宮島・原爆ドーム)", targetKm: 45, icon: "⛩️", img: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=500&auto=format&fit=crop&q=80", desc: "【安芸の宮島】満潮時に海の上に浮かぶようにそびえ立つ荘厳な朱色の大鳥居。" },
+      { id: 3, name: "大阪 (道頓堀・通天閣)", targetKm: 90, icon: "🐙", img: "https://images.unsplash.com/photo-1590559899731-a382839e5549?w=500&auto=format&fit=crop&q=80", desc: "【天下の台所】色鮮やかな巨大ネオンサインが輝く活気あふれる道頓堀。" },
+      { id: 4, name: "名古屋 (名古屋城)", targetKm: 130, icon: "🏯", img: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=500&auto=format&fit=crop&q=80", desc: "【尾張名古屋】天守閣の屋根で金のシャチホコが眩しく輝く名城。" },
+      { id: 5, name: "東京 (羽田・浅草)", targetKm: 180, icon: "🗼", img: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=500&auto=format&fit=crop&q=80", desc: "【日本横断達成】大都会の輝く夜景！羽田空港からついに国際線で世界へ。" },
+      { id: 6, name: "ソウル (韓国)", targetKm: 500, icon: "🇰🇷", img: "https://images.unsplash.com/photo-1538485399081-7191377e8241?w=500&auto=format&fit=crop&q=80", desc: "【海外ルート突入】歴史ある古宮とライトアップされたNソウルタワーの景色。" },
+      { id: 7, name: "バンコク (タイ)", targetKm: 1000, icon: "🇹🇭", img: "https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=500&auto=format&fit=crop&q=80", desc: "【微笑みの国】夕日に照らされて黄金に輝くチャオプラヤ川沿いの美しい寺院。" },
+      { id: 8, name: "パリ (フランス)", targetKm: 2000, icon: "🇫🇷", img: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=500&auto=format&fit=crop&q=80", desc: "【芸術の都】トワイライトタイムにロマンチックに輝くエッフェル塔。" },
+      { id: 9, name: "ニューヨーク (アメリカ)", targetKm: 3500, icon: "🇺🇸", img: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=500&auto=format&fit=crop&q=80", desc: "【世界の大都市】マンハッタンの摩天楼と活気あふれるタイムズスクエア。" },
+      { id: 10, name: "ホノルル (ハワイ)", targetKm: 5000, icon: "🌺", img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&auto=format&fit=crop&q=80", desc: "【常夏の楽園】ワイキキビーチの白い砂浜と澄み切った青い海。" },
+      { id: 11, name: "北九州へ帰国 (GOAL!)", targetKm: 6500, icon: "🎉", img: "https://images.unsplash.com/photo-1492571350019-22de08371fd3?w=500&auto=format&fit=crop&q=80", desc: "【世界横断コンプリート】地球1周フィットネス旅達成！引き締まった最高の腹筋を獲得！" }
+    ];
+
+    // 確実に埋め込み再生できる検証済み動画リストのみを掲載
+    const courseData = {
+      morning: [
+        { id: "m_A", name: "🌅 朝A：カズハ7分 腹筋＆ヒップ", videoId: "USJgKSLxDRc", needReps: false, comment: "✨【朝の目覚ましに最適】姿勢改善と骨盤周りの代謝を一気に引き上げる軽快な7分コース。" },
+        { id: "m_B", name: "🌅 朝B：基本スクワット＆腕立て伏せ", videoId: "E5rbpDjYwDo", needReps: true, comment: "🏋️【全身運動で大筋群を刺激】脚と胸の大きな筋肉を動かすことで、1日中の基礎代謝を底上げ！" },
+        { id: "m_C", name: "🌅 朝C：全身脂肪燃焼スペシャル", videoId: "6gHwh1eZ0yY", needReps: false, comment: "🔥【汗をかいてスッキリしたい朝に】有酸素×筋トレの組み合わせで体脂肪を強力燃焼！" },
+        { id: "m_REST", name: "🟢 【朝の休息日】完全レスト（ストレッチ＆オフ）", videoId: "", needReps: false, comment: "🌿 朝は完全に運動をお休みし、深呼吸で心身をリカバリーします。" }
+      ],
+      night: [
+        { id: "n_A", name: "🌃 夜A：下腹足上げキープ（2分・静音）", videoId: "VboGgLR4l7A", needReps: false, comment: "🌙【ぽっこり下腹を集中的にケア】ドタバタ音が出ない静音設計。気になる下腹をピンポイントで引き締め。" },
+        { id: "n_B", name: "🌃 夜B：地獄のプランクバリエーション", videoId: "o5vb430_m38", needReps: false, comment: "⚡【体幹の徹底強化】お腹まわりを一本の軸のように硬く絞り込みます。" },
+        { id: "n_C", name: "🌃 夜C：ブルガリアンスクワット＆体幹ケア", videoId: "LTsAhtk4QQM", needReps: false, comment: "🧘【下半身＆体幹の引き締め】お腹と太ももの引き締め要素を融合。" },
+        { id: "n_REST", name: "🌙 【夜の休息日】完全レスト（入浴＆睡眠優先）", videoId: "", needReps: false, comment: "🛀 夜は完全にお休みし、湯船に浸かって脳疲労と足のダルさをリセット。" }
+      ]
+    };
+
+    const recipeList = [
+      { title: "🍋 鶏むね肉のレンジ塩レモン蒸し", desc: "油ゼロで高タンパク！しっとり柔らかい胸肉レシピ。", howto: "<b>【分量（1人分）】</b><br>・鶏むね肉：1枚（約250g）<br>・酒：大さじ1<br>・塩：小さじ1/3<br>・レモン汁：大さじ1<br><br><b>【作り方】</b><br>①フォークで刺し穴を開けた胸肉に調味料を揉み込む。<br>②ラップをしてレンジ(600W)で4分加熱し蒸らす。" },
+      { title: "🐟 鮭のホイル焼き（キノコ＆玉ねぎ）", desc: "良質な脂質(オメガ3)とタンパク質が同時に摂れる！", howto: "<b>【分量（1人分）】</b><br>・生鮭切り身：1切れ<br>・玉ねぎ：1/4個<br>・マイタケ：1/2パック<br>・酒、ポン酢：各大さじ1<br><br><b>【作り方】</b><br>①ホイルに野菜と鮭を乗せ調味料を振る。<br>②密閉してフライパンで中火で12分蒸し焼きにする。" },
+      { title: "🍳 豆腐と鶏肉のヘルシーチャンプルー", desc: "ボリューム満点で低カロリーな定番チャンプルー。", howto: "<b>【分量（1人分）】</b><br>・木綿豆腐：1/2丁<br>・鶏むね肉(皮なし)：100g<br>・キャベツ：2枚<br>・卵：1個<br>・醤油、和風だし：各小さじ1<br><br><b>【作り方】</b><br>①具材をノンオイルで炒め、溶き卵を回し入れる。<br>②醤油とだしで味を整える。" }
+    ];
+
+    const weeklyPools = {
+      burn: [
+        { dayName: "土曜日", title: "🍲 豆腐とたっぷりキノコのヘルシー鍋", desc: "【買い物リスト】木綿豆腐(1丁)、マイタケ(1パック)、エノキ(1パック)、白菜", howto: "<b>【1人分の分量】</b><br>・木綿豆腐: 1/2丁<br>・キノコ類: 150g<br>・白菜: 2枚<br>・昆布だし、ポン酢: 適量<br><br><b>【作り方】</b><br>①出汁を入れた鍋で豆腐とキノコ、野菜をしっかり煮込む。<br>②ポン酢でさっぱりといただく。" },
+        { dayName: "日曜日", title: "🍋 鶏むね肉のレンジ塩レモン蒸し", desc: "【買い物リスト】鶏むね肉(1枚)、レモン(1個)、きゅうり(1本)", howto: "<b>【1人分の分量】</b><br>・鶏むね肉(皮なし): 1枚(250g)<br>・レモン汁: 大さじ1<br>・きゅうり: 1本<br><br><b>【作り方】</b><br>①胸肉に酒と塩を揉み込みレンジで4分加熱。<br>②薄切りきゅうりと和える。" },
+        { dayName: "月曜日", title: "🥩 豚もも赤身肉とモヤシのノンオイルポン酢蒸し", desc: "【買い物リスト】豚もも赤身肉(150g)、モヤシ(1袋)、ポン酢", howto: "<b>【1人分の分量】</b><br>・豚もも赤身肉: 150g<br>・モヤシ: 1袋(200g)<br>・ポン酢: 大さじ2<br><br><b>【作り方】</b><br>①モヤシの上に豚もも肉を敷き、ラップをしてレンジで4分加熱。<br>②ポン酢をかけて脱脂調理。" },
+        { dayName: "火曜日", title: "🍳 豆腐ハンバーグ（和風おろしポン酢）", desc: "【買い物リスト】木綿豆腐(1/2丁)、鶏ひき肉(100g)、大根(5cm)", howto: "<b>【1人分の分量】</b><br>・水切り木綿豆腐: 150g<br>・鶏ひき肉: 50g<br>・大根おろし: 大さじ2<br><br><b>【作り方】</b><br>①豆腐とひき肉をよく捏ねてノンオイルで両面焼く。<br>②大根おろしとポン酢をのせる。" },
+        { dayName: "水曜日", title: "🦑 イカとブロッコリーのニンニク蒸し焼き", desc: "【買い物リスト】ロールイカ(150g)、ブロッコリー(1/2株)", howto: "<b>【1人分の分量】</b><br>・イカ: 150g<br>・ブロッコリー: 1/2株<br>・醤油、ニンニク: 各小さじ1<br><br><b>【作り方】</b><br>①ブロッコリーとイカをフライパンで蒸し焼きにし、ニンニク醤油で手早く和える。" },
+        { dayName: "木曜日", title: "🐟 生鮭とマイタケの和風ホイル蒸し", desc: "【買い物リスト】生鮭(1切れ)、マイタケ(1/2パック)、玉ねぎ(1/4個)", howto: "<b>【1人分の分量】</b><br>・生鮭切り身: 1切れ<br>・マイタケ: 50g<br>・玉ねぎ: 1/4個<br><br><b>【作り方】</b><br>①ホイルに具材を包みフライパンで12分蒸し焼きにする。" },
+        { dayName: "金曜日", title: "🥣 絹ごし豆腐とワカメの中華風スープ仕立て", desc: "【買い物リスト】絹豆腐(1/2丁)、乾燥ワカメ、卵(1個)", howto: "<b>【1人分の分量】</b><br>・絹豆腐: 1/2丁<br>・乾燥ワカメ: 小さじ1<br>・溶き卵: 1個分<br><br><b>【作り方】</b><br>①鶏ガラスープで豆腐とワカメを煮て、溶き卵を回し入れて完成。" }
+      ],
+      reset: [
+        { dayName: "土曜日", title: "🍳 ふわふわ豆腐ハンバーグ＆生野菜添え", desc: "【買い物リスト】絹ごし豆腐(1/2丁)、鶏ひき肉(100g)、キャベツ", howto: "<b>【1人分の分量】</b><br>・絹豆腐: 100g(水切り)<br>・鶏ひき肉: 100g<br>・生姜汁: 小さじ1<br><br><b>【作り方】</b><br>①材料を練り合わせて形を整え、フッ素加工フライパンで蒸し焼き。" },
+        { dayName: "日曜日", title: "🐟 鮪(マグロ)赤身のお刺身 ＋ 豆腐味噌汁", desc: "【買い物リスト】マグロ赤身(150g)、木綿豆腐(1/2丁)、ワカメ", howto: "<b>【1人分の分量】</b><br>・マグロ赤身柵: 150g<br>・木綿豆腐: 1/2丁<br><br><b>【作り方】</b><br>①高タンパク・低脂質のマグロを刺身で。具沢山の豆腐味噌汁を添える。" },
+        { dayName: "月曜日", title: "🥩 豚もも赤身肉の生姜炒め（油不使用）", desc: "【買い物リスト】豚もも赤身薄切り(150g)、玉ねぎ(1/2個)、生姜", howto: "<b>【1人分の分量】</b><br>・豚もも赤身薄切り: 150g<br>・玉ねぎ: 1/2個<br>・醤油、みりん、生姜: 適量<br><br><b>【作り方】</b><br>①酒と調味料で玉ねぎと豚肉を炒め煮にして香ばしく仕上げる。" },
+        { dayName: "火曜日", title: "🍋 鶏むね肉とブロッコリーの塩コショウ炒め", desc: "【買い物リスト】鶏むね肉(1枚)、ブロッコリー(1/2株)", howto: "<b>【1人分の分量】</b><br>・鶏むね肉: 150g<br>・ブロッコリー: 100g<br><br><b>【作り方】</b><br>①ひとくち大に切った胸肉とブロッコリーを蒸し焼きにし塩コショウでシンプルに味付け。" },
+        { dayName: "水曜日", title: "🐟 生鮭のソテー和風おろしポン酢", desc: "【買い物リスト】生鮭(1切れ)、大根(5cm)、ポン酢", howto: "<b>【1人分の分量】</b><br>・生鮭切り身: 1切れ<br>・大根おろし: 大さじ3<br><br><b>【作り方】</b><br>①鮭をノングリースで両面香ばしく焼き、大根おろしとポン酢で味わう。" },
+        { dayName: "木曜日", title: "🍲 鱈(タラ)と木綿豆腐のコンソメ煮", desc: "【買い物リスト】生タラ(1切れ)、木綿豆腐(1/2丁)、人参", howto: "<b>【1人分の分量】</b><br>・生タラ: 1切れ<br>・木綿豆腐: 1/2丁<br>・コンソメ: 1個<br><br><b>【作り方】</b><br>①コンソメスープでタラと豆腐、野菜を優しく煮込む。" },
+        { dayName: "金曜日", title: "🍳 豆腐と野菜のヘルシー卵とじ", desc: "【買い物リスト】木綿豆腐(1/2丁)、玉ねぎ(1/4個)、卵(1個)", howto: "<b>【1人分の分量】</b><br>・木綿豆腐: 1/2丁<br>・卵: 1個<br>・和風だし、醤油: 各小さじ1<br><br><b>【作り方】</b><br>①だし汁で豆腐と玉ねぎを煮て、溶き卵でふんわりとじる。" }
+      ],
+      standard: [
+        { dayName: "土曜日", title: "🐟 鯖の塩焼き定食 ＋ 豆腐わかめスープ", desc: "【買い物リスト】塩サバ(1切れ)、木綿豆腐(1/2丁)、ワカメ", howto: "<b>【1人分の分量】</b><br>・塩サバ: 1切れ<br>・木綿豆腐: 1/2丁<br>・乾燥ワカメ: 小さじ1<br><br><b>【作り方】</b><br>①サバをグリルで焼く。豆腐とワカメの味噌汁を添える。" },
+        { dayName: "日曜日", title: "🍋 鶏むね肉のレンジ塩レモン蒸し", desc: "【買い物リスト】鶏むね肉(1枚)、レモン(1個)、きゅうり(1本)", howto: "<b>【1人分の分量】</b><br>・鶏むね肉: 1枚(250g)<br>・レモン汁: 大さじ1<br>・きゅうり: 1本<br><br><b>【作り方】</b><br>①胸肉に酒と塩を揉み込みレンジで4分加熱。きゅうりと合わせる。" },
+        { dayName: "月曜日", title: "🥩 豚もも肉とモヤシのポン酢蒸し", desc: "【買い物リスト】豚もも薄切り肉(150g)、モヤシ(1袋)、ポン酢", howto: "<b>【1人分の分量】</b><br>・豚もも薄切り肉: 150g<br>・モヤシ: 1袋(200g)<br><br><b>【作り方】</b><br>①モヤシと豚肉を耐熱容器に入れレンジで4分30秒加熱。" },
+        { dayName: "火曜日", title: "🍳 豆腐と鶏肉のハンバーグ", desc: "【買い物リスト】鶏ひき肉(150g)、絹ごし豆腐(1/2丁)", howto: "<b>【1人分の分量】</b><br>・鶏ひき肉: 100g<br>・絹豆腐: 100g(水切り)<br><br><b>【作り方】</b><br>①材料を捏ねて形を整え、フライパンで両面蒸し焼き。" },
+        { dayName: "水曜日", title: "🦑 イカとブロッコリーのニンニク醤油炒め", desc: "【買い物リスト】ロールイカ(150g)、ブロッコリー(1/2株)", howto: "<b>【1人分の分量】</b><br>・ロールイカ: 150g<br>・ブロッコリー: 1/2株<br><br><b>【作り方】</b><br>①下茹でしたブロッコリーとイカをニンニク醤油でサッと炒める。" },
+        { dayName: "木曜日", title: "🍲 鱈(タラ)と野菜の昆布だし湯豆腐", desc: "【買い物リスト】生タラ(1切れ)、木綿豆腐(1丁)、白菜(2枚)", howto: "<b>【1人分の分量】</b><br>・生タラ: 1切れ<br>・木綿豆腐: 1/2丁<br><br><b>【作り方】</b><br>①昆布だしで具材を煮込み、ポン酢で味わう。" },
+        { dayName: "金曜日", title: "🥣 鶏ひき肉と野菜のコンソメスープ煮", desc: "【買い物リスト】鶏ひき肉(100g)、玉ねぎ(1/2個)、人参(1/3本)", howto: "<b>【1人分の分量】</b><br>・鶏ひき肉: 100g<br>・玉ねぎ: 1/2個<br><br><b>【作り方】</b><br>①カット野菜とひき肉をコンソメスープで煮込む。" }
+      ],
+      recovery: [
+        { dayName: "土曜日", title: "🥩 豚もも赤身肉のビタミンポークソテー", desc: "【買い物リスト】豚もも赤身(150g)、ニンニク、ブロッコリー", howto: "<b>【1人分の分量】</b><br>・豚もも赤身ステーキ用: 150g<br>・ニンニクスライス: 1片<br><br><b>【作り方】</b><br>①ビタミンB1豊富な豚もも肉をニンニク醤油で香ばしくソテー。" },
+        { dayName: "日曜日", title: "🐟 生鮭のちゃんちゃん焼き風（赤味噌仕立て）", desc: "【買い物リスト】生鮭(1切れ)、キャベツ(2枚)、玉ねぎ(1/4個)", howto: "<b>【1人分の分量】</b><br>・生鮭切り身: 1切れ<br>・キャベツ、玉ねぎ: 100g<br>・味噌、みりん: 各小さじ2<br><br><b>【作り方】</b><br>①野菜と鮭をフライパンに入れ味噌だれを回しかけて蒸し焼き。" },
+        { dayName: "月曜日", title: "🍳 豆腐ハンバーグ（きのこ和風あんかけ）", desc: "【買い物リスト】木綿豆腐(1/2丁)、鶏ひき肉(100g)、エノキ", howto: "<b>【1人分の分量】</b><br>・豆腐ハンバーグ種: 150g<br>・エノキ、シメジ: 50g<br><br><b>【作り方】</b><br>①香ばしく焼いた豆腐ハンバーグにとろみのあるキノコあんをかける。" },
+        { dayName: "火曜日", title: "🐟 鮪(マグロ)赤身の山かけボウル ＋ 豆腐汁", desc: "【買い物リスト】マグロ赤身(150g)、長芋(50g)、木綿豆腐", howto: "<b>【1人分の分量】</b><br>・マグロ赤身: 150g<br>・すりおろし長芋: 50g<br><br><b>【作り方】</b><br>①マグロ赤身にすりおろした長芋と醤油をかけて栄養補給。" },
+        { dayName: "水曜日", title: "🍋 鶏むね肉と彩り野菜の黒酢炒め", desc: "【買い物リスト】鶏むね肉(1枚)、パプリカ(1/2個)、玉ねぎ", howto: "<b>【1人分の分量】</b><br>・鶏むね肉: 150g<br>・黒酢、醤油: 各大さじ1<br><br><b>【作り方】</b><br>①胸肉と野菜を黒酢ダレで炒め、疲労回復を促進。" },
+        { dayName: "木曜日", title: "🍲 具だくさん海鮮豆腐クッパ風", desc: "【買い物リスト】エビ・イカミックス(100g)、絹豆腐(1/2丁)、キムチ", howto: "<b>【1人分の分量】</b><br>・シーフード: 100g<br>・絹豆腐: 1/2丁<br>・キムチ: 30g<br><br><b>【作り方】</b><br>①中華だしで具材と豆腐を煮込み、キムチで旨味を加える。" },
+        { dayName: "金曜日", title: "🥣 豆腐と鶏むね肉のヘルシー親子煮", desc: "【買い物リスト】鶏むね肉(100g)、木綿豆腐(1/2丁)、卵(1個)", howto: "<b>【1人分の分量】</b><br>・鶏むね肉: 100g<br>・木綿豆腐: 1/2丁<br>・卵: 1個<br><br><b>【作り方】</b><br>①めんつゆで胸肉と豆腐を煮込み、卵で閉じる。" }
+      ]
+    };
+
+    let currentTimeMode = "morning";
+    let player;
+    let isVideoFinished = false;
+    let weightChartInstance = null;
+    let currentDisplayDate = new Date();
+
+    document.getElementById('logDate').value = new Date().toISOString().split('T')[0];
+
+    populateCourseOptions();
+    setDailyRecipe();
+    loadDateWeightData();
+
+    function populateCourseOptions() {
+      const select = document.getElementById('workoutCourse');
+      select.innerHTML = '';
+      courseData[currentTimeMode].forEach(course => {
+        const opt = document.createElement('option');
+        opt.value = course.id;
+        opt.innerText = course.name;
+        select.appendChild(opt);
+      });
+      onCourseChange();
+    }
+
+    function switchTimeMode(mode) {
+      currentTimeMode = mode;
+      document.getElementById('tabMorning').classList.toggle('active', mode === 'morning');
+      document.getElementById('tabNight').classList.toggle('active', mode === 'night');
+
+      document.getElementById('weightLabel').innerHTML = mode === 'morning' 
+        ? '朝の体重 (kg) <span style="font-size: 0.78rem; color: #888;">※起床直後推奨</span>'
+        : '夜の体重 (kg) <span style="font-size: 0.78rem; color: #888;">※入浴前/就寝前推奨</span>';
+
+      populateCourseOptions();
+      loadDateWeightData();
+      evaluateDaySupport();
+    }
+
+    function getCurrentCourseObj() {
+      const selectedId = document.getElementById('workoutCourse').value;
+      return courseData[currentTimeMode].find(c => c.id === selectedId) || courseData[currentTimeMode][0];
+    }
+
+    function loadDateWeightData() {
+      const date = document.getElementById('logDate').value;
+      const logData = JSON.parse(localStorage.getItem('abs_workout_logs') || '{}');
+      const dayData = logData[date] || {};
+
+      if (currentTimeMode === 'morning') {
+        document.getElementById('weight').value = dayData.morningWeight || (dayData.weight || '');
+      } else {
+        document.getElementById('weight').value = dayData.nightWeight || '';
+      }
+    }
+
+    function setDailyRecipe() {
+      const dayIndex = new Date().getDate() % recipeList.length;
+      const recipe = recipeList[dayIndex];
+      document.getElementById('recipeTitle').innerText = "💡 本日の高タンパク・低脂質レシピ提案：" + recipe.title;
+      document.getElementById('recipeDesc').innerText = recipe.desc;
+      document.getElementById('mainRecipeHowtoBox').innerHTML = recipe.howto;
+    }
+
+    function toggleMainRecipeHowto() {
+      const box = document.getElementById('mainRecipeHowtoBox');
+      box.style.display = box.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function evaluateDaySupport() {
+      const logData = JSON.parse(localStorage.getItem('abs_workout_logs') || '{}');
+      const dates = Object.keys(logData).sort();
+      
+      let consecutiveWorkouts = 0;
+      for (let i = dates.length - 1; i >= 0; i--) {
+        const day = logData[dates[i]];
+        if ((day.morning && day.morning.done && !day.morning.isRest) || (day.night && day.night.done && !day.night.isRest)) {
+          consecutiveWorkouts++;
+        } else {
+          break;
+        }
+      }
+
+      const restBanner = document.getElementById('restBanner');
+      if (consecutiveWorkouts >= 5) {
+        restBanner.style.display = 'flex';
+        document.getElementById('restMsg').innerText = `【レストデー推奨】${consecutiveWorkouts}日連続トレーニング達成中！今日は軽めのストレッチにして体を休めましょう。`;
+      } else {
+        restBanner.style.display = 'none';
+      }
+
+      const weights = [];
+      dates.forEach(d => {
+        const day = logData[d];
+        const w = day.morningWeight || day.weight;
+        if (w) weights.push(w);
+      });
+
+      const currentInput = document.getElementById('weight').value;
+      if (currentInput) weights.push(parseFloat(currentInput));
+
+      const msgEl = document.getElementById('recommendMsg');
+      if (weights.length >= 2) {
+        const diff = weights[weights.length - 1] - weights[weights.length - 2];
+        if (diff > 0.2) {
+          msgEl.innerText = `【代謝ブースト推奨】前回比+${diff.toFixed(1)}kg：スクワットや太もも運動で燃焼させましょう！`;
+        } else if (diff <= -0.2) {
+          msgEl.innerText = `【順調減量モード】前回比${diff.toFixed(1)}kg：絶好調です！この調子で美しいラインを作っていきましょう！`;
+        } else {
+          msgEl.innerText = "【安定キープ中】良いリズムです！本日も目標メニューを完走しましょう。";
+        }
+      } else {
+        msgEl.innerText = "【継続は力なり】毎日の記録と動画完走で理想のボディメイクへ！";
+      }
+    }
+
+    function onYouTubeIframeAPIReady() {
+      const courseObj = getCurrentCourseObj();
+      if (courseObj.videoId) {
+        player = new YT.Player('player', {
+          videoId: courseObj.videoId,
+          playerVars: { 'playsinline': 1, 'rel': 0, 'modestbranding': 1 },
+          events: { 'onStateChange': onPlayerStateChange }
+        });
+      }
+    }
+
+    function onPlayerStateChange(event) {
+      if (event.data === YT.PlayerState.ENDED) {
+        unlockSubmitButton(false);
+      }
+    }
+
+    function unlockSubmitButton(isRest) {
+      isVideoFinished = true;
+      const statusEl = document.getElementById('videoStatus');
+      const btn = document.getElementById('btnSubmit');
+
+      if (isRest) {
+        statusEl.innerText = "🌿 休息日モード：お休みスタンプを押せます";
+        statusEl.className = "video-status rest-mode";
+        btn.className = "btn-submit rest-btn";
+        btn.innerText = `休養完了！${currentTimeMode === 'morning' ? '☀️朝' : '🌙夜'}休息スタンプを押す 🟢`;
+      } else {
+        statusEl.innerText = "🎉 動画完走認証完了！スタンプを押せます";
+        statusEl.className = "video-status completed";
+        btn.className = "btn-submit";
+        btn.innerText = `記録して${currentTimeMode === 'morning' ? '☀️朝' : '🌙夜'}スタンプを押す 💮`;
+      }
+      btn.disabled = false;
+    }
+
+    function onCourseChange() {
+      const courseObj = getCurrentCourseObj();
+      const repsInputs = document.getElementById('repsInputs');
+      repsInputs.style.display = courseObj.needReps ? 'grid' : 'none';
+
+      document.getElementById('videoCommentTitle').innerText = `🎯 【${courseObj.name}】のおすすめポイント`;
+      document.getElementById('videoCommentDesc').innerText = courseObj.comment;
+
+      const videoWrapper = document.getElementById('videoWrapper');
+      const statusEl = document.getElementById('videoStatus');
+      const btn = document.getElementById('btnSubmit');
+      btn.className = "btn-submit";
+
+      isVideoFinished = false;
+
+      if (courseObj.id.includes("REST")) {
+        videoWrapper.style.display = 'none';
+        unlockSubmitButton(true);
+      } else {
+        videoWrapper.style.display = 'block';
+        statusEl.innerText = "▶️ 動画を最後まで再生すると完走認証されます";
+        statusEl.className = "video-status";
+        btn.disabled = true;
+        btn.innerText = "🔒 動画完走でスタンプ獲得 💮";
+
+        if (player && player.loadVideoById) {
+          player.loadVideoById(courseObj.videoId);
+        }
+      }
+    }
+
+    function saveLog() {
+      if (!isVideoFinished) {
+        alert("動画を最後まで再生するか、休息日を選択してください！");
+        return;
+      }
+
+      const date = document.getElementById('logDate').value;
+      const weight = document.getElementById('weight').value;
+      const checkFast = document.getElementById('checkFast').checked;
+      const checkOil = document.getElementById('checkOil').checked;
+      const sqReps = document.getElementById('sqReps').value;
+      const puReps = document.getElementById('puReps').value;
+      const courseObj = getCurrentCourseObj();
+      const isRest = courseObj.id.includes("REST");
+
+      if (!date) {
+        alert("日付を選択してください");
+        return;
+      }
+
+      const logData = JSON.parse(localStorage.getItem('abs_workout_logs') || '{}');
+      if (!logData[date]) {
+        logData[date] = { morning: null, night: null, morningWeight: null, nightWeight: null };
+      }
+
+      logData[date][currentTimeMode] = {
+        courseName: courseObj.name,
+        checkFast,
+        checkOil,
+        sqReps: courseObj.needReps ? sqReps : null,
+        puReps: courseObj.needReps ? puReps : null,
+        done: true,
+        isRest: isRest
+      };
+
+      if (weight) {
+        if (currentTimeMode === 'morning') {
+          logData[date].morningWeight = parseFloat(weight);
+        } else {
+          logData[date].nightWeight = parseFloat(weight);
+        }
+      }
+
+      localStorage.setItem('abs_workout_logs', JSON.stringify(logData));
+      alert(`${currentTimeMode === 'morning' ? '☀️朝' : '🌙夜'}の記録を保存しました！お疲れ様でした✨`);
+      
+      renderApp();
+    }
+
+    function changeMonth(direction) {
+      currentDisplayDate.setMonth(currentDisplayDate.getMonth() + direction);
+      renderApp();
+    }
+
+    function renderApp() {
+      const logData = JSON.parse(localStorage.getItem('abs_workout_logs') || '{}');
+      
+      let totalStamps = 0;
+      let totalKm = 0;
+
+      Object.keys(logData).forEach(d => {
+        const day = logData[d];
+        if (day.morning && day.morning.done) {
+          totalStamps++;
+          if (totalKm < 180) {
+            totalKm += day.morning.isRest ? 3 : 5;
+          } else {
+            totalKm += day.morning.isRest ? 50 : 200;
+          }
+        }
+        if (day.night && day.night.done) {
+          totalStamps++;
+          if (totalKm < 180) {
+            totalKm += day.night.isRest ? 3 : 5;
+          } else {
+            totalKm += day.night.isRest ? 50 : 200;
+          }
+        }
+      });
+
+      document.getElementById('stampCounter').innerText = `累計獲得スタンプ: ${totalStamps} 個`;
+      
+      const levelBadge = document.getElementById('levelBadge');
+      const progressFill = document.getElementById('progressFill');
+
+      const currentLevel = Math.floor(totalStamps / 30) + 1;
+      const levelNames = ["継続ビギナー", "ウエストシーカー", "アブアスリート", "シックスパックマスター", "鉄人トレーニー"];
+      levelBadge.innerText = `Lv.${currentLevel} ${levelNames[Math.min(currentLevel - 1, levelNames.length - 1)]}`;
+      
+      const progressPercent = ((totalStamps % 30) / 30) * 100;
+      progressFill.style.width = `${progressPercent}%`;
+
+      updateTravelMap(totalKm);
+
+      const year = currentDisplayDate.getFullYear();
+      const month = currentDisplayDate.getMonth();
+      document.getElementById('monthTitle').innerText = `${year}年 ${month + 1}月`;
+
+      const grid = document.getElementById('stampGrid');
+      grid.innerHTML = '';
+
+      const lastDay = new Date(year, month + 1, 0);
+      const daysInMonth = lastDay.getDate();
+
+      let morningMonthCount = 0;
+      let nightMonthCount = 0;
+
+      const chartLabels = [];
+      const chartWeights = [];
+
+      const allDates = Object.keys(logData).sort();
+      allDates.forEach(d => {
+        const day = logData[d];
+        const displayW = day.morningWeight || day.weight || day.nightWeight;
+        if (displayW) {
+          chartLabels.push(d.slice(5).replace('-', '/'));
+          chartWeights.push(displayW);
+        }
+      });
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const mStr = String(month + 1).padStart(2, '0');
+        const dStr = String(day).padStart(2, '0');
+        const dateKey = `${year}-${mStr}-${dStr}`;
+
+        const dayData = logData[dateKey] || {};
+        const mEntry = dayData.morning;
+        const nEntry = dayData.night;
+
+        const hasMorning = mEntry && mEntry.done;
+        const isMorningRest = hasMorning && mEntry.isRest;
+        const hasNight = nEntry && nEntry.done;
+        const isNightRest = hasNight && nEntry.isRest;
+
+        if (hasMorning) morningMonthCount++;
+        if (hasNight) nightMonthCount++;
+
+        const box = document.createElement('div');
+        box.className = 'stamp-box';
+
+        let mWText = dayData.morningWeight || dayData.weight ? `朝:${dayData.morningWeight || dayData.weight}` : '';
+        let nWText = dayData.nightWeight ? `夜:${dayData.nightWeight}` : '';
+
+        let mSlotClass = hasMorning ? (isMorningRest ? 'm-rest' : 'm-done') : '';
+        let mIcon = hasMorning ? (isMorningRest ? '🟢' : '☀️') : '';
+
+        let nSlotClass = hasNight ? (isNightRest ? 'n-rest' : 'n-done') : '';
+        let nIcon = hasNight ? (isNightRest ? '🔵' : '🌙') : '';
+
+        box.innerHTML = `
+          <div class="stamp-day-title">${day}日</div>
+          <div class="stamp-slot-container">
+            <div class="stamp-slot ${mSlotClass}">${mIcon}</div>
+            <div class="stamp-slot ${nSlotClass}">${nIcon}</div>
+          </div>
+          <div class="stamp-info">
+            ${mWText ? `<div>${mWText}</div>` : ''}
+            ${nWText ? `<div>${nWText}</div>` : ''}
+          </div>
+        `;
+        grid.appendChild(box);
+      }
+
+      document.getElementById('mCount').innerText = `🌅 朝達成: ${morningMonthCount}日`;
+      document.getElementById('nCount').innerText = `🌃 夜達成: ${nightMonthCount}日`;
+
+      renderWeightChart(chartLabels, chartWeights);
+      evaluateDaySupport();
+    }
+
+    function updateTravelMap(totalKm) {
+      const currentLoop = Math.floor(totalKm / LOOP_MAX_KM) + 1;
+      const loopKm = totalKm % LOOP_MAX_KM;
+
+      document.getElementById('loopBadge').innerText = `${currentLoop}周目`;
+      document.getElementById('travelTotalKm').innerText = `${totalKm} km`;
+
+      let currentIdx = 0;
+      for (let i = 0; i < travelSpots.length; i++) {
+        if (loopKm >= travelSpots[i].targetKm) {
+          currentIdx = i;
+        } else {
+          break;
+        }
+      }
+
+      const currentSpot = travelSpots[currentIdx];
+      const nextSpot = travelSpots[Math.min(currentIdx + 1, travelSpots.length - 1)];
+
+      document.getElementById('travelCurrentSpot').innerText = `${currentSpot.icon} ${currentSpot.name}`;
+
+      if (loopKm >= 180) {
+        document.getElementById('travelVehicle').innerText = "✈️ 国際線ジェット移動";
+      } else if (loopKm >= 45) {
+        document.getElementById('travelVehicle').innerText = "🚄 新幹線移動";
+      } else {
+        document.getElementById('travelVehicle').innerText = "🚶 徒歩＆ランニング";
+      }
+
+      const segStart = currentSpot.targetKm;
+      const segEnd = (currentIdx === travelSpots.length - 1) ? LOOP_MAX_KM : nextSpot.targetKm;
+      const remain = segEnd - loopKm;
+      const percent = Math.min(100, Math.max(0, ((loopKm - segStart) / (segEnd - segStart)) * 100));
+
+      document.getElementById('travelNextSpot').innerText = (currentIdx === travelSpots.length - 1)
+        ? `次の目的地: 周回達成！(2周目へ)`
+        : `次の目的地: ${nextSpot.name}`;
+      document.getElementById('travelRemainKm').innerText = `あと ${remain} km`;
+      document.getElementById('travelProgressFill').style.width = `${percent}%`;
+
+      const trophyBox = document.getElementById('trophyContainer');
+      trophyBox.innerHTML = '';
+      for (let l = 1; l <= Math.max(currentLoop, 3); l++) {
+        const isUnlocked = l < currentLoop;
+        const badge = document.createElement('div');
+        badge.className = `trophy-badge ${isUnlocked ? 'unlocked' : ''}`;
+        const icons = ["🥉", "🥈", "🥇", "🏆", "💎"];
+        const icon = icons[Math.min(l - 1, icons.length - 1)];
+        badge.innerText = `${icon} ${l}周目制覇${isUnlocked ? ' (GET!)' : ''}`;
+        trophyBox.appendChild(badge);
+      }
+    }
+
+    function openAlbumModal() {
+      renderAlbumGrid();
+      document.getElementById('albumModal').style.display = 'block';
+    }
+
+    function closeAlbumModal() {
+      document.getElementById('albumModal').style.display = 'none';
+    }
+
+    function renderAlbumGrid() {
+      const container = document.getElementById('albumGrid');
+      container.innerHTML = '';
+
+      const logData = JSON.parse(localStorage.getItem('abs_workout_logs') || '{}');
+      let totalKm = 0;
+
+      Object.keys(logData).forEach(d => {
+        const day = logData[d];
+        if (day.morning && day.morning.done) totalKm += (totalKm < 180 ? (day.morning.isRest ? 3 : 5) : (day.morning.isRest ? 50 : 200));
+        if (day.night && day.night.done) totalKm += (totalKm < 180 ? (day.night.isRest ? 3 : 5) : (day.night.isRest ? 50 : 200));
+      });
+
+      const currentLoop = Math.floor(totalKm / LOOP_MAX_KM) + 1;
+      const loopKm = totalKm % LOOP_MAX_KM;
+
+      travelSpots.forEach(spot => {
+        const isUnlocked = (currentLoop > 1) || (loopKm >= spot.targetKm);
+        const card = document.createElement('div');
+        card.className = `album-card ${isUnlocked ? 'unlocked' : 'locked'}`;
+
+        card.innerHTML = `
+          <div class="album-img-wrapper">
+            <span class="album-badge">${isUnlocked ? '📸 GET!' : '🔒 未解放'}</span>
+            <img class="album-img" src="${spot.img}" alt="${spot.name}">
+          </div>
+          <div class="album-body">
+            <div class="album-title">${spot.icon} ${spot.name}</div>
+            <div class="album-desc">${isUnlocked ? spot.desc : `目標: ${spot.targetKm} km でフォト獲得`}</div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function renderWeightChart(labels, weights) {
+      const ctx = document.getElementById('weightChart').getContext('2d');
+
+      if (weightChartInstance) {
+        weightChartInstance.destroy();
+      }
+
+      weightChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: '体重 (kg)',
+            data: weights,
+            borderColor: '#ff5722',
+            backgroundColor: 'rgba(255, 87, 34, 0.12)',
+            borderWidth: 3,
+            pointBackgroundColor: '#fbbf24',
+            pointBorderColor: '#fff',
+            pointRadius: 5,
+            fill: true,
+            tension: 0.3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { color: '#1e293b' } },
+            y: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { color: '#1e293b' } }
+          }
+        }
+      });
+    }
+
+    function getCalculatedTargetSaturday() {
+      const now = new Date();
+      const currentDay = now.getDay();
+      const currentHour = now.getHours();
+
+      let targetSat = new Date(now);
+
+      if (currentDay === 5) {
+        if (currentHour < 12) {
+          targetSat.setDate(now.getDate() - 6);
+        } else {
+          targetSat.setDate(now.getDate() + 1);
+        }
+      } else if (currentDay === 6) {
+        targetSat.setDate(now.getDate());
+      } else {
+        targetSat.setDate(now.getDate() - (currentDay + 1));
+      }
+      return targetSat;
+    }
+
+    function evaluateWeeklyWeightChange() {
+      const logData = JSON.parse(localStorage.getItem('abs_workout_logs') || '{}');
+      const recentWeights = [];
+
+      const today = new Date();
+      for (let i = 0; i < 7; i++) {
+        const d = new Date();
+        d.setDate(today.getDate() - i);
+        const dateKey = d.toISOString().split('T')[0];
+        
+        if (logData[dateKey]) {
+          const w = logData[dateKey].morningWeight || logData[dateKey].weight || logData[dateKey].nightWeight;
+          if (w) recentWeights.push(w);
+        }
+      }
+
+      if (recentWeights.length < 2) {
+        return { mode: 'standard', diffText: '（データ蓄積中）', desc: '【標準バランス献立】高タンパク＆低脂質な定番メニューをお届けします。' };
+      }
+
+      const latest = recentWeights[0];
+      const oldest = recentWeights[recentWeights.length - 1];
+      const diff = latest - oldest;
+
+      if (diff >= 0.5) {
+        return { mode: 'burn', diffText: `（直近1週間で +${diff.toFixed(1)}kg 増加）`, desc: '🔥【極・脂肪燃焼デトックス献立】脂質カット徹底＆きのこ・豆腐多めで即効引き締め！' };
+      } else if (diff >= 0.2) {
+        return { mode: 'reset', diffText: `（直近1週間で +${diff.toFixed(1)}kg 微増）`, desc: '📈【糖質リセット＆引き締め献立】和風あっさり味でむくみと体重増加をしっかりリセット！' };
+      } else if (diff <= -0.2) {
+        return { mode: 'recovery', diffText: `（直近1週間で ${diff.toFixed(1)}kg 順調減量）`, desc: '✨【代謝キープ＆リカバリー献立】減量絶好調！筋肉疲労を癒し代謝を落とさないビタミン重視メニュー。' };
+      } else {
+        return { mode: 'standard', diffText: `（直近1週間で ${diff >= 0 ? '+' : ''}${diff.toFixed(1)}kg 安定維持）`, desc: '⚖️【PFC最適キープ献立】絶妙な体重キープ中！このバランスで腹筋の引き締めを加速させます。' };
+      }
+    }
+
+    function openRecipeModal() {
+      renderWeekRecipes();
+      document.getElementById('recipeModal').style.display = 'block';
+    }
+
+    function closeRecipeModal() {
+      document.getElementById('recipeModal').style.display = 'none';
+    }
+
+    function toggleHowto(idx) {
+      const box = document.getElementById(`howto_${idx}`);
+      box.style.display = box.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function renderWeekRecipes() {
+      const container = document.getElementById('weekRecipeList');
+      container.innerHTML = '';
+
+      const targetSat = getCalculatedTargetSaturday();
+      const targetSun = new Date(targetSat);
+      targetSun.setDate(targetSat.getDate() + 6);
+
+      const formatDate = d => `${d.getMonth() + 1}/${d.getDate()}`;
+      document.getElementById('weekPeriodText').innerText = `対象期間：${formatDate(targetSat)}(土) 〜 ${formatDate(targetSun)}(金) 【金曜12時自動更新】`;
+
+      const evalResult = evaluateWeeklyWeightChange();
+      document.getElementById('recipeEvalBox').innerHTML = `<b>📊 体重分析結果 ${evalResult.diffText}</b><br>${evalResult.desc}`;
+
+      const selectedPool = weeklyPools[evalResult.mode] || weeklyPools.standard;
+
+      selectedPool.forEach((item, idx) => {
+        const menuDate = new Date(targetSat);
+        menuDate.setDate(targetSat.getDate() + idx);
+
+        const card = document.createElement('div');
+        card.className = 'recipe-card-week';
+        card.innerHTML = `
+          <h3>${formatDate(menuDate)} (${item.dayName.slice(0,1)})：${item.title}</h3>
+          <p>${item.desc}</p>
+          <button class="howto-toggle-btn" onclick="toggleHowto(${idx})">📖 分量・作り方を見る</button>
+          <div class="recipe-howto-box" id="howto_${idx}">
+            ${item.howto}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function exportData() {
+      const data = localStorage.getItem('abs_workout_logs') || '{}';
+      const blob = new Blob([data], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `abs_workout_backup_${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function importData() {
+      document.getElementById('importFile').click();
+    }
+
+    function handleFileSelect(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          localStorage.setItem('abs_workout_logs', JSON.stringify(parsed));
+          alert("データの復元が完了しました！");
+          renderApp();
+          loadDateWeightData();
+        } catch (err) {
+          alert("ファイル形式が正しくありません。");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    renderApp();
+  </script>
+</body>
+</html>
