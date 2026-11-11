@@ -489,13 +489,19 @@
       return Math.floor((pastDays + firstDay.getDay() + 1) / 7);
     }
 
+    // 多彩なバラエティ豊かなレシピプール（鶏むね、鮭、豚肉、パスタ・うどん等の麺類を含む）
     function getDynamicWeightModeMenus() {
       const w = getWeekBaseIndex();
       const pool = [
-        { type: "鶏むね肉", name: "鶏むね肉と3種キノコのペッパーポン酢", mainIng: "鶏むね肉 1枚＋しめじ", soup: { name: "豆腐スープ", detail: "水200ml, 豆腐" }, egg: "ゆで卵 1個", side: "もずく酢", note: "高タンパク低脂質！", methods: ["主菜: 鶏むね肉", "調理: ポン酢で蒸し焼き"] },
-        { type: "魚メイン", name: "生鮭とキノコの旨塩焼き", mainIng: "生鮭 1切れ", soup: { name: "わかめスープ", detail: "水200ml, わかめ" }, egg: "ゆで卵 1個", side: "納豆", note: "オメガ3脂肪酸！", methods: ["主菜: 生鮭", "調理: 旨塩焼き"] },
-        { type: "肉メイン", name: "豚ロースとキャベツの生姜炒め", mainIng: "豚ロース 120g", soup: { name: "中華スープ", detail: "水200ml" }, egg: "ゆで卵 1個", side: "キムチ", note: "ビタミンB1豊富！", methods: ["主菜: 豚ロース", "調理: 生姜醤油"] }
+        { type: "鶏むね肉", name: "鶏むね肉と3種キノコのペッパーポン酢", mainIng: "鶏むね肉 1枚＋しめじ", soup: { name: "豆腐スープ", detail: "水200ml, 豆腐" }, egg: "ゆで卵 1個", side: "もずく酢", note: "高タンパク低脂質！", methods: ["主菜: 鶏むね肉 1枚を一口大に切る", "調理: ポン酢とキノコでさっと蒸し焼きにする"] },
+        { type: "魚メイン", name: "生鮭とキノコの旨塩焼き", mainIng: "生鮭 1切れ", soup: { name: "わかめスープ", detail: "水200ml, わかめ" }, egg: "ゆで卵 1個", side: "納豆", note: "オメガ3脂肪酸！", methods: ["主菜: 生鮭 1切れに軽く塩を振る", "調理: グリルまたはフライパンで香ばしく焼く"] },
+        { type: "肉メイン", name: "豚ロースとキャベツの生姜炒め", mainIng: "豚ロース 120g", soup: { name: "中華スープ", detail: "水200ml" }, egg: "ゆで卵 1個", side: "キムチ", note: "ビタミンB1豊富！", methods: ["主菜: 豚ロース 120g、キャベツ", "調理: 生姜・醤油ベースで炒め合わせる"] },
+        { type: "麺類・パスタ", name: "ツナと大葉の和風おろしパスタ", mainIng: "パスタ 80g＋ツナ缶", soup: { name: "お吸い物", detail: "お湯、お麩" }, egg: "温泉卵 1個", side: "冷やしトマト", note: "さっぱり和風で満足感！", methods: ["主菜: パスタを茹でる", "調理: ツナ、大根おろし、大葉、麺つゆで和える"] },
+        { type: "鶏もも肉", name: "鶏もも肉のネギ塩焼き", mainIng: "鶏もも肉 120g", soup: { name: "卵スープ", detail: "水200ml, 溶き卵" }, egg: "ゆで卵 1個", side: "きゅうりの塩昆布和え", note: "ジューシーで食べ応え抜群！", methods: ["主菜: 鶏もも肉の余分な脂を取る", "調理: ごま油とネギ塩ダレでこんがり焼き上げる"] },
+        { type: "うどん・麺類", name: "温かいおろし肉うどん", mainIng: "冷凍うどん 1玉＋豚肉少量", soup: { name: "自家製だしつゆ", detail: "めんつゆベース" }, egg: "生卵 1個", side: "ほうれん草のお浸し", note: "消化が良く温まる！", methods: ["主菜: うどんを茹でる", "調理: 豚肉を煮込んでおろしとネギをトッピング"] },
+        { type: "野菜・ヘルシー", name: "豆腐と豚ひき肉のピリ辛麻婆", mainIng: "木綿豆腐 1丁＋豚ひき肉", soup: { name: "中華スープ", detail: "水200ml" }, egg: "ゆで卵 1個", side: "もやしナムル", note: "糖質オフでボリューミー！", methods: ["主菜: 豆腐とひき肉を炒める", "調理: 豆板醤と鶏ガラスープでピリ辛に仕上げる"] }
       ];
+
       let res = [];
       for(let i=0; i<7; i++) {
         let p = pool[(w + i) % pool.length];
@@ -779,7 +785,7 @@
       const evalBox = document.getElementById('recipeEvalBox');
       if(evalBox) evalBox.innerHTML = `📊 <b>パーソナル献立プラン</b><br>・モード：<b>${activeMenuObj.title}</b>`;
 
-      activeMenuObj.menu.forEach((item, idx) => {
+      activeMenuObj.menu.forEach((item) => {
         const card = document.createElement('div');
         card.className = 'recipe-card-week';
         card.innerHTML = `
