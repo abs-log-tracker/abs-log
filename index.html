@@ -76,4 +76,817 @@
     }
 
     .avatar-card {
-      background: linear-gradient(135deg, #0b132b, #1c2541); border: 1
+      background: linear-gradient(135deg, #0b132b, #1c2541); border: 1px solid #3b82f6; position: relative; text-align: center;
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+    }
+
+    .status-badge {
+      background: linear-gradient(135deg, #00f0ff, #3b82f6); color: #000; font-size: 0.75rem; font-weight: 800; padding: 3px 10px; border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+    }
+
+    .coach-speech-bubble {
+      background: rgba(11, 19, 43, 0.85);
+      border: 1px solid #00f0ff;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 0.83rem;
+      color: #e0f2fe;
+      margin-bottom: 14px;
+      text-align: left;
+      position: relative;
+      box-shadow: 0 4px 15px rgba(0, 240, 255, 0.15);
+      line-height: 1.5;
+    }
+    .coach-speech-bubble::after {
+      content: ''; position: absolute; top: -6px; left: 30px; width: 10px; height: 10px;
+      background: rgba(11, 19, 43, 0.85); border-left: 1px solid #00f0ff; border-top: 1px solid #00f0ff; transform: rotate(45deg);
+    }
+
+    .top-goal-bar {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;
+      background: rgba(15, 23, 42, 0.85); padding: 10px; border-radius: 10px; border: 1px solid #1e3a8a;
+      font-size: 0.8rem; text-align: center;
+    }
+    .top-goal-item { color: #93c5fd; }
+    .top-goal-val { font-weight: bold; color: #fbbf24; font-size: 0.95rem; }
+
+    .cyber-dashboard-grid {
+      display: grid; grid-template-columns: 1fr 1.3fr 1fr; align-items: center; gap: 10px; margin: 14px 0;
+      background: rgba(15, 23, 42, 0.7); padding: 16px 10px; border-radius: 14px; border: 1px solid #1e3a8a;
+    }
+
+    .stat-node { display: flex; flex-direction: column; align-items: center; }
+    .stat-label { font-size: 0.73rem; color: #93c5fd; font-weight: bold; }
+    .stat-value { font-size: 1.15rem; font-weight: 800; color: #fff; margin-top: 2px; }
+
+    .ring-progress-wrapper {
+      position: relative; width: 110px; height: 110px; margin: 0 auto; display: flex; align-items: center; justify-content: center;
+    }
+    .ring-svg { width: 100%; height: 100%; transform: rotate(-90deg); filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.5)); }
+    .ring-bg { fill: none; stroke: #1e293b; stroke-width: 8; }
+    .ring-fill {
+      fill: none; stroke: url(#neonGradient); stroke-width: 8; stroke-dasharray: 283; stroke-dashoffset: 283;
+      stroke-linecap: round; transition: stroke-dashoffset 1s ease-in-out;
+    }
+
+    .ring-inner-text { position: absolute; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .percent-val { font-size: 1.25rem; font-weight: 900; color: #00f0ff; text-shadow: 0 0 10px rgba(0,240,255,0.6); }
+    .percent-sub { font-size: 0.62rem; color: #94a3b8; font-weight: bold; }
+
+    .weight-analogy-box {
+      background: rgba(15, 23, 42, 0.85); border: 1px dashed #3b82f6; border-radius: 12px; padding: 12px;
+      font-size: 0.83rem; color: #cbd5e1; text-align: left; line-height: 1.6;
+    }
+    .analogy-title { font-weight: bold; color: #00f0ff; margin-bottom: 2px; }
+
+    .menu-week-calendar {
+      display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 12px;
+    }
+    .menu-day-btn {
+      background-color: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 8px 2px;
+      text-align: center; cursor: pointer; color: #94a3b8; font-size: 0.7rem; transition: all 0.2s;
+    }
+    .menu-day-btn.active { background-color: #0284c7; border-color: #38bdf8; color: #ffffff; font-weight: bold; }
+    .menu-day-btn.today { border: 2px solid #f59e0b; }
+
+    .recipe-box, .video-comment-box { background: #0f172a; padding: 12px; border-radius: 8px; margin-bottom: 14px; font-size: 0.85rem; border: 1px solid #1e293b; }
+    .recipe-box { border-left: 4px solid var(--accent-gold); }
+    .video-comment-box { border-left: 4px solid var(--accent-color); }
+
+    .time-tabs { display: flex; gap: 10px; margin-bottom: 14px; }
+    .time-tab {
+      flex: 1; padding: 12px; text-align: center; background: #1a2234; border: 1px solid var(--border-highlight);
+      border-radius: 10px; font-weight: bold; font-size: 0.9rem; color: var(--text-dim); cursor: pointer;
+    }
+    .time-tab.active { background: linear-gradient(135deg, #ff5722, #ea580c); color: #fff; border-color: #f97316; }
+
+    label { display: block; font-size: 0.85rem; color: var(--text-dim); margin-top: 12px; margin-bottom: 6px; font-weight: 500; }
+    input[type="date"], input[type="number"], select, input[type="text"], textarea {
+      width: 100%; padding: 12px; background-color: #0f172a; border: 1px solid var(--border-highlight);
+      border-radius: 10px; color: #fff; font-size: 0.95rem; outline: none;
+    }
+
+    .video-container {
+      position: relative; width: 100%; padding-top: 56.25%; background: #000; border-radius: 12px; overflow: hidden; margin-top: 14px; border: 1px solid var(--border-highlight);
+    }
+    .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+
+    .external-video-btn {
+      display: block; width: 100%; margin-top: 10px; background: #2563eb; color: #fff; text-align: center;
+      padding: 12px; border-radius: 10px; font-weight: bold; font-size: 0.9rem; text-decoration: none;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+    }
+
+    .force-unlock-btn {
+      display: block; width: 100%; margin-top: 8px; background: #334155; color: #cbd5e1; text-align: center;
+      padding: 8px; border-radius: 8px; font-size: 0.78rem; font-weight: bold; border: 1px solid #475569; cursor: pointer;
+    }
+
+    .video-status {
+      margin-top: 12px; padding: 10px; border-radius: 8px; font-size: 0.85rem; text-align: center; font-weight: bold;
+      background: #1a2234; color: var(--text-dim); border: 1px solid var(--border-highlight);
+    }
+    .video-status.completed { background: rgba(16, 185, 129, 0.15); color: var(--success-color); border: 1px solid rgba(16, 185, 129, 0.4); }
+    .video-status.rest-mode { background: rgba(59, 130, 246, 0.15); color: var(--rest-color); border: 1px solid rgba(59, 130, 246, 0.4); }
+
+    .btn-submit {
+      width: 100%; background: linear-gradient(135deg, #ff5722, #ea580c); color: #fff; border: none;
+      padding: 15px; border-radius: 12px; font-size: 1rem; font-weight: 800; margin-top: 18px; cursor: pointer;
+      box-shadow: 0 4px 16px rgba(255, 87, 34, 0.4);
+    }
+    .btn-submit.rest-btn { background: linear-gradient(135deg, #3b82f6, #2563eb); box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4); }
+    .btn-submit:disabled { background: #334155; color: #64748b; box-shadow: none; cursor: not-allowed; }
+
+    .chart-container { position: relative; width: 100%; height: 240px; margin-top: 12px; }
+
+    .month-selector { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .month-btn { background: #1a2234; border: 1px solid var(--border-highlight); color: #fff; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: bold; }
+    .month-title { font-size: 1.05rem; font-weight: bold; color: var(--accent-gold); }
+    .month-summary { display: flex; justify-content: space-around; background: #0f172a; padding: 8px; border-radius: 8px; font-size: 0.8rem; margin-bottom: 14px; border: 1px solid #1e293b; font-weight: 600; }
+
+    .stamp-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+    .stamp-box { background: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 6px 3px; display: flex; flex-direction: column; align-items: center; font-size: 0.65rem; color: var(--text-dim); min-height: 80px; }
+    .stamp-day-title { font-weight: bold; color: #cbd5e1; margin-bottom: 4px; }
+    .stamp-slot-container { display: flex; flex-direction: column; gap: 3px; width: 100%; align-items: center; }
+    .stamp-slot { width: 100%; height: 22px; border-radius: 6px; background: #162032; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; border: 1px dashed #334155; }
+    .stamp-slot.m-done { background: rgba(245, 158, 11, 0.2); border: 1px solid #f59e0b; }
+    .stamp-slot.m-rest { background: rgba(59, 130, 246, 0.2); border: 1px solid #3b82f6; }
+    .stamp-slot.n-done { background: rgba(59, 130, 246, 0.2); border: 1px solid #3b82f6; }
+    .stamp-slot.n-rest { background: rgba(168, 85, 247, 0.2); border: 1px solid #a855f7; }
+
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px); z-index: 1000; padding: 16px; overflow-y: auto; }
+    .modal-content { background: var(--card-bg); border-radius: 18px; padding: 24px; max-width: 620px; margin: 30px auto; border: 1px solid var(--border-highlight); box-shadow: 0 12px 36px rgba(0,0,0,0.5); }
+    .modal-close { float: right; background: #1e293b; color: #fff; border: 1px solid var(--border-highlight); padding: 6px 14px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+
+    .recipe-eval-box { background: rgba(251, 191, 36, 0.1); border: 1px solid rgba(251, 191, 36, 0.4); padding: 12px; border-radius: 10px; font-size: 0.85rem; color: #fde68a; margin-bottom: 14px; }
+    .recipe-card-week { background: #0f172a; border-radius: 12px; padding: 14px; margin-bottom: 12px; border-left: 4px solid var(--accent-gold); border: 1px solid #1e293b; }
+    .howto-toggle-btn { display: inline-block; margin-top: 8px; padding: 6px 12px; background: #1e293b; border: 1px solid var(--border-highlight); color: var(--accent-gold); border-radius: 6px; font-size: 0.78rem; font-weight: bold; cursor: pointer; }
+    .recipe-howto-box { display: none; margin-top: 10px; padding: 10px; background: #131c2e; border-radius: 8px; font-size: 0.82rem; color: #e2e8f0; border: 1px dashed #334155; line-height: 1.6; }
+    
+    .custom-video-item { background: #0f172a; padding: 12px; border-radius: 10px; margin-bottom: 12px; border: 1px solid #1e293b; }
+    .goal-input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: #0f172a; padding: 12px; border-radius: 12px; border: 1px solid #1e3a8a; margin-bottom: 14px; }
+    .ingredient-search-box { background: #0f172a; padding: 12px; border-radius: 12px; border: 1px solid #10b981; margin-bottom: 14px; }
+    .btn-search-recipe { width: 100%; background: linear-gradient(135deg, #10b981, #059669); color: #fff; border: none; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 0.85rem; cursor: pointer; margin-top: 8px; }
+  </style>
+</head>
+<body>
+
+  <div class="app-header">
+    <h1 id="appTitleHeader" onclick="triggerSecretDebug()">🔥 カラダログ</h1>
+    <div class="header-btns">
+      <button class="menu-link-btn" onclick="openVideoModal()">⚙️ 設定</button>
+      <button class="menu-link-btn" onclick="openRecipeModal()">🍽️ 献立</button>
+    </div>
+  </div>
+
+  <div class="card avatar-card">
+    <div class="card-title" style="border-bottom: none; padding-bottom: 0;">
+      <span>🌐 プログレス状況</span>
+      <span class="status-badge" id="bmiStatusBadge">分析中...</span>
+    </div>
+    
+    <div class="coach-speech-bubble" id="coachSpeechBubble">
+      💬 (AIコーチのアドバイスをロード中...)
+    </div>
+
+    <div class="top-goal-bar">
+      <div class="top-goal-item">🎯 目標体重: <span class="top-goal-val" id="topTargetWeightVal">70.0 kg</span></div>
+      <div class="top-goal-item">⏳ 達成期間: <span class="top-goal-val" id="topTargetPeriodVal">5 か月</span></div>
+    </div>
+
+    <div class="cyber-dashboard-grid">
+      <div class="stat-node">
+        <div class="stat-label">現在の体重</div>
+        <div class="stat-value" id="currentWeightVal">77.5 kg</div>
+      </div>
+
+      <div class="ring-progress-wrapper">
+        <svg class="ring-svg" viewBox="0 0 100 100">
+          <defs>
+            <linearGradient id="neonGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#ff5722"/>
+              <stop offset="100%" stop-color="#00f0ff"/>
+            </linearGradient>
+          </defs>
+          <circle class="ring-bg" cx="50" cy="50" r="45"/>
+          <circle class="ring-fill" id="ringProgressFill" cx="50" cy="50" r="45"/>
+        </svg>
+        <div class="ring-inner-text">
+          <div class="percent-val" id="percentVal">0%</div>
+          <div class="percent-sub">GOAL</div>
+        </div>
+      </div>
+
+      <div class="stat-node">
+        <div class="stat-label">目標まで</div>
+        <div class="stat-value" id="diffWeightText" style="color: #34d399;">-7.5 kg</div>
+        <div style="font-size: 0.68rem; color: #94a3b8; margin-top: 2px;">差分</div>
+      </div>
+    </div>
+
+    <div class="weight-analogy-box" id="weightAnalogyBox">
+      <div class="analogy-title">💡 体重・軽さ換算</div>
+      <div id="analogyText">体重を記録すると重さの例えが更新されます。</div>
+    </div>
+  </div>
+
+  <div class="card" style="border: 1px solid #f59e0b;">
+    <div class="card-title" style="color: #f59e0b; margin-bottom: 8px; padding-bottom: 6px;">
+      <span>🎯 本日のプチ筋トレ課題</span>
+      <button onclick="generateDailyChallenge()" style="background:none; border:none; color:#94a3b8; font-size:0.75rem; cursor:pointer;">↻ 変更</button>
+    </div>
+    <div id="workoutChallengeTitle" style="font-size: 0.95rem; font-weight: bold; color: #fff;"></div>
+    <div id="workoutChallengeTarget" style="font-size: 0.75rem; color: #38bdf8; margin-top: 2px;"></div>
+    
+    <div id="workoutChallengeVisual" style="background:#0f172a; border:1px dashed #475569; border-radius:8px; padding:10px; margin-top:8px; font-size:0.8rem; color:#cbd5e1; line-height:1.5;">
+      読み込み中...
+    </div>
+
+    <button id="challengeCompleteBtn" onclick="completeDailyChallenge()" style="margin-top: 10px; width: 100%; background: #059669; color: white; border: none; padding: 7px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.8rem;">
+      ✓ 課題クリア！
+    </button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <span>📅 今週のパーソナル献立</span>
+      <span id="weekPatternLabel" style="font-size: 0.7rem; color: #38bdf8; text-align: right; max-width: 55%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
+    </div>
+
+    <div class="menu-week-calendar" id="mainMenuCalendarGrid"></div>
+
+    <div class="recipe-box">
+      <div class="recipe-title" id="recipeTitle">💡 本日の定食</div>
+      <div id="recipeDesc">メニュー読み込み中...</div>
+      <button class="howto-toggle-btn" onclick="toggleMainRecipeHowto()">📖 詳細な調理手順・分量を見る</button>
+      <div class="recipe-howto-box" id="mainRecipeHowtoBox"></div>
+    </div>
+
+    <div class="time-tabs">
+      <div class="time-tab active" id="tabMorning" onclick="switchTimeMode('morning')">🌅 朝用メニュー</div>
+      <div class="time-tab" id="tabNight" onclick="switchTimeMode('night')">🌃 夜用メニュー</div>
+    </div>
+
+    <label>日付</label>
+    <input type="date" id="logDate" onchange="loadDateWeightData()">
+
+    <label id="weightLabel">体重 (kg)</label>
+    <input type="number" id="weight" step="0.1" placeholder="例: 77.5" onchange="saveCurrentWeightInput()">
+
+    <label>運動コース選択 <span style="font-size:0.72rem; color:#38bdf8; font-weight:normal;">(状況に合わせて自動おすすめ中✨)</span></label>
+    <select id="workoutCourse" onchange="onCourseChange()"></select>
+
+    <div class="video-comment-box" id="videoCommentBox">
+      <div style="font-weight: bold; color: var(--accent-color); margin-bottom: 4px;" id="videoCommentTitle">🎯 コースのポイント</div>
+      <div id="targetMuscleArea" style="font-size: 0.82rem; color: #38bdf8; font-weight: bold; margin-bottom: 4px;">🎯 効く部位: ---</div>
+      <div id="videoCommentDesc">---</div>
+    </div>
+
+    <div class="video-container" id="videoWrapper">
+      <div id="player"></div>
+    </div>
+
+    <a href="#" id="externalVideoLink" class="external-video-btn" target="_blank">▶️ YouTubeアプリで動画を開いて運動する</a>
+    <button class="force-unlock-btn" onclick="forceUnlockVideo()">☑️ 【動画視聴が終わったら】ここを押して完走認証する</button>
+
+    <div class="video-status" id="videoStatus">
+      ▶️ 動画を再生するか、上のボタンで視聴完了にできます
+    </div>
+
+    <button class="btn-submit" id="btnSubmit" onclick="saveLog()" disabled>
+      🔒 動画完走でスタンプGET 💮
+    </button>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>📈 体重推移グラフ</span></div>
+    <div class="chart-container"><canvas id="weightChart"></canvas></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>💮 スタンプカレンダー</span></div>
+    <div class="month-selector">
+      <button class="month-btn" onclick="changeMonth(-1)">◀ 前月</button>
+      <div class="month-title" id="monthTitle">2026年 11月</div>
+      <button class="month-btn" onclick="changeMonth(1)">翌月 ▶</button>
+    </div>
+    <div class="month-summary">
+      <span id="mCount">🌅 朝: 0日</span>
+      <span id="nCount">🌃 夜: 0日</span>
+    </div>
+    <div class="stamp-grid" id="stampGrid"></div>
+  </div>
+
+  <!-- ⚙️ 動画設定 モーダル -->
+  <div class="modal" id="videoModal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeVideoModal()">✕ 閉じる</button>
+      <h2 style="color: var(--accent-gold); font-size: 1.1rem; margin-bottom: 6px;">⚙️ 動画設定</h2>
+      <div id="videoCustomList"></div>
+      <button class="btn-submit" onclick="saveCustomVideos()" style="margin-top: 10px; padding: 10px; font-size: 0.9rem;">💾 保存</button>
+      <button class="btn-submit" onclick="resetCustomVideos()" style="margin-top: 8px; padding: 8px; font-size: 0.85rem; background: #475569;">🔄 初期化</button>
+    </div>
+  </div>
+
+  <!-- 🍽️ 献立一覧・買い物リスト モーダル -->
+  <div class="modal" id="recipeModal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeRecipeModal()">✕ 閉じる</button>
+      <h2 style="color: var(--accent-gold); font-size: 1.15rem; margin-bottom: 6px;">🍽️ 目標設定＆献立</h2>
+      <div class="goal-input-grid">
+        <div>
+          <label style="margin-top:0; color:#fbbf24;">🎯 目標体重 (kg)</label>
+          <input type="number" id="targetWeightInput" step="0.1" placeholder="例: 70.0" oninput="saveGoalParams()">
+        </div>
+        <div>
+          <label style="margin-top:0; color:#fbbf24;">⏳ 達成期間 (か月)</label>
+          <input type="number" id="targetPeriodInput" min="1" max="12" placeholder="例: 5" oninput="saveGoalParams()">
+        </div>
+      </div>
+
+      <button class="btn-submit" onclick="generateShoppingList()" style="background: linear-gradient(135deg, #3b82f6, #2563eb); margin-bottom: 14px; padding: 12px; font-size: 0.9rem;">
+        🛒 今週の買い物リストを自動作成してコピー
+      </button>
+
+      <div class="recipe-eval-box" id="recipeEvalBox">📊 体重データを分析中...</div>
+      <div id="weekRecipeList"></div>
+    </div>
+  </div>
+
+  <!-- 🕵️‍♂️ シークレット・デバッグ モーダル -->
+  <div class="modal" id="secretDebugModal">
+    <div class="modal-content" style="border: 2px solid #00f0ff;">
+      <button class="modal-close" onclick="closeSecretDebug()">✕ 閉じる</button>
+      <h2 style="color: #00f0ff; font-size: 1.1rem; margin-bottom: 8px;">🕵️‍♂️ デバッグパネル</h2>
+      <div style="background: #0f172a; padding: 12px; border-radius: 10px; margin-bottom: 12px; border: 1px solid #1e3a8a; font-size: 0.85rem;">
+        <button class="btn-submit" onclick="testSimulateNextWeek()" style="margin-top: 4px; padding: 10px; font-size: 0.85rem; background: linear-gradient(135deg, #00f0ff, #2563eb); color:#000; font-weight:900;">🧪 翌週の献立に切り替え (+1週)</button>
+        <button class="btn-submit" onclick="testResetWeekOffset()" style="margin-top: 8px; padding: 8px; font-size: 0.80rem; background: #334155; color:#fff;">🔄 週オフセットをリセット</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script>
+    const defaultCourseData = {
+      morning: [
+        { id: "m_A", name: "🌅 朝A：カズハ7分 腹筋＆ヒップ", videoId: "USJgKSLxDRc", type: "agi", targetMuscle: "お腹周り・腹直筋", comment: "✨ 姿勢改善と骨盤周りの代謝を引き上げる7分コース" },
+        { id: "m_B", name: "🌅 朝B：基本スクワット＆腕立て", videoId: "E5rbpDjYwDo", type: "power", targetMuscle: "太もも・お尻・胸", comment: "🏋️ 基礎代謝を底上げする筋トレコース" },
+        { id: "m_C", name: "🌅 朝C：脂肪燃焼スペシャル", videoId: "6gHwh1eZ0yY", type: "stamina", targetMuscle: "全身の脂肪・心肺", comment: "🔥 有酸素×筋トレで脂肪燃焼" },
+        { id: "m_REST", name: "🟢 【朝の休息日】", videoId: "", type: "rest", targetMuscle: "リフレッシュ", comment: "🌿 休息日" }
+      ],
+      night: [
+        { id: "n_A", name: "🌃 夜A：下腹足上げキープ", videoId: "VboGgLR4l7A", type: "agi", targetMuscle: "下腹部", comment: "🌙 静音設計の下腹引き締め" },
+        { id: "n_B", name: "🌃 夜B：地獄のプランク", videoId: "o5vb430_m38", type: "power", targetMuscle: "体幹軸", comment: "⚡ 体幹強化コース" },
+        { id: "n_C", name: "🌃 夜C：ブルガリアンスクワット", videoId: "LTsAhtk4QQM", type: "stamina", targetMuscle: "下半身全体", comment: "🧘 下半身と心肺機能" },
+        { id: "n_REST", name: "🌙 【夜の休息日】", videoId: "", type: "rest", targetMuscle: "疲労回復", comment: "🛀 リセット" }
+      ]
+    };
+
+    let secretTapCount = 0;
+    let secretTapTimer = null;
+    let debugWeekOffset = parseInt(localStorage.getItem('debug_week_offset_v4') || '0', 10);
+
+    function triggerSecretDebug() {
+      secretTapCount++;
+      if (secretTapTimer) clearTimeout(secretTapTimer);
+      if (secretTapCount >= 5) {
+        secretTapCount = 0;
+        document.getElementById('secretDebugModal').style.display = 'block';
+      }
+      secretTapTimer = setTimeout(() => { secretTapCount = 0; }, 1500);
+    }
+    function closeSecretDebug() { document.getElementById('secretDebugModal').style.display = 'none'; }
+    function testSimulateNextWeek() {
+      debugWeekOffset += 1;
+      localStorage.setItem('debug_week_offset_v4', debugWeekOffset);
+      alert(`🧪 翌週にシフトしました！`);
+      closeSecretDebug();
+      refreshAllViews();
+    }
+    function testResetWeekOffset() {
+      debugWeekOffset = 0;
+      localStorage.setItem('debug_week_offset_v4', '0');
+      alert(`🔄 リセットしました`);
+      closeSecretDebug();
+      refreshAllViews();
+    }
+    function refreshAllViews() {
+      selectedSatDayIdx = getSatStartDayIndex();
+      renderMenuCalendar();
+      renderSelectedMenu(selectedSatDayIdx);
+      renderApp();
+    }
+
+    function getStoredLogs() {
+      const primary = localStorage.getItem('abs_workout_logs');
+      if (primary) {
+        try { return JSON.parse(primary); } catch(e) {}
+      }
+      return {};
+    }
+    function saveStoredLogs(dataObj) {
+      localStorage.setItem('abs_workout_logs', JSON.stringify(dataObj));
+    }
+
+    function getActiveCourses() {
+      const saved = localStorage.getItem('custom_courses_data_v18');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (parsed && Array.isArray(parsed.morning)) return parsed;
+        } catch(e) {}
+      }
+      return defaultCourseData;
+    }
+
+    function resetCustomVideos() {
+      localStorage.removeItem('custom_courses_data_v18');
+      alert("初期化しました！");
+      closeVideoModal();
+      populateCourseOptions();
+    }
+
+    function getWeekBaseIndex() {
+      const now = new Date();
+      now.setDate(now.getDate() + (debugWeekOffset * 7));
+      const firstDay = new Date(2026, 0, 1);
+      const pastDays = Math.floor((now - firstDay) / (1000 * 60 * 60 * 24));
+      return Math.floor((pastDays + firstDay.getDay() + 1) / 7);
+    }
+
+    function getDynamicWeightModeMenus() {
+      const w = getWeekBaseIndex();
+      const pool = [
+        { type: "鶏むね肉", name: "鶏むね肉と3種キノコのペッパーポン酢", mainIng: "鶏むね肉 1枚＋しめじ", soup: { name: "豆腐スープ", detail: "水200ml, 豆腐" }, egg: "ゆで卵 1個", side: "もずく酢", note: "高タンパク低脂質！", methods: ["主菜: 鶏むね肉", "調理: ポン酢で蒸し焼き"] },
+        { type: "魚メイン", name: "生鮭とキノコの旨塩焼き", mainIng: "生鮭 1切れ", soup: { name: "わかめスープ", detail: "水200ml, わかめ" }, egg: "ゆで卵 1個", side: "納豆", note: "オメガ3脂肪酸！", methods: ["主菜: 生鮭", "調理: 旨塩焼き"] },
+        { type: "肉メイン", name: "豚ロースとキャベツの生姜炒め", mainIng: "豚ロース 120g", soup: { name: "中華スープ", detail: "水200ml" }, egg: "ゆで卵 1個", side: "キムチ", note: "ビタミンB1豊富！", methods: ["主菜: 豚ロース", "調理: 生姜醤油"] }
+      ];
+      let res = [];
+      for(let i=0; i<7; i++) {
+        let p = pool[(w + i) % pool.length];
+        res.push({ day: ["土","日","月","火","水","木","金"][i], fullDay: ["土曜日","日曜日","月曜日","火曜日","水曜日","木曜日","金曜日"][i], ...p });
+      }
+      return { shred: res, optimal: res };
+    }
+
+    let currentTimeMode = "morning";
+    let player;
+    let isVideoFinished = false;
+    let weightChartInstance = null;
+    let currentDisplayDate = new Date();
+
+    function getSatStartDayIndex() {
+      const now = new Date();
+      now.setDate(now.getDate() + (debugWeekOffset * 7));
+      return (now.getDay() + 1) % 7;
+    }
+    let selectedSatDayIdx = getSatStartDayIndex();
+    document.getElementById('logDate').value = new Date().toISOString().split('T')[0];
+
+    function getActiveWeeklyMenu() {
+      const menus = getDynamicWeightModeMenus();
+      return { mode: "optimal", title: "🔥 自動最適化モード", menu: menus.optimal };
+    }
+
+    const dailyWorkouts = [
+      { name: "膝つき腕立て伏せ", count: "12回 × 2セット", target: "胸・二の腕", visual: "📌 <b>【動作イメージ】</b> 床に膝をついて胸を床ギリギリまで下ろします。" },
+      { name: "プランク", count: "45秒ホールド", target: "体幹全体", visual: "📌 <b>【動作イメージ】</b> 両肘とつま先で体を一直線にキープ。" },
+      { name: "スクワット", count: "15回 × 2セット", target: "下半身", visual: "📌 <b>【動作イメージ】</b> 椅子に腰かけるように股関節を引きます。" }
+    ];
+
+    function generateDailyChallenge() {
+      const workout = dailyWorkouts[Math.floor(Math.random() * dailyWorkouts.length)];
+      document.getElementById('workoutChallengeTitle').innerHTML = `${workout.name} <span style="font-size:0.8rem; color:#38bdf8;">(${workout.count})</span>`;
+      document.getElementById('workoutChallengeTarget').innerText = `🎯 効く部位: ${workout.target}`;
+      document.getElementById('workoutChallengeVisual').innerHTML = workout.visual;
+      const btn = document.getElementById('challengeCompleteBtn');
+      if(btn) { btn.innerText = "✓ 課題クリア！"; btn.style.background = "#059669"; btn.disabled = false; }
+    }
+    function completeDailyChallenge() {
+      const btn = document.getElementById('challengeCompleteBtn');
+      if(btn) { btn.innerText = "🎉 クリア済み！"; btn.style.background = "#475569"; btn.disabled = true; }
+    }
+
+    function renderMenuCalendar() {
+      const grid = document.getElementById('mainMenuCalendarGrid');
+      if(!grid) return;
+      grid.innerHTML = '';
+      const todayIdx = getSatStartDayIndex();
+      const activeMenuObj = getActiveWeeklyMenu();
+      document.getElementById('weekPatternLabel').innerText = activeMenuObj.title;
+
+      activeMenuObj.menu.forEach((item, idx) => {
+        const btn = document.createElement('div');
+        btn.className = `menu-day-btn ${idx === selectedSatDayIdx ? 'active' : ''} ${idx === todayIdx ? 'today' : ''}`;
+        btn.innerHTML = `<span>${item.day}</span>${idx === todayIdx ? '★' : ''}`;
+        btn.onclick = () => { selectedSatDayIdx = idx; renderMenuCalendar(); renderSelectedMenu(idx); };
+        grid.appendChild(btn);
+      });
+    }
+
+    function renderSelectedMenu(idx) {
+      const activeMenuObj = getActiveWeeklyMenu();
+      const recipe = activeMenuObj.menu[idx % activeMenuObj.menu.length];
+      document.getElementById('recipeTitle').innerText = `📅 [${recipe.fullDay}]：${recipe.main}`;
+      document.getElementById('recipeDesc').innerText = `セット：${recipe.soup.name} ＋ ${recipe.egg} ＋ ${recipe.side}`;
+      
+      let methodsHtml = recipe.methods.map(m => `<div>${m}</div>`).join('');
+      document.getElementById('mainRecipeHowtoBox').innerHTML = `${methodsHtml}<div style="color:#fbbf24; margin-top:4px;"><b>【ポイント】</b> ${recipe.note}</div>`;
+    }
+
+    function toggleMainRecipeHowto() {
+      const box = document.getElementById('mainRecipeHowtoBox');
+      box.style.display = box.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function populateCourseOptions() {
+      const select = document.getElementById('workoutCourse');
+      if(!select) return;
+      select.innerHTML = '';
+      const activeData = getActiveCourses();
+      activeData[currentTimeMode].forEach(course => {
+        const opt = document.createElement('option');
+        opt.value = course.id; opt.innerText = course.name;
+        select.appendChild(opt);
+      });
+      onCourseChange();
+    }
+
+    function switchTimeMode(mode) {
+      currentTimeMode = mode;
+      document.getElementById('tabMorning').classList.toggle('active', mode === 'morning');
+      document.getElementById('tabNight').classList.toggle('active', mode === 'night');
+      populateCourseOptions();
+      loadDateWeightData();
+    }
+
+    function getCurrentCourseObj() {
+      const select = document.getElementById('workoutCourse');
+      const selectedId = select ? select.value : null;
+      const activeData = getActiveCourses();
+      const courses = activeData[currentTimeMode] || defaultCourseData[currentTimeMode];
+      return courses.find(c => c.id === selectedId) || courses[0];
+    }
+
+    function loadDateWeightData() {
+      const date = document.getElementById('logDate').value;
+      const logData = getStoredLogs();
+      const dayData = logData[date] || {};
+      document.getElementById('weight').value = currentTimeMode === 'morning' ? (dayData.morningWeight || dayData.weight || '') : (dayData.nightWeight || '');
+      checkAlreadyCompletedToday(date);
+    }
+
+    function saveCurrentWeightInput() {
+      const date = document.getElementById('logDate').value;
+      const val = document.getElementById('weight').value;
+      if(!val) return;
+      const logData = getStoredLogs();
+      if(!logData[date]) logData[date] = {};
+      if(currentTimeMode === 'morning') logData[date].morningWeight = parseFloat(val);
+      else logData[date].nightWeight = parseFloat(val);
+      saveStoredLogs(logData);
+      renderApp();
+    }
+
+    function checkAlreadyCompletedToday(dateStr) {
+      const logData = getStoredLogs();
+      const dayData = logData[dateStr] || {};
+      const btn = document.getElementById('btnSubmit');
+      if(!btn) return;
+      if(dayData[currentTimeMode] && dayData[currentTimeMode].done) {
+        btn.disabled = true; btn.innerText = "✅ 記録済みです";
+      } else {
+        btn.disabled = false; btn.innerText = "💮 記録してスタンプ獲得";
+      }
+    }
+
+    function onYouTubeIframeAPIReady() { setupPlayer(); }
+    function setupPlayer() {
+      const courseObj = getCurrentCourseObj();
+      if(!courseObj) return;
+      if(courseObj.videoId) {
+        document.getElementById('externalVideoLink').href = `https://www.youtube.com/watch?v=${courseObj.videoId}`;
+        document.getElementById('externalVideoLink').style.display = 'block';
+        document.getElementById('videoWrapper').style.display = 'block';
+        if(typeof YT !== 'undefined' && YT.Player) {
+          try { player = new YT.Player('player', { videoId: courseObj.videoId }); } catch(e){}
+        }
+      } else {
+        document.getElementById('videoWrapper').style.display = 'none';
+        document.getElementById('externalVideoLink').style.display = 'none';
+      }
+    }
+
+    function forceUnlockVideo() {
+      isVideoFinished = true;
+      document.getElementById('videoStatus').innerText = "🎉 完了認証されました！";
+      document.getElementById('videoStatus').className = "video-status completed";
+      document.getElementById('btnSubmit').disabled = false;
+    }
+
+    function onCourseChange() {
+      const courseObj = getCurrentCourseObj();
+      if(!courseObj) return;
+      document.getElementById('videoCommentTitle').innerText = `🎯 【${courseObj.name}】`;
+      document.getElementById('targetMuscleArea').innerText = `🎯 効く部位: ${courseObj.targetMuscle || '全身'}`;
+      document.getElementById('videoCommentDesc').innerText = courseObj.comment || '';
+      setupPlayer();
+    }
+
+    function saveLog() {
+      const date = document.getElementById('logDate').value;
+      const logData = getStoredLogs();
+      if(!logData[date]) logData[date] = {};
+      const weight = document.getElementById('weight').value;
+      const courseObj = getCurrentCourseObj();
+
+      logData[date][currentTimeMode] = { courseName: courseObj.name, done: true };
+      if(weight) {
+        if(currentTimeMode === 'morning') logData[date].morningWeight = parseFloat(weight);
+        else logData[date].nightWeight = parseFloat(weight);
+      }
+      saveStoredLogs(logData);
+      alert("記録を保存しました！💮");
+      renderApp();
+    }
+
+    function updateAvatarDisplay() {
+      const logData = getStoredLogs();
+      let latestW = null;
+      Object.keys(logData).sort().forEach(d => {
+        const w = logData[d].nightWeight || logData[d].morningWeight || logData[d].weight;
+        if(w) latestW = w;
+      });
+
+      const currentW = latestW || 77.5;
+      const targetW = parseFloat(localStorage.getItem('user_target_weight')) || 70.0;
+      const targetP = parseFloat(localStorage.getItem('user_target_period')) || 5;
+
+      document.getElementById('topTargetWeightVal').innerText = `${targetW.toFixed(1)} kg`;
+      document.getElementById('topTargetPeriodVal').innerText = `${targetP} か月`;
+      document.getElementById('currentWeightVal').innerText = `${currentW.toFixed(1)} kg`;
+
+      const diff = currentW - targetW;
+      const diffEl = document.getElementById('diffWeightText');
+      if(diff > 0) {
+        diffEl.innerText = `-${diff.toFixed(1)} kg`;
+        diffEl.style.color = "#34d399";
+      } else {
+        diffEl.innerText = `🎉 達成！`;
+        diffEl.style.color = "#fbbf24";
+      }
+
+      const progressPercent = Math.min(100, Math.max(0, Math.round((1 - (diff / 10)) * 100)));
+      document.getElementById('percentVal').innerText = `${progressPercent}%`;
+      document.getElementById('ringProgressFill').style.strokeDashoffset = 283 - (283 * progressPercent / 100);
+
+      document.getElementById('bmiStatusBadge').innerText = currentW >= 25 ? "STATUS: OVERLOAD" : "STATUS: OPTIMAL";
+
+      const bottleCount = Math.round(diff * 2000 / 500);
+      document.getElementById('analogyText').innerHTML = `
+        ・現在の体重は <b>【大型犬約2.2頭分 🐕】</b> に相当！<br>
+        ・目標達成まであと <b>500mlペットボトル 約 ${bottleCount} 本分（${diff.toFixed(1)}kg）</b> です！ 🥤
+      `;
+
+      document.getElementById('coachSpeechBubble').innerHTML = `
+        💬「現在の体重は <b>${currentW}kg</b> です！目標の${targetW}kgまであと <b>-${diff.toFixed(1)}kg</b>。下半身の引き締めと有酸素運動を重点的に進めていきましょう🔥」
+      `;
+    }
+
+    function openVideoModal() {
+      const listEl = document.getElementById('videoCustomList');
+      listEl.innerHTML = '';
+      const courses = getActiveCourses();
+      ['morning', 'night'].forEach(timeKey => {
+        let html = `<h3 style="color:#60a5fa; font-size:0.9rem; margin:10px 0;">${timeKey === 'morning' ? '朝用' : '夜用'}</h3>`;
+        courses[timeKey].forEach((c, idx) => {
+          if(c.type === 'rest') return;
+          html += `<div class="custom-video-item"><label>名</label><input type="text" id="c_name_${timeKey}_${idx}" value="${c.name}"><label>ID</label><input type="text" id="c_vid_${timeKey}_${idx}" value="${c.videoId}"></div>`;
+        });
+        listEl.innerHTML += html;
+      });
+      document.getElementById('videoModal').style.display = 'block';
+    }
+    function closeVideoModal() { document.getElementById('videoModal').style.display = 'none'; }
+    function saveCustomVideos() {
+      const courses = getActiveCourses();
+      ['morning', 'night'].forEach(timeKey => {
+        courses[timeKey].forEach((c, idx) => {
+          if(c.type === 'rest') return;
+          const n = document.getElementById(`c_name_${timeKey}_${idx}`);
+          const v = document.getElementById(`c_vid_${timeKey}_${idx}`);
+          if(n && v) { c.name = n.value; c.videoId = v.value.trim(); }
+        });
+      });
+      localStorage.setItem('custom_courses_data_v18', JSON.stringify(courses));
+      alert("保存しました！"); closeVideoModal(); populateCourseOptions();
+    }
+
+    function openRecipeModal() {
+      document.getElementById('targetWeightInput').value = localStorage.getItem('user_target_weight') || '';
+      document.getElementById('targetPeriodInput').value = localStorage.getItem('user_target_period') || '';
+      document.getElementById('recipeEvalBox').innerHTML = "📊 パーソナル献立プラン稼働中！";
+      document.getElementById('weekRecipeList').innerHTML = "";
+      document.getElementById('recipeModal').style.display = 'block';
+    }
+    function closeRecipeModal() { document.getElementById('recipeModal').style.display = 'none'; }
+    function saveGoalParams() {
+      localStorage.setItem('user_target_weight', document.getElementById('targetWeightInput').value);
+      localStorage.setItem('user_target_period', document.getElementById('targetPeriodInput').value);
+      renderApp();
+    }
+    function generateShoppingList() {
+      alert("📋 今週の買い物リストを作成しました！");
+    }
+
+    function changeMonth(dir) { currentDisplayDate.setMonth(currentDisplayDate.getMonth() + dir); renderApp(); }
+
+    function renderApp() {
+      const logData = getStoredLogs();
+      const year = currentDisplayDate.getFullYear();
+      const month = currentDisplayDate.getMonth();
+      document.getElementById('monthTitle').innerText = `${year}年 ${month + 1}月`;
+
+      const grid = document.getElementById('stampGrid');
+      grid.innerHTML = '';
+      const lastDay = new Date(year, month + 1, 0);
+      let mCount = 0, nCount = 0;
+      
+      const chartLabels = [];
+      const morningWeights = [];
+      const nightWeights = [];
+      const targetMonthPrefix = `${year}-${String(month+1).padStart(2,'0')}`;
+
+      Object.keys(logData).sort().forEach(d => {
+        const day = logData[d];
+        const mw = day.morningWeight || day.weight;
+        const nw = day.nightWeight;
+        if(mw || nw) {
+          const labelStr = d.slice(5).replace('-', '/');
+          if(!chartLabels.includes(labelStr)) {
+            chartLabels.push(labelStr);
+            morningWeights.push(mw || null);
+            nightWeights.push(nw || null);
+          }
+        }
+      });
+
+      for (let day = 1; day <= lastDay.getDate(); day++) {
+        const dateKey = `${targetMonthPrefix}-${String(day).padStart(2,'0')}`;
+        const dayData = logData[dateKey] || {};
+        if(dayData.morning && dayData.morning.done) mCount++;
+        if(dayData.night && dayData.night.done) nCount++;
+
+        const box = document.createElement('div');
+        box.className = 'stamp-box';
+        box.innerHTML = `
+          <div class="stamp-day-title">${day}日</div>
+          <div class="stamp-slot-container">
+            <div class="stamp-slot ${dayData.morning?.done ? 'm-done' : ''}">${dayData.morning?.done ? '☀️' : ''}</div>
+            <div class="stamp-slot ${dayData.night?.done ? 'n-done' : ''}">${dayData.night?.done ? '🌙' : ''}</div>
+          </div>
+        `;
+        grid.appendChild(box);
+      }
+      document.getElementById('mCount').innerText = `🌅 朝: ${mCount}日`;
+      document.getElementById('nCount').innerText = `🌃 夜: ${nCount}日`;
+
+      renderWeightChart(chartLabels, morningWeights, nightWeights);
+      updateAvatarDisplay();
+    }
+
+    function renderWeightChart(labels, morningWeights, nightWeights) {
+      const ctx = document.getElementById('weightChart').getContext('2d');
+      if (weightChartInstance) weightChartInstance.destroy();
+      const targetW = parseFloat(localStorage.getItem('user_target_weight')) || 70.0;
+
+      if(labels.length === 0) {
+        labels = ["11/8", "11/9", "11/10", "11/11"];
+        morningWeights = [78.0, 77.8, 77.6, 77.5];
+        nightWeights = [78.3, 78.0, 77.8, 77.5];
+      }
+
+      weightChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            { label: '朝体重', data: morningWeights, borderColor: '#ff5722', borderWidth: 3, tension: 0.2, spanGaps: true },
+            { label: '夜体重', data: nightWeights, borderColor: '#3b82f6', borderWidth: 3, tension: 0.2, spanGaps: true },
+            { label: '目標', data: new Array(labels.length).fill(targetW), borderColor: '#10b981', borderDash: [5,5], borderWidth: 2, pointRadius: 0 }
+          ]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+      });
+    }
+
+    // 初期化実行
+    generateDailyChallenge();
+    populateCourseOptions();
+    renderMenuCalendar();
+    renderSelectedMenu(selectedSatDayIdx);
+    renderApp();
+  </script>
+</body>
+</html>
