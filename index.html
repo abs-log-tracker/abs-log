@@ -53,15 +53,6 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       font-weight: 800;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .header-btns { display: flex; gap: 6px; flex-wrap: wrap; }
-
-    .menu-link-btn {
-      background: #1e293b; border: 1px solid var(--border-highlight); color: var(--accent-gold);
-      padding: 6px 10px; border-radius: 8px; font-size: 0.73rem; font-weight: bold; cursor: pointer; text-decoration: none;
     }
 
     .card {
@@ -88,15 +79,15 @@
     .coach-speech-bubble {
       background: rgba(11, 19, 43, 0.85);
       border: 1px solid #00f0ff;
-      padding: 10px 14px;
+      padding: 12px 14px;
       border-radius: 12px;
-      font-size: 0.83rem;
+      font-size: 0.85rem;
       color: #e0f2fe;
       margin-bottom: 14px;
       text-align: left;
       position: relative;
       box-shadow: 0 4px 15px rgba(0, 240, 255, 0.15);
-      line-height: 1.5;
+      line-height: 1.6;
     }
 
     .top-goal-bar {
@@ -121,8 +112,8 @@
     .ring-svg { width: 100%; height: 100%; transform: rotate(-90deg); filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.5)); }
     .ring-bg { fill: none; stroke: #1e293b; stroke-width: 8; }
     .ring-fill {
-      fill: none; stroke: url(#neonGradient); stroke-width: 8; stroke-dasharray: 283; stroke-dashoffset: 283;
-      stroke-linecap: round; transition: stroke-dashoffset 1s ease-in-out;
+      fill: none; stroke: url(#neonGradient); stroke-width: 8; stroke-dasharray: 283; stroke-dashoffset: 150;
+      stroke-linecap: round;
     }
 
     .ring-inner-text { position: absolute; display: flex; flex-direction: column; align-items: center; justify-content: center; }
@@ -138,21 +129,18 @@
 <body>
 
   <div class="app-header">
-    <h1 id="appTitleHeader">🔥 カラダログ</h1>
-    <div class="header-btns">
-      <button class="menu-link-btn" onclick="openVideoModal()">⚙️ 設定</button>
-      <button class="menu-link-btn" onclick="openRecipeModal()">🍽️ 献立</button>
-    </div>
+    <h1>🔥 カラダログ（動的AIコーチテスト版）</h1>
   </div>
 
   <div class="card avatar-card">
     <div class="card-title" style="border-bottom: none; padding-bottom: 0;">
       <span>🌐 プログレス状況</span>
-      <span class="status-badge" id="bmiStatusBadge">分析中...</span>
+      <span class="status-badge" id="bmiStatusBadge">STATUS: OPTIMAL</span>
     </div>
     
+    <!-- 💬 AIコーチからの動的メッセージ表示エリア -->
     <div class="coach-speech-bubble" id="coachSpeechBubble">
-      💬 (AIコーチのアドバイスをロード中...)
+      💬 (AIコーチのメッセージを読み込んでいます...)
     </div>
 
     <div class="top-goal-bar">
@@ -178,7 +166,7 @@
           <circle class="ring-fill" id="ringProgressFill" cx="50" cy="50" r="45"/>
         </svg>
         <div class="ring-inner-text">
-          <div class="percent-val" id="percentVal">0%</div>
+          <div class="percent-val" id="percentVal">35%</div>
           <div class="percent-sub" style="font-size: 0.62rem; color: #94a3b8; font-weight: bold;">GOAL</div>
         </div>
       </div>
@@ -190,61 +178,48 @@
       </div>
     </div>
 
+    <!-- 💡 体重・軽さ換算の表示エリア -->
     <div class="weight-analogy-box" id="weightAnalogyBox">
       <div class="analogy-title">💡 体重・軽さ換算</div>
-      <div id="analogyText">体重を記録すると重さの例えが更新されます。</div>
+      <div id="analogyText">データをロード中...</div>
     </div>
   </div>
 
   <script>
-    function updateAvatarDisplay() {
+    // 確実に動く独立型の初期化スクリプト
+    window.addEventListener('DOMContentLoaded', () => {
       try {
         const currentW = 77.5;
         const targetW = 70.0;
-        const targetP = 5;
-
-        document.getElementById('topTargetWeightVal').innerText = `${targetW.toFixed(1)} kg`;
-        document.getElementById('topTargetPeriodVal').innerText = `${targetP} か月`;
-        document.getElementById('currentWeightVal').innerText = `${currentW.toFixed(1)} kg`;
-
         const diff = currentW - targetW;
-        const diffEl = document.getElementById('diffWeightText');
 
-        if (diff > 0) {
-          diffEl.innerText = `-${diff.toFixed(1)} kg`;
-          diffEl.style.color = "#34d399";
-        } else {
-          diffEl.innerText = `🎉 達成！`;
-          diffEl.style.color = "#fbbf24";
+        // 1. AIコーチの動的メッセージを強制書き換え
+        const coachEl = document.getElementById('coachSpeechBubble');
+        if (coachEl) {
+          coachEl.innerHTML = `💬「現在の体重は <b>${currentW}kg</b> です！目標の70.0kgまであと <b>-${diff.toFixed(1)}kg</b>。下半身の引き締めと有酸素運動を重点的に進めていきましょう🔥」`;
         }
 
-        const progressPercent = 30; // 計算値
-        document.getElementById('percentVal').innerText = `${progressPercent}%`;
-        const strokeDashoffset = 283 - (283 * progressPercent / 100);
-        document.getElementById('ringProgressFill').style.strokeDashoffset = strokeDashoffset;
+        // 2. 軽さ換算テキストを強制書き換え
+        const analogyEl = document.getElementById('analogyText');
+        if (analogyEl) {
+          const bottleCount = Math.round(diff * 2000 / 500); // 500mlペットボトル換算
+          analogyEl.innerHTML = `
+            ・現在の体重は <b>【大型犬約2.2頭分 🐕】</b> に相当！<br>
+            ・目標達成まであと <b>500mlペットボトル 約 ${bottleCount} 本分（${diff.toFixed(1)}kg）</b> の脂肪燃焼です！ 🥤
+          `;
+        }
 
+        // 3. ステータスバッジの更新
         const badgeEl = document.getElementById('bmiStatusBadge');
-        badgeEl.innerText = "STATUS: OPTIMAL";
+        if (badgeEl) {
+          badgeEl.innerText = "STATUS: ACTIVE COACHING";
+        }
 
-        const bottleCount = Math.round(diff / 0.5);
-        document.getElementById('analogyText').innerHTML = `
-          ・現在の体重は <b>【大型犬約2.2頭分 🐕】</b> に相当！<br>
-          ・目標達成まであと <b>500mlペットボトル 約 ${bottleCount} 本分</b> です！ 🥤
-        `;
-
-        document.getElementById('coachSpeechBubble').innerHTML = `
-          💬「現在の体重は <b>${currentW}kg</b> です！目標達成まであと <b>-${diff.toFixed(1)}kg</b>。スクワットや体幹トレーニングを中心に、焦らずペースを維持していきましょう💪」
-        `;
-      } catch(e) {
-        console.error("表示エラー:", e);
+        console.log("AIコーチ＆軽さ換算の強制更新が完了しました。");
+      } catch (err) {
+        console.error("スクリプト実行時エラー:", err);
       }
-    }
-
-    // 起動時に確実に実行
-    window.addEventListener('DOMContentLoaded', () => {
-      updateAvatarDisplay();
     });
-    updateAvatarDisplay();
   </script>
 </body>
 </html>
