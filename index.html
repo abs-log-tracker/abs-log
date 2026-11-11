@@ -140,9 +140,7 @@
     }
     .analogy-title { font-weight: bold; color: #00f0ff; margin-bottom: 2px; }
 
-    .menu-week-calendar {
-      display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 12px;
-    }
+    .menu-week-calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 12px; }
     .menu-day-btn {
       background-color: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 8px 2px;
       text-align: center; cursor: pointer; color: #94a3b8; font-size: 0.7rem; transition: all 0.2s;
@@ -188,14 +186,12 @@
       background: #1a2234; color: var(--text-dim); border: 1px solid var(--border-highlight);
     }
     .video-status.completed { background: rgba(16, 185, 129, 0.15); color: var(--success-color); border: 1px solid rgba(16, 185, 129, 0.4); }
-    .video-status.rest-mode { background: rgba(59, 130, 246, 0.15); color: var(--rest-color); border: 1px solid rgba(59, 130, 246, 0.4); }
 
     .btn-submit {
       width: 100%; background: linear-gradient(135deg, #ff5722, #ea580c); color: #fff; border: none;
       padding: 15px; border-radius: 12px; font-size: 1rem; font-weight: 800; margin-top: 18px; cursor: pointer;
       box-shadow: 0 4px 16px rgba(255, 87, 34, 0.4);
     }
-    .btn-submit.rest-btn { background: linear-gradient(135deg, #3b82f6, #2563eb); box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4); }
     .btn-submit:disabled { background: #334155; color: #64748b; box-shadow: none; cursor: not-allowed; }
 
     .chart-container { position: relative; width: 100%; height: 240px; margin-top: 12px; }
@@ -206,14 +202,12 @@
     .month-summary { display: flex; justify-content: space-around; background: #0f172a; padding: 8px; border-radius: 8px; font-size: 0.8rem; margin-bottom: 14px; border: 1px solid #1e293b; font-weight: 600; }
 
     .stamp-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
-    .stamp-box { background: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 6px 3px; display: flex; flex-direction: column; align-items: center; font-size: 0.65rem; color: var(--text-dim); min-height: 80px; }
+    .stamp-box { background: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 6px 3px; display: flex; flex-direction: column; align-items: center; font-size: 0.65rem; color: var(--text-dim); min-height: 84px; }
     .stamp-day-title { font-weight: bold; color: #cbd5e1; margin-bottom: 4px; }
     .stamp-slot-container { display: flex; flex-direction: column; gap: 3px; width: 100%; align-items: center; }
-    .stamp-slot { width: 100%; height: 22px; border-radius: 6px; background: #162032; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; border: 1px dashed #334155; }
+    .stamp-slot { width: 100%; height: 20px; border-radius: 4px; background: #162032; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; border: 1px dashed #334155; }
     .stamp-slot.m-done { background: rgba(245, 158, 11, 0.2); border: 1px solid #f59e0b; }
-    .stamp-slot.m-rest { background: rgba(59, 130, 246, 0.2); border: 1px solid #3b82f6; }
     .stamp-slot.n-done { background: rgba(59, 130, 246, 0.2); border: 1px solid #3b82f6; }
-    .stamp-slot.n-rest { background: rgba(168, 85, 247, 0.2); border: 1px solid #a855f7; }
 
     .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px); z-index: 1000; padding: 16px; overflow-y: auto; }
     .modal-content { background: var(--card-bg); border-radius: 18px; padding: 24px; max-width: 620px; margin: 30px auto; border: 1px solid var(--border-highlight); box-shadow: 0 12px 36px rgba(0,0,0,0.5); }
@@ -226,8 +220,6 @@
     
     .custom-video-item { background: #0f172a; padding: 12px; border-radius: 10px; margin-bottom: 12px; border: 1px solid #1e293b; }
     .goal-input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: #0f172a; padding: 12px; border-radius: 12px; border: 1px solid #1e3a8a; margin-bottom: 14px; }
-    .ingredient-search-box { background: #0f172a; padding: 12px; border-radius: 12px; border: 1px solid #10b981; margin-bottom: 14px; }
-    .btn-search-recipe { width: 100%; background: linear-gradient(135deg, #10b981, #059669); color: #fff; border: none; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 0.85rem; cursor: pointer; margin-top: 8px; }
   </style>
 </head>
 <body>
@@ -298,14 +290,8 @@
     </div>
     <div id="workoutChallengeTitle" style="font-size: 0.95rem; font-weight: bold; color: #fff;"></div>
     <div id="workoutChallengeTarget" style="font-size: 0.75rem; color: #38bdf8; margin-top: 2px;"></div>
-    
-    <div id="workoutChallengeVisual" style="background:#0f172a; border:1px dashed #475569; border-radius:8px; padding:10px; margin-top:8px; font-size:0.8rem; color:#cbd5e1; line-height:1.5;">
-      読み込み中...
-    </div>
-
-    <button id="challengeCompleteBtn" onclick="completeDailyChallenge()" style="margin-top: 10px; width: 100%; background: #059669; color: white; border: none; padding: 7px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.8rem;">
-      ✓ 課題クリア！
-    </button>
+    <div id="workoutChallengeVisual" style="background:#0f172a; border:1px dashed #475569; border-radius:8px; padding:10px; margin-top:8px; font-size:0.8rem; color:#cbd5e1; line-height:1.5;">読み込み中...</div>
+    <button id="challengeCompleteBtn" onclick="completeDailyChallenge()" style="margin-top: 10px; width: 100%; background: #059669; color: white; border: none; padding: 7px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.8rem;">✓ 課題クリア！</button>
   </div>
 
   <div class="card">
@@ -343,20 +329,14 @@
       <div id="videoCommentDesc">---</div>
     </div>
 
-    <div class="video-container" id="videoWrapper">
-      <div id="player"></div>
-    </div>
+    <div class="video-container" id="videoWrapper"><div id="player"></div></div>
 
     <a href="#" id="externalVideoLink" class="external-video-btn" target="_blank">▶️ YouTubeアプリで動画を開いて運動する</a>
     <button class="force-unlock-btn" onclick="forceUnlockVideo()">☑️ 【動画視聴が終わったら】ここを押して完走認証する</button>
 
-    <div class="video-status" id="videoStatus">
-      ▶️ 動画を再生するか、上のボタンで視聴完了にできます
-    </div>
+    <div class="video-status" id="videoStatus">▶️ 動画を再生するか、上のボタンで視聴完了にできます</div>
 
-    <button class="btn-submit" id="btnSubmit" onclick="saveLog()" disabled>
-      🔒 動画完走でスタンプGET 💮
-    </button>
+    <button class="btn-submit" id="btnSubmit" onclick="saveLog()" disabled>🔒 動画完走でスタンプGET 💮</button>
   </div>
 
   <div class="card">
@@ -393,7 +373,7 @@
   <div class="modal" id="recipeModal">
     <div class="modal-content">
       <button class="modal-close" onclick="closeRecipeModal()">✕ 閉じる</button>
-      <h2 style="color: var(--accent-gold); font-size: 1.15rem; margin-bottom: 6px;">🍽️ 目標設定＆献立</h2>
+      <h2 style="color: var(--accent-gold); font-size: 1.15rem; margin-bottom: 6px;">🍽️ 目標設定＆献立一覧</h2>
       <div class="goal-input-grid">
         <div>
           <label style="margin-top:0; color:#fbbf24;">🎯 目標体重 (kg)</label>
@@ -404,11 +384,7 @@
           <input type="number" id="targetPeriodInput" min="1" max="12" placeholder="例: 5" oninput="saveGoalParams()">
         </div>
       </div>
-
-      <button class="btn-submit" onclick="generateShoppingList()" style="background: linear-gradient(135deg, #3b82f6, #2563eb); margin-bottom: 14px; padding: 12px; font-size: 0.9rem;">
-        🛒 今週の買い物リストを自動作成してコピー
-      </button>
-
+      <button class="btn-submit" onclick="generateShoppingList()" style="background: linear-gradient(135deg, #3b82f6, #2563eb); margin-bottom: 14px; padding: 12px; font-size: 0.9rem;">🛒 今週の買い物リストを自動作成してコピー</button>
       <div class="recipe-eval-box" id="recipeEvalBox">📊 体重データを分析中...</div>
       <div id="weekRecipeList"></div>
     </div>
@@ -419,10 +395,8 @@
     <div class="modal-content" style="border: 2px solid #00f0ff;">
       <button class="modal-close" onclick="closeSecretDebug()">✕ 閉じる</button>
       <h2 style="color: #00f0ff; font-size: 1.1rem; margin-bottom: 8px;">🕵️‍♂️ デバッグパネル</h2>
-      <div style="background: #0f172a; padding: 12px; border-radius: 10px; margin-bottom: 12px; border: 1px solid #1e3a8a; font-size: 0.85rem;">
-        <button class="btn-submit" onclick="testSimulateNextWeek()" style="margin-top: 4px; padding: 10px; font-size: 0.85rem; background: linear-gradient(135deg, #00f0ff, #2563eb); color:#000; font-weight:900;">🧪 翌週の献立に切り替え (+1週)</button>
-        <button class="btn-submit" onclick="testResetWeekOffset()" style="margin-top: 8px; padding: 8px; font-size: 0.80rem; background: #334155; color:#fff;">🔄 週オフセットをリセット</button>
-      </div>
+      <button class="btn-submit" onclick="testSimulateNextWeek()" style="margin-top: 4px; padding: 10px; font-size: 0.85rem; background: linear-gradient(135deg, #00f0ff, #2563eb); color:#000; font-weight:900;">🧪 翌週の献立に切り替え (+1週)</button>
+      <button class="btn-submit" onclick="testResetWeekOffset()" style="margin-top: 8px; padding: 8px; font-size: 0.80rem; background: #334155; color:#fff;">🔄 週オフセットをリセット</button>
     </div>
   </div>
 
@@ -786,18 +760,41 @@
     function openRecipeModal() {
       document.getElementById('targetWeightInput').value = localStorage.getItem('user_target_weight') || '';
       document.getElementById('targetPeriodInput').value = localStorage.getItem('user_target_period') || '';
-      document.getElementById('recipeEvalBox').innerHTML = "📊 パーソナル献立プラン稼働中！";
-      document.getElementById('weekRecipeList').innerHTML = "";
+      renderRecipeModalContent();
       document.getElementById('recipeModal').style.display = 'block';
     }
     function closeRecipeModal() { document.getElementById('recipeModal').style.display = 'none'; }
     function saveGoalParams() {
       localStorage.setItem('user_target_weight', document.getElementById('targetWeightInput').value);
       localStorage.setItem('user_target_period', document.getElementById('targetPeriodInput').value);
+      renderRecipeModalContent();
       renderApp();
     }
+
+    function renderRecipeModalContent() {
+      const container = document.getElementById('weekRecipeList');
+      if(!container) return;
+      container.innerHTML = '';
+      const activeMenuObj = getActiveWeeklyMenu();
+      const evalBox = document.getElementById('recipeEvalBox');
+      if(evalBox) evalBox.innerHTML = `📊 <b>パーソナル献立プラン</b><br>・モード：<b>${activeMenuObj.title}</b>`;
+
+      activeMenuObj.menu.forEach((item, idx) => {
+        const card = document.createElement('div');
+        card.className = 'recipe-card-week';
+        card.innerHTML = `
+          <h3 style="color:#fbbf24; font-size:0.95rem;">📅 [${item.fullDay}] ${item.main}</h3>
+          <p style="font-size:0.82rem; color:#cbd5e1; margin-top:2px;">💡 ジャンル: <b>${item.type}</b></p>
+          <div style="font-size:0.78rem; color:#38bdf8; margin-top:4px; background:#0f172a; padding:6px; border-radius:6px;">
+            🥣 セット：${item.soup.name} ＋ ${item.egg} ＋ ${item.side}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
     function generateShoppingList() {
-      alert("📋 今週の買い物リストを作成しました！");
+      alert("📋 今週の買い物リストをコピーしました！");
     }
 
     function changeMonth(dir) { currentDisplayDate.setMonth(currentDisplayDate.getMonth() + dir); renderApp(); }
@@ -838,6 +835,13 @@
         if(dayData.morning && dayData.morning.done) mCount++;
         if(dayData.night && dayData.night.done) nCount++;
 
+        const morningW = dayData.morningWeight || dayData.weight;
+        const nightW = dayData.nightWeight;
+        let weightDisplay = '';
+        if(morningW && nightW) weightDisplay = `朝:${morningW}/夜:${nightW}`;
+        else if(morningW) weightDisplay = `朝:${morningW}`;
+        else if(nightW) weightDisplay = `夜:${nightW}`;
+
         const box = document.createElement('div');
         box.className = 'stamp-box';
         box.innerHTML = `
@@ -846,6 +850,7 @@
             <div class="stamp-slot ${dayData.morning?.done ? 'm-done' : ''}">${dayData.morning?.done ? '☀️' : ''}</div>
             <div class="stamp-slot ${dayData.night?.done ? 'n-done' : ''}">${dayData.night?.done ? '🌙' : ''}</div>
           </div>
+          <div class="stamp-info" style="font-size:0.5rem; line-height:1.1; margin-top:2px; color:#38bdf8;">${weightDisplay}</div>
         `;
         grid.appendChild(box);
       }
