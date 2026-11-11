@@ -206,8 +206,12 @@
     .stamp-day-title { font-weight: bold; color: #cbd5e1; margin-bottom: 4px; }
     .stamp-slot-container { display: flex; flex-direction: column; gap: 3px; width: 100%; align-items: center; }
     .stamp-slot { width: 100%; height: 20px; border-radius: 4px; background: #162032; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; border: 1px dashed #334155; }
-    .stamp-slot.m-done { background: rgba(245, 158, 11, 0.2); border: 1px solid #f59e0b; }
-    .stamp-slot.n-done { background: rgba(59, 130, 246, 0.2); border: 1px solid #3b82f6; }
+    
+    /* スタンプスタイル（運動 vs 休息） */
+    .stamp-slot.m-done { background: rgba(245, 158, 11, 0.25); border: 1px solid #f59e0b; }
+    .stamp-slot.m-rest { background: rgba(16, 185, 129, 0.25); border: 1px solid #10b981; }
+    .stamp-slot.n-done { background: rgba(59, 130, 246, 0.25); border: 1px solid #3b82f6; }
+    .stamp-slot.n-rest { background: rgba(168, 85, 247, 0.25); border: 1px solid #a855f7; }
 
     .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px); z-index: 1000; padding: 16px; overflow-y: auto; }
     .modal-content { background: var(--card-bg); border-radius: 18px; padding: 24px; max-width: 620px; margin: 30px auto; border: 1px solid var(--border-highlight); box-shadow: 0 12px 36px rgba(0,0,0,0.5); }
@@ -489,7 +493,6 @@
       return Math.floor((pastDays + firstDay.getDay() + 1) / 7);
     }
 
-    // 多彩なバラエティ豊かなレシピプール（鶏むね、鮭、豚肉、パスタ・うどん等の麺類を含む）
     function getDynamicWeightModeMenus() {
       const w = getWeekBaseIndex();
       const pool = [
@@ -681,7 +684,9 @@
       const weight = document.getElementById('weight').value;
       const courseObj = getCurrentCourseObj();
 
-      logData[date][currentTimeMode] = { courseName: courseObj.name, done: true };
+      const isRest = courseObj.type === 'rest';
+      logData[date][currentTimeMode] = { courseName: courseObj.name, done: true, isRest: isRest };
+
       if(weight) {
         if(currentTimeMode === 'morning') logData[date].morningWeight = parseFloat(weight);
         else logData[date].nightWeight = parseFloat(weight);
@@ -848,13 +853,34 @@
         else if(morningW) weightDisplay = `朝:${morningW}`;
         else if(nightW) weightDisplay = `夜:${nightW}`;
 
+        // スタンプアイコン（運動 vs 休息）
+        let mIcon = '';
+        let mClass = '';
+        if(dayData.morning?.done) {
+          if(dayData.morning.isRest || dayData.morning.courseName?.includes('休息')) {
+            mIcon = '🌿'; mClass = 'm-rest';
+          } else {
+            mIcon = '🌅'; mClass = 'm-done';
+          }
+        }
+
+        let nIcon = '';
+        let nClass = '';
+        if(dayData.night?.done) {
+          if(dayData.night.isRest || dayData.night.courseName?.includes('休息')) {
+            nIcon = '🛀'; nClass = 'n-rest';
+          } else {
+            nIcon = '🌃'; nClass = 'n-done';
+          }
+        }
+
         const box = document.createElement('div');
         box.className = 'stamp-box';
         box.innerHTML = `
           <div class="stamp-day-title">${day}日</div>
           <div class="stamp-slot-container">
-            <div class="stamp-slot ${dayData.morning?.done ? 'm-done' : ''}">${dayData.morning?.done ? '☀️' : ''}</div>
-            <div class="stamp-slot ${dayData.night?.done ? 'n-done' : ''}">${dayData.night?.done ? '🌙' : ''}</div>
+            <div class="stamp-slot ${mClass}">${mIcon}</div>
+            <div class="stamp-slot ${nClass}">${nIcon}</div>
           </div>
           <div class="stamp-info" style="font-size:0.5rem; line-height:1.1; margin-top:2px; color:#38bdf8;">${weightDisplay}</div>
         `;
