@@ -53,6 +53,15 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       font-weight: 800;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .header-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+
+    .menu-link-btn {
+      background: #1e293b; border: 1px solid var(--border-highlight); color: var(--accent-gold);
+      padding: 6px 10px; border-radius: 8px; font-size: 0.73rem; font-weight: bold; cursor: pointer; text-decoration: none;
     }
 
     .card {
@@ -67,159 +76,4 @@
     }
 
     .avatar-card {
-      background: linear-gradient(135deg, #0b132b, #1c2541); border: 1px solid #3b82f6; position: relative; text-align: center;
-      box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
-    }
-
-    .status-badge {
-      background: linear-gradient(135deg, #00f0ff, #3b82f6); color: #000; font-size: 0.75rem; font-weight: 800; padding: 3px 10px; border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
-    }
-
-    .coach-speech-bubble {
-      background: rgba(11, 19, 43, 0.85);
-      border: 1px solid #00f0ff;
-      padding: 12px 14px;
-      border-radius: 12px;
-      font-size: 0.85rem;
-      color: #e0f2fe;
-      margin-bottom: 14px;
-      text-align: left;
-      position: relative;
-      box-shadow: 0 4px 15px rgba(0, 240, 255, 0.15);
-      line-height: 1.6;
-    }
-
-    .top-goal-bar {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;
-      background: rgba(15, 23, 42, 0.85); padding: 10px; border-radius: 10px; border: 1px solid #1e3a8a;
-      font-size: 0.8rem; text-align: center;
-    }
-    .top-goal-val { font-weight: bold; color: #fbbf24; font-size: 0.95rem; }
-
-    .cyber-dashboard-grid {
-      display: grid; grid-template-columns: 1fr 1.3fr 1fr; align-items: center; gap: 10px; margin: 14px 0;
-      background: rgba(15, 23, 42, 0.7); padding: 16px 10px; border-radius: 14px; border: 1px solid #1e3a8a;
-    }
-
-    .stat-node { display: flex; flex-direction: column; align-items: center; }
-    .stat-label { font-size: 0.73rem; color: #93c5fd; font-weight: bold; }
-    .stat-value { font-size: 1.15rem; font-weight: 800; color: #fff; margin-top: 2px; }
-
-    .ring-progress-wrapper {
-      position: relative; width: 110px; height: 110px; margin: 0 auto; display: flex; align-items: center; justify-content: center;
-    }
-    .ring-svg { width: 100%; height: 100%; transform: rotate(-90deg); filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.5)); }
-    .ring-bg { fill: none; stroke: #1e293b; stroke-width: 8; }
-    .ring-fill {
-      fill: none; stroke: url(#neonGradient); stroke-width: 8; stroke-dasharray: 283; stroke-dashoffset: 150;
-      stroke-linecap: round;
-    }
-
-    .ring-inner-text { position: absolute; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-    .percent-val { font-size: 1.25rem; font-weight: 900; color: #00f0ff; text-shadow: 0 0 10px rgba(0,240,255,0.6); }
-
-    .weight-analogy-box {
-      background: rgba(15, 23, 42, 0.85); border: 1px dashed #3b82f6; border-radius: 12px; padding: 12px;
-      font-size: 0.83rem; color: #cbd5e1; text-align: left; line-height: 1.6;
-    }
-    .analogy-title { font-weight: bold; color: #00f0ff; margin-bottom: 2px; }
-  </style>
-</head>
-<body>
-
-  <div class="app-header">
-    <h1>🔥 カラダログ（動的AIコーチテスト版）</h1>
-  </div>
-
-  <div class="card avatar-card">
-    <div class="card-title" style="border-bottom: none; padding-bottom: 0;">
-      <span>🌐 プログレス状況</span>
-      <span class="status-badge" id="bmiStatusBadge">STATUS: OPTIMAL</span>
-    </div>
-    
-    <!-- 💬 AIコーチからの動的メッセージ表示エリア -->
-    <div class="coach-speech-bubble" id="coachSpeechBubble">
-      💬 (AIコーチのメッセージを読み込んでいます...)
-    </div>
-
-    <div class="top-goal-bar">
-      <div class="top-goal-item">🎯 目標体重: <span class="top-goal-val" id="topTargetWeightVal">70.0 kg</span></div>
-      <div class="top-goal-item">⏳ 達成期間: <span class="top-goal-val" id="topTargetPeriodVal">5 か月</span></div>
-    </div>
-
-    <div class="cyber-dashboard-grid">
-      <div class="stat-node">
-        <div class="stat-label">現在の体重</div>
-        <div class="stat-value" id="currentWeightVal">77.5 kg</div>
-      </div>
-
-      <div class="ring-progress-wrapper">
-        <svg class="ring-svg" viewBox="0 0 100 100">
-          <defs>
-            <linearGradient id="neonGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#ff5722"/>
-              <stop offset="100%" stop-color="#00f0ff"/>
-            </linearGradient>
-          </defs>
-          <circle class="ring-bg" cx="50" cy="50" r="45"/>
-          <circle class="ring-fill" id="ringProgressFill" cx="50" cy="50" r="45"/>
-        </svg>
-        <div class="ring-inner-text">
-          <div class="percent-val" id="percentVal">35%</div>
-          <div class="percent-sub" style="font-size: 0.62rem; color: #94a3b8; font-weight: bold;">GOAL</div>
-        </div>
-      </div>
-
-      <div class="stat-node">
-        <div class="stat-label">目標まで</div>
-        <div class="stat-value" id="diffWeightText" style="color: #34d399;">-7.5 kg</div>
-        <div style="font-size: 0.68rem; color: #94a3b8; margin-top: 2px;">差分</div>
-      </div>
-    </div>
-
-    <!-- 💡 体重・軽さ換算の表示エリア -->
-    <div class="weight-analogy-box" id="weightAnalogyBox">
-      <div class="analogy-title">💡 体重・軽さ換算</div>
-      <div id="analogyText">データをロード中...</div>
-    </div>
-  </div>
-
-  <script>
-    // 確実に動く独立型の初期化スクリプト
-    window.addEventListener('DOMContentLoaded', () => {
-      try {
-        const currentW = 77.5;
-        const targetW = 70.0;
-        const diff = currentW - targetW;
-
-        // 1. AIコーチの動的メッセージを強制書き換え
-        const coachEl = document.getElementById('coachSpeechBubble');
-        if (coachEl) {
-          coachEl.innerHTML = `💬「現在の体重は <b>${currentW}kg</b> です！目標の70.0kgまであと <b>-${diff.toFixed(1)}kg</b>。下半身の引き締めと有酸素運動を重点的に進めていきましょう🔥」`;
-        }
-
-        // 2. 軽さ換算テキストを強制書き換え
-        const analogyEl = document.getElementById('analogyText');
-        if (analogyEl) {
-          const bottleCount = Math.round(diff * 2000 / 500); // 500mlペットボトル換算
-          analogyEl.innerHTML = `
-            ・現在の体重は <b>【大型犬約2.2頭分 🐕】</b> に相当！<br>
-            ・目標達成まであと <b>500mlペットボトル 約 ${bottleCount} 本分（${diff.toFixed(1)}kg）</b> の脂肪燃焼です！ 🥤
-          `;
-        }
-
-        // 3. ステータスバッジの更新
-        const badgeEl = document.getElementById('bmiStatusBadge');
-        if (badgeEl) {
-          badgeEl.innerText = "STATUS: ACTIVE COACHING";
-        }
-
-        console.log("AIコーチ＆軽さ換算の強制更新が完了しました。");
-      } catch (err) {
-        console.error("スクリプト実行時エラー:", err);
-      }
-    });
-  </script>
-</body>
-</html>
+      background: linear-gradient(135deg, #0b132b, #1c2541); border: 1
