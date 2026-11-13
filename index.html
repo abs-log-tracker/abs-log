@@ -165,7 +165,7 @@
       border-radius: 10px; color: #fff; font-size: 0.95rem; outline: none;
     }
 
-    /* スマート動画カード（エラーなしで確実にYouTubeアプリ等で再生） */
+    /* スマート動画カード（サムネイル表示で確実にYouTubeアプリやブラウザで再生） */
     .video-card-smart {
       position: relative; width: 100%; border-radius: 14px; overflow: hidden; margin-top: 14px;
       border: 2px solid #3b82f6; background: #000; text-decoration: none; display: block;
@@ -331,7 +331,7 @@
     <label id="weightLabel">体重 (kg)</label>
     <input type="number" id="weight" step="0.1" placeholder="例: 77.5" onchange="saveCurrentWeightInput()">
 
-    <label>運動コース選択 <span style="font-size:0.72rem; color:#38bdf8; font-weight:normal;">(全候補メニュー＆快適再生✨)</span></label>
+    <label>運動コース選択 <span style="font-size:0.72rem; color:#38bdf8; font-weight:normal;">(安定再生・確実版✨)</span></label>
     <select id="workoutCourse" onchange="onCourseChange()"></select>
 
     <div class="video-comment-box" id="videoCommentBox">
@@ -340,7 +340,7 @@
       <div id="videoCommentDesc">---</div>
     </div>
 
-    <!-- スマート動画サムネイルカード（YouTubeアプリ等で確実に再生＆エラーゼロ） -->
+    <!-- スマート動画カード（タップでYouTubeアプリ等で確実に再生） -->
     <a href="#" id="smartVideoCard" class="video-card-smart" target="_blank">
       <img id="videoThumb" class="video-thumb-img" src="" alt="サムネイル">
       <div class="video-play-overlay">
@@ -482,7 +482,7 @@
     }
 
     function getActiveCourses() {
-      const saved = localStorage.getItem('custom_courses_data_v25');
+      const saved = localStorage.getItem('custom_courses_data_v26');
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
@@ -493,6 +493,7 @@
     }
 
     function resetCustomVideos() {
+      localStorage.removeItem('custom_courses_data_v26');
       localStorage.removeItem('custom_courses_data_v25');
       localStorage.removeItem('custom_courses_data_v24');
       localStorage.removeItem('custom_courses_data_v23');
@@ -500,7 +501,7 @@
       localStorage.removeItem('custom_courses_data_v21');
       localStorage.removeItem('custom_courses_data_v20');
       localStorage.removeItem('custom_courses_data_v18');
-      alert("最新の全候補メニュー＆機能に初期化しました！");
+      alert("最新版に初期化しました！");
       closeVideoModal();
       populateCourseOptions();
     }
@@ -783,7 +784,7 @@
           if(n && v) { c.name = n.value; c.videoId = v.value.trim(); }
         });
       });
-      localStorage.setItem('custom_courses_data_v25', JSON.stringify(courses));
+      localStorage.setItem('custom_courses_data_v26', JSON.stringify(courses));
       alert("保存しました！"); closeVideoModal(); populateCourseOptions();
     }
 
@@ -828,7 +829,7 @@
       });
     }
 
-    // 🛒 買い物リストを自動作成してクリップボードにコピーする機能
+    // 🛒 確実にクリップボードへテキストを書き込む安全な関数
     function generateShoppingList() {
       const activeMenuObj = getActiveWeeklyMenu();
       let listText = "🛒 【今週の買い物リスト】\n";
@@ -836,12 +837,35 @@
         listText += `[${item.fullDay}] ${item.mainIng} / ${item.soup.name}(${item.soup.detail}) / ${item.egg} / ${item.side}\n`;
       });
 
-      navigator.clipboard.writeText(listText).then(() => {
-        alert("📋 今週の買い物リストをクリップボードにコピーしました！そのままLINEやメモに貼り付けられます。");
-      }).catch(err => {
-        // フォールバック（コピー失敗時）
-        prompt("下のテキストを手動でコピーしてください：", listText);
-      });
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(listText).then(() => {
+          alert("📋 今週の買い物リストをクリップボードにコピーしました！メモやLINEにそのまま貼り付けられます。");
+        }).catch(() => {
+          fallbackCopyText(listText);
+        });
+      } else {
+        fallbackCopyText(listText);
+      }
+    }
+
+    function fallbackCopyText(text) {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.position = "fixed";  // 画面外に配置
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+          alert("📋 買い物リストをコピーしました！");
+        } else {
+          prompt("お使いの環境では自動コピーできないため、以下のテキストを手動でコピーしてください：", text);
+        }
+      } catch (err) {
+        prompt("手動でコピーしてください：", text);
+      }
+      document.body.removeChild(textArea);
     }
 
     function changeMonth(dir) { currentDisplayDate.setMonth(currentDisplayDate.getMonth() + dir); renderApp(); }
@@ -945,7 +969,7 @@
           labels: labels,
           datasets: [
             { label: '朝体重', data: morningWeights, borderColor: '#ff5722', borderWidth: 3, tension: 0.2, spanGaps: true },
-            { label: '夜体重', data: nightWeights, borderColor: '#3b82f6', borderWidth: 3, tension: 0.2, spanGaps: true },
+            { label: '夜体重', data: nightWeights, borderColor: '#3b82f6', borderWidth: 3, tension: 0.2, spanGapes: true },
             { label: '目標', data: new Array(labels.length).fill(targetW), borderColor: '#10b981', borderDash: [5,5], borderWidth: 2, pointRadius: 0 }
           ]
         },
