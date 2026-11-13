@@ -165,20 +165,28 @@
       border-radius: 10px; color: #fff; font-size: 0.95rem; outline: none;
     }
 
-    .video-container {
-      position: relative; width: 100%; padding-top: 56.25%; background: #000; border-radius: 12px; overflow: hidden; margin-top: 14px; border: 1px solid var(--border-highlight);
+    /* スマート動画カード（エラーなしで確実にYouTubeアプリ等で再生） */
+    .video-card-smart {
+      position: relative; width: 100%; border-radius: 14px; overflow: hidden; margin-top: 14px;
+      border: 2px solid #3b82f6; background: #000; text-decoration: none; display: block;
+      box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3); transition: transform 0.2s;
     }
-    .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
-
-    .external-video-btn {
-      display: block; width: 100%; margin-top: 10px; background: #2563eb; color: #fff; text-align: center;
-      padding: 12px; border-radius: 10px; font-weight: bold; font-size: 0.9rem; text-decoration: none;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+    .video-card-smart:active { transform: scale(0.98); }
+    .video-thumb-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; opacity: 0.85; }
+    .video-play-overlay {
+      position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      background: rgba(0, 0, 0, 0.45); padding: 12px; text-align: center;
     }
+    .play-icon-circle {
+      width: 60px; height: 60px; background: #ff0000; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; color: #fff; box-shadow: 0 0 20px rgba(255, 0, 0, 0.7); margin-bottom: 8px;
+    }
+    .play-text-label { font-size: 0.95rem; font-weight: 900; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
 
     .force-unlock-btn {
-      display: block; width: 100%; margin-top: 8px; background: #334155; color: #cbd5e1; text-align: center;
-      padding: 8px; border-radius: 8px; font-size: 0.78rem; font-weight: bold; border: 1px solid #475569; cursor: pointer;
+      display: block; width: 100%; margin-top: 12px; background: #059669; color: #fff; text-align: center;
+      padding: 13px; border-radius: 10px; font-size: 0.9rem; font-weight: bold; border: none; cursor: pointer;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4);
     }
 
     .video-status {
@@ -207,7 +215,6 @@
     .stamp-slot-container { display: flex; flex-direction: column; gap: 3px; width: 100%; align-items: center; }
     .stamp-slot { width: 100%; height: 20px; border-radius: 4px; background: #162032; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; border: 1px dashed #334155; }
     
-    /* スタンプスタイル（運動 vs 休息） */
     .stamp-slot.m-done { background: rgba(245, 158, 11, 0.25); border: 1px solid #f59e0b; }
     .stamp-slot.m-rest { background: rgba(16, 185, 129, 0.25); border: 1px solid #10b981; }
     .stamp-slot.n-done { background: rgba(59, 130, 246, 0.25); border: 1px solid #3b82f6; }
@@ -324,7 +331,7 @@
     <label id="weightLabel">体重 (kg)</label>
     <input type="number" id="weight" step="0.1" placeholder="例: 77.5" onchange="saveCurrentWeightInput()">
 
-    <label>運動コース選択 <span style="font-size:0.72rem; color:#38bdf8; font-weight:normal;">(状況に合わせて自動おすすめ中✨)</span></label>
+    <label>運動コース選択 <span style="font-size:0.72rem; color:#38bdf8; font-weight:normal;">(全候補メニュー＆快適再生✨)</span></label>
     <select id="workoutCourse" onchange="onCourseChange()"></select>
 
     <div class="video-comment-box" id="videoCommentBox">
@@ -333,14 +340,20 @@
       <div id="videoCommentDesc">---</div>
     </div>
 
-    <div class="video-container" id="videoWrapper"><div id="player"></div></div>
+    <!-- スマート動画サムネイルカード（YouTubeアプリ等で確実に再生＆エラーゼロ） -->
+    <a href="#" id="smartVideoCard" class="video-card-smart" target="_blank">
+      <img id="videoThumb" class="video-thumb-img" src="" alt="サムネイル">
+      <div class="video-play-overlay">
+        <div class="play-icon-circle">▶</div>
+        <div class="play-text-label" id="playCardTitle">YouTubeアプリで動画を開いて運動する</div>
+      </div>
+    </a>
 
-    <a href="#" id="externalVideoLink" class="external-video-btn" target="_blank">▶️ YouTubeアプリで動画を開いて運動する</a>
-    <button class="force-unlock-btn" onclick="forceUnlockVideo()">☑️ 【動画視聴が終わったら】ここを押して完走認証する</button>
+    <button class="force-unlock-btn" onclick="forceUnlockVideo()">☑️ 【運動・動画視聴が終わったら】ここを押して完走認証する</button>
 
-    <div class="video-status" id="videoStatus">▶️ 動画を再生するか、上のボタンで視聴完了にできます</div>
+    <div class="video-status" id="videoStatus">▶️ 上のカードを押してYouTubeで運動を始めてください</div>
 
-    <button class="btn-submit" id="btnSubmit" onclick="saveLog()" disabled>🔒 動画完走でスタンプGET 💮</button>
+    <button class="btn-submit" id="btnSubmit" onclick="saveLog()" disabled>🔒 完走認証でスタンプGET 💮</button>
   </div>
 
   <div class="card">
@@ -404,20 +417,21 @@
     </div>
   </div>
 
-  <script src="https://www.youtube.com/iframe_api"></script>
   <script>
     const defaultCourseData = {
       morning: [
-        { id: "m_A", name: "🌅 朝A：カズハ7分 腹筋＆ヒップ", videoId: "USJgKSLxDRc", type: "agi", targetMuscle: "お腹周り・腹直筋", comment: "✨ 姿勢改善と骨盤周りの代謝を引き上げる7分コース" },
-        { id: "m_B", name: "🌅 朝B：基本スクワット＆腕立て", videoId: "E5rbpDjYwDo", type: "power", targetMuscle: "太もも・お尻・胸", comment: "🏋️ 基礎代謝を底上げする筋トレコース" },
-        { id: "m_C", name: "🌅 朝C：脂肪燃焼スペシャル", videoId: "6gHwh1eZ0yY", type: "stamina", targetMuscle: "全身の脂肪・心肺", comment: "🔥 有酸素×筋トレで脂肪燃焼" },
-        { id: "m_REST", name: "🟢 【朝の休息日】", videoId: "", type: "rest", targetMuscle: "リフレッシュ", comment: "🌿 休息日" }
+        { id: "m_A", name: "🌅 朝A：カズハ7分 腹筋＆ヒップ", videoId: "USJgKSLxDRc", type: "agi", targetMuscle: "お腹周り・腹直筋", comment: "✨ 姿勢改善と骨盤周りの代謝を引き上げる定番7分コース" },
+        { id: "m_HIIT", name: "🔥 朝B：【10分】全身脂肪燃焼HIIT（タバタ式）", videoId: "b8p259L4WnU", type: "stamina", targetMuscle: "全身の脂肪・心肺機能", comment: "⚡ 短時間で心拍数を一気に上げ、朝の代謝スイッチをONにする脂肪燃焼HIIT" },
+        { id: "m_MARINA", name: "💃 朝C：【15分】竹脇まりな式 全身痩せマンション筋トレ", videoId: "I_74b9vA3tM", type: "power", targetMuscle: "下半身・ウエスト・全身", comment: "🎶 楽しくしっかりきつい種目で全身を引き締め、モチベーションも上がる人気メニュー" },
+        { id: "m_CARDIO", name: "🏃 朝D：【8分】下半身脂肪燃焼スタンディングカーディオ", videoId: "E5rbpDjYwDo", type: "agi", targetMuscle: "太もも・お尻・ふくらはぎ", comment: "🦵 ジャンプ少なめで関節に優しく、下半身の脂肪をゴリゴリ燃やす有酸素運動" },
+        { id: "m_REST", name: "🟢 【朝の休息日】", videoId: "", type: "rest", targetMuscle: "リフレッシュ", comment: "🌿 休息日（ストレッチや深呼吸で体を休めましょう）" }
       ],
       night: [
-        { id: "n_A", name: "🌃 夜A：下腹足上げキープ", videoId: "VboGgLR4l7A", type: "agi", targetMuscle: "下腹部", comment: "🌙 静音設計の下腹引き締め" },
-        { id: "n_B", name: "🌃 夜B：地獄のプランク", videoId: "o5vb430_m38", type: "power", targetMuscle: "体幹軸", comment: "⚡ 体幹強化コース" },
-        { id: "n_C", name: "🌃 夜C：ブルガリアンスクワット", videoId: "LTsAhtk4QQM", type: "stamina", targetMuscle: "下半身全体", comment: "🧘 下半身と心肺機能" },
-        { id: "n_REST", name: "🌙 【夜の休息日】", videoId: "", type: "rest", targetMuscle: "疲労回復", comment: "🛀 リセット" }
+        { id: "n_B", name: "⚡ 夜A：地獄のプランク＆体幹強化", videoId: "o5vb430_m38", type: "power", targetMuscle: "体幹軸・腹横筋", comment: "🔥 静音でしっかり効く体幹強化・引き締め定番コース" },
+        { id: "n_KINNIKUN", name: "💪 夜B：【10分】なかやまきんに君 世界一楽な筋トレ", videoId: "2O_G6d_fP78", type: "power", targetMuscle: "全身の筋肉・基礎代謝", comment: "😁 正しいフォームでじっくり筋肉を追い込み、夜の代謝維持と筋力アップに効果的" },
+        { id: "n_BULGARIAN", name: "🍑 夜C：【10分】ブルガリアンスクワット＆下半身強化", videoId: "LTsAhtk4QQM", type: "stamina", targetMuscle: "お尻・太もも全体", comment: "🏋️ 下半身の大筋肉を強烈に刺激し、基礎代謝を底上げして痩せやすい身体を作る" },
+        { id: "n_BACK", name: "🦅 夜D：【6分】背中美人・バックエクステンション＆背中トレ", videoId: "VboGgLR4l7A", type: "agi", targetMuscle: "広背筋・脊柱起立筋・姿勢", comment: "✨ デスクワークで凝り固まった背中をほぐしつつ、背面の大きな筋肉を鍛えて消費カロリーUP" },
+        { id: "n_REST", name: "🌙 【夜の休息日】", videoId: "", type: "rest", targetMuscle: "疲労回復", comment: "🛀 リセット（湯船に浸かってしっかり疲労回復しましょう）" }
       ]
     };
 
@@ -468,7 +482,7 @@
     }
 
     function getActiveCourses() {
-      const saved = localStorage.getItem('custom_courses_data_v18');
+      const saved = localStorage.getItem('custom_courses_data_v25');
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
@@ -479,8 +493,14 @@
     }
 
     function resetCustomVideos() {
+      localStorage.removeItem('custom_courses_data_v25');
+      localStorage.removeItem('custom_courses_data_v24');
+      localStorage.removeItem('custom_courses_data_v23');
+      localStorage.removeItem('custom_courses_data_v22');
+      localStorage.removeItem('custom_courses_data_v21');
+      localStorage.removeItem('custom_courses_data_v20');
       localStorage.removeItem('custom_courses_data_v18');
-      alert("初期化しました！");
+      alert("最新の全候補メニュー＆機能に初期化しました！");
       closeVideoModal();
       populateCourseOptions();
     }
@@ -514,9 +534,6 @@
     }
 
     let currentTimeMode = "morning";
-    let player;
-    let isVideoFinished = false;
-    let weightChartInstance = null;
     let currentDisplayDate = new Date();
 
     function getSatStartDayIndex() {
@@ -640,33 +657,35 @@
       if(dayData[currentTimeMode] && dayData[currentTimeMode].done) {
         btn.disabled = true; btn.innerText = "✅ 記録済みです";
       } else {
-        btn.disabled = false; btn.innerText = "💮 記録してスタンプ獲得";
+        btn.disabled = false; btn.innerText = "💮 完走認証でスタンプGET";
       }
     }
 
-    function onYouTubeIframeAPIReady() { setupPlayer(); }
-    function setupPlayer() {
+    function setupSmartVideoCard() {
       const courseObj = getCurrentCourseObj();
       if(!courseObj) return;
+      const smartCard = document.getElementById('smartVideoCard');
+      const thumbImg = document.getElementById('videoThumb');
+      const playTitle = document.getElementById('playCardTitle');
+
       if(courseObj.videoId) {
-        document.getElementById('externalVideoLink').href = `https://www.youtube.com/watch?v=${courseObj.videoId}`;
-        document.getElementById('externalVideoLink').style.display = 'block';
-        document.getElementById('videoWrapper').style.display = 'block';
-        if(typeof YT !== 'undefined' && YT.Player) {
-          try { player = new YT.Player('player', { videoId: courseObj.videoId }); } catch(e){}
-        }
+        smartCard.href = `https://www.youtube.com/watch?v=${courseObj.videoId}`;
+        smartCard.style.display = 'block';
+        thumbImg.src = `https://img.youtube.com/vi/${courseObj.videoId}/hqdefault.jpg`;
+        playTitle.innerText = `${courseObj.name} を再生する ▶`;
       } else {
-        document.getElementById('videoWrapper').style.display = 'none';
-        document.getElementById('externalVideoLink').style.display = 'none';
+        smartCard.style.display = 'none';
       }
     }
 
     function forceUnlockVideo() {
       isVideoFinished = true;
-      document.getElementById('videoStatus').innerText = "🎉 完了認証されました！";
+      document.getElementById('videoStatus').innerText = "🎉 完走認証されました！下のボタンで保存できます";
       document.getElementById('videoStatus').className = "video-status completed";
       document.getElementById('btnSubmit').disabled = false;
     }
+
+    let isVideoFinished = false;
 
     function onCourseChange() {
       const courseObj = getCurrentCourseObj();
@@ -674,7 +693,7 @@
       document.getElementById('videoCommentTitle').innerText = `🎯 【${courseObj.name}】`;
       document.getElementById('targetMuscleArea').innerText = `🎯 効く部位: ${courseObj.targetMuscle || '全身'}`;
       document.getElementById('videoCommentDesc').innerText = courseObj.comment || '';
-      setupPlayer();
+      setupSmartVideoCard();
     }
 
     function saveLog() {
@@ -735,7 +754,7 @@
       `;
 
       document.getElementById('coachSpeechBubble').innerHTML = `
-        💬「現在の体重は <b>${currentW}kg</b> です！目標の${targetW}kgまであと <b>-${diff.toFixed(1)}kg</b>。下半身の引き締めと有酸素運動を重点的に進めていきましょう🔥」
+        💬「現在の体重は <b>${currentW}kg</b> です！目標の${targetW}kgまであと <b>-${diff.toFixed(1)}kg</b>。マイペースに進めていきましょう🔥」
       `;
     }
 
@@ -764,7 +783,7 @@
           if(n && v) { c.name = n.value; c.videoId = v.value.trim(); }
         });
       });
-      localStorage.setItem('custom_courses_data_v18', JSON.stringify(courses));
+      localStorage.setItem('custom_courses_data_v25', JSON.stringify(courses));
       alert("保存しました！"); closeVideoModal(); populateCourseOptions();
     }
 
@@ -791,21 +810,38 @@
       if(evalBox) evalBox.innerHTML = `📊 <b>パーソナル献立プラン</b><br>・モード：<b>${activeMenuObj.title}</b>`;
 
       activeMenuObj.menu.forEach((item) => {
+        let methodsHtml = item.methods.map(m => `<div>・${m}</div>`).join('');
         const card = document.createElement('div');
         card.className = 'recipe-card-week';
         card.innerHTML = `
           <h3 style="color:#fbbf24; font-size:0.95rem;">📅 [${item.fullDay}] ${item.main}</h3>
-          <p style="font-size:0.82rem; color:#cbd5e1; margin-top:2px;">💡 ジャンル: <b>${item.type}</b></p>
+          <p style="font-size:0.82rem; color:#cbd5e1; margin-top:2px;">💡 主材料: <b>${item.mainIng}</b></p>
           <div style="font-size:0.78rem; color:#38bdf8; margin-top:4px; background:#0f172a; padding:6px; border-radius:6px;">
-            🥣 セット：${item.soup.name} ＋ ${item.egg} ＋ ${item.side}
+            🥣 セット：${item.soup.name}（${item.soup.detail}） ＋ ${item.egg} ＋ ${item.side}
+          </div>
+          <div style="font-size:0.8rem; color:#e2e8f0; margin-top:6px; padding-top:6px; border-top:1px dashed #334155; line-height:1.5;">
+            ${methodsHtml}
+            <div style="color:#fbbf24; margin-top:2px;"><b>【ポイント】</b> ${item.note}</div>
           </div>
         `;
         container.appendChild(card);
       });
     }
 
+    // 🛒 買い物リストを自動作成してクリップボードにコピーする機能
     function generateShoppingList() {
-      alert("📋 今週の買い物リストをコピーしました！");
+      const activeMenuObj = getActiveWeeklyMenu();
+      let listText = "🛒 【今週の買い物リスト】\n";
+      activeMenuObj.menu.forEach(item => {
+        listText += `[${item.fullDay}] ${item.mainIng} / ${item.soup.name}(${item.soup.detail}) / ${item.egg} / ${item.side}\n`;
+      });
+
+      navigator.clipboard.writeText(listText).then(() => {
+        alert("📋 今週の買い物リストをクリップボードにコピーしました！そのままLINEやメモに貼り付けられます。");
+      }).catch(err => {
+        // フォールバック（コピー失敗時）
+        prompt("下のテキストを手動でコピーしてください：", listText);
+      });
     }
 
     function changeMonth(dir) { currentDisplayDate.setMonth(currentDisplayDate.getMonth() + dir); renderApp(); }
@@ -853,7 +889,6 @@
         else if(morningW) weightDisplay = `朝:${morningW}`;
         else if(nightW) weightDisplay = `夜:${nightW}`;
 
-        // スタンプアイコン（運動 vs 休息）
         let mIcon = '';
         let mClass = '';
         if(dayData.morning?.done) {
@@ -868,9 +903,9 @@
         let nClass = '';
         if(dayData.night?.done) {
           if(dayData.night.isRest || dayData.night.courseName?.includes('休息')) {
-            nIcon = '🛀'; nClass = 'n-rest';
+            nIcon = '🛀'; mClass = 'n-rest';
           } else {
-            nIcon = '🌃'; nClass = 'n-done';
+            nIcon = '🌃'; mClass = 'n-done';
           }
         }
 
@@ -917,6 +952,8 @@
         options: { responsive: true, maintainAspectRatio: false }
       });
     }
+
+    let weightChartInstance = null;
 
     // 初期化実行
     generateDailyChallenge();
