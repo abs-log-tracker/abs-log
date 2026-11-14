@@ -228,7 +228,7 @@
 <body>
 
   <div class="app-header">
-    <h1 id="appTitleHeader" onclick="triggerSecretDebug()">🔥 カラダログ</h1>
+    <h1 id="appTitleHeader" onclick="triggerSecretDebug()">🔥 体重・運動・献立ログ</h1>
     <div class="header-btns">
       <button class="menu-link-btn" onclick="openVideoModal()">⚙️ 設定</button>
       <button class="menu-link-btn" onclick="openRecipeModal()">🍽️ 献立</button>
@@ -405,12 +405,11 @@
 
   <script src="https://www.youtube.com/iframe_api"></script>
   <script>
-    // カズハさんの新動画2本（ckQah7rYqaw, ZwOzq690FKM）を朝B・朝Cにデフォルト組み込み
     const defaultCourseData = {
       morning: [
         { id: "m_A", name: "🌅 朝A：カズハ7分 腹筋＆ヒップ", videoId: "USJgKSLxDRc", type: "agi", targetMuscle: "お腹周り・腹直筋", comment: "✨ 姿勢改善と骨盤周りの代謝を引き上げる定番7分コース" },
         { id: "m_HIIT", name: "🔥 朝B：【LE SSERAFIM】カズハの筋トレルーティーン(7min)全身痩せ", videoId: "ckQah7rYqaw", type: "stamina", targetMuscle: "全身の脂肪・心肺機能", comment: "⚡ テンポが良く朝の代謝スイッチをONにする全身痩せルーティン" },
-        { id: "m_MARINA", name: "💃 朝C：카즈하의 여름 대비 욕심쟁이 상하체 운동 루틴", videoId: "ZwOzq690FKM", type: "power", targetMuscle: "上下半身・体幹", comment: "🎶 腕・お腹・脚をバランスよく追い込む人気メニュー" },
+        { id: "m_MARINA", name: "💃 朝C：【LE SSERAFIM】カズハの夏向け上下半身トレーニング", videoId: "ZwOzq690FKM", type: "power", targetMuscle: "上下半身・体幹", comment: "🎶 腕・お腹・脚をバランスよく追い込む人気メニュー" },
         { id: "m_CARDIO", name: "🏃 朝D：【8分】下半身脂肪燃焼スタンディングカーディオ", videoId: "E5rbpDjYwDo", type: "agi", targetMuscle: "太もも・お尻・ふくらはぎ", comment: "🦵 ジャンプ少なめで関節に優しく、下半身の脂肪をゴリゴリ燃やす有酸素運動" },
         { id: "m_REST", name: "🟢 【朝の休息日】", videoId: "", type: "rest", targetMuscle: "リフレッシュ", comment: "🌿 休息日（ストレッチや深呼吸で体を休めましょう）" }
       ],
@@ -470,7 +469,7 @@
     }
 
     function getActiveCourses() {
-      const saved = localStorage.getItem('custom_courses_data_v33');
+      const saved = localStorage.getItem('custom_courses_data_v35');
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
@@ -481,8 +480,8 @@
     }
 
     function resetCustomVideos() {
-      localStorage.removeItem('custom_courses_data_v33');
-      localStorage.removeItem('custom_courses_data_v32');
+      localStorage.removeItem('custom_courses_data_v35');
+      localStorage.removeItem('custom_courses_data_v34');
       alert("最新版に初期化しました！");
       closeVideoModal();
       populateCourseOptions();
@@ -859,7 +858,7 @@
           if(n && v) { c.name = n.value; c.videoId = v.value.trim(); }
         });
       });
-      localStorage.setItem('custom_courses_data_v33', JSON.stringify(courses));
+      localStorage.setItem('custom_courses_data_v35', JSON.stringify(courses));
       alert("保存しました！"); closeVideoModal(); populateCourseOptions();
     }
 
