@@ -165,7 +165,6 @@
       border-radius: 10px; color: #fff; font-size: 0.95rem; outline: none;
     }
 
-    /* アプリ内埋め込み動画プレイヤー */
     .video-container {
       position: relative; width: 100%; padding-top: 56.25%; background: #000; border-radius: 12px; overflow: hidden; margin-top: 14px; border: 1px solid var(--border-highlight);
     }
@@ -324,7 +323,7 @@
     <label id="weightLabel">体重 (kg)</label>
     <input type="number" id="weight" step="0.1" placeholder="例: 77.5" onchange="saveCurrentWeightInput()">
 
-    <label>運動コース選択 <span style="font-size:0.72rem; color:#38bdf8; font-weight:normal;">(アプリ内埋め込み再生✨)</span></label>
+    <label>運動コース選択 <span style="font-size:0.72rem; color:#38bdf8; font-weight:normal;">(安定再生版✨)</span></label>
     <select id="workoutCourse" onchange="onCourseChange()"></select>
 
     <div class="video-comment-box" id="videoCommentBox">
@@ -333,7 +332,6 @@
       <div id="videoCommentDesc">---</div>
     </div>
 
-    <!-- アプリ内埋め込み動画プレイヤー -->
     <div class="video-container" id="videoWrapper"><div id="player"></div></div>
 
     <a href="#" id="externalVideoLink" class="external-video-btn" target="_blank">▶️ YouTubeアプリで動画を開いて運動する</a>
@@ -471,7 +469,7 @@
     }
 
     function getActiveCourses() {
-      const saved = localStorage.getItem('custom_courses_data_v27');
+      const saved = localStorage.getItem('custom_courses_data_v30');
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
@@ -482,15 +480,8 @@
     }
 
     function resetCustomVideos() {
-      localStorage.removeItem('custom_courses_data_v27');
-      localStorage.removeItem('custom_courses_data_v26');
-      localStorage.removeItem('custom_courses_data_v25');
-      localStorage.removeItem('custom_courses_data_v24');
-      localStorage.removeItem('custom_courses_data_v23');
-      localStorage.removeItem('custom_courses_data_v22');
-      localStorage.removeItem('custom_courses_data_v21');
-      localStorage.removeItem('custom_courses_data_v20');
-      localStorage.removeItem('custom_courses_data_v18');
+      localStorage.removeItem('custom_courses_data_v30');
+      localStorage.removeItem('custom_courses_data_v29');
       alert("最新版に初期化しました！");
       closeVideoModal();
       populateCourseOptions();
@@ -504,16 +495,113 @@
       return Math.floor((pastDays + firstDay.getDay() + 1) / 7);
     }
 
+    // 🍳 卵を2日に1回に抑え、すべてのメニューに「詳しい分量と調理手順」を記載した献立プール
     function getDynamicWeightModeMenus() {
       const w = getWeekBaseIndex();
       const pool = [
-        { type: "鶏むね肉", name: "鶏むね肉と3種キノコのペッパーポン酢", mainIng: "鶏むね肉 1枚＋しめじ", soup: { name: "豆腐スープ", detail: "水200ml, 豆腐" }, egg: "ゆで卵 1個", side: "もずく酢", note: "高タンパク低脂質！", methods: ["主菜: 鶏むね肉 1枚を一口大に切る", "調理: ポン酢とキノコでさっと蒸し焼きにする"] },
-        { type: "魚メイン", name: "生鮭とキノコの旨塩焼き", mainIng: "生鮭 1切れ", soup: { name: "わかめスープ", detail: "水200ml, わかめ" }, egg: "ゆで卵 1個", side: "納豆", note: "オメガ3脂肪酸！", methods: ["主菜: 生鮭 1切れに軽く塩を振る", "調理: グリルまたはフライパンで香ばしく焼く"] },
-        { type: "肉メイン", name: "豚ロースとキャベツの生姜炒め", mainIng: "豚ロース 120g", soup: { name: "中華スープ", detail: "水200ml" }, egg: "ゆで卵 1個", side: "キムチ", note: "ビタミンB1豊富！", methods: ["主菜: 豚ロース 120g、キャベツ", "調理: 生姜・醤油ベースで炒め合わせる"] },
-        { type: "麺類・パスタ", name: "ツナと大葉の和風おろしパスタ", mainIng: "パスタ 80g＋ツナ缶", soup: { name: "お吸い物", detail: "お湯、お麩" }, egg: "温泉卵 1個", side: "冷やしトマト", note: "さっぱり和風で満足感！", methods: ["主菜: パスタを茹でる", "調理: ツナ、大根おろし、大葉、麺つゆで和える"] },
-        { type: "鶏もも肉", name: "鶏もも肉のネギ塩焼き", mainIng: "鶏もも肉 120g", soup: { name: "卵スープ", detail: "水200ml, 溶き卵" }, egg: "ゆで卵 1個", side: "きゅうりの塩昆布和え", note: "ジューシーで食べ応え抜群！", methods: ["主菜: 鶏もも肉の余分な脂を取る", "調理: ごま油とネギ塩ダレでこんがり焼き上げる"] },
-        { type: "うどん・麺類", name: "温かいおろし肉うどん", mainIng: "冷凍うどん 1玉＋豚肉少量", soup: { name: "自家製だしつゆ", detail: "めんつゆベース" }, egg: "生卵 1個", side: "ほうれん草のお浸し", note: "消化が良く温まる！", methods: ["主菜: うどんを茹でる", "調理: 豚肉を煮込んでおろしとネギをトッピング"] },
-        { type: "野菜・ヘルシー", name: "豆腐と豚ひき肉のピリ辛麻婆", mainIng: "木綿豆腐 1丁＋豚ひき肉", soup: { name: "中華スープ", detail: "水200ml" }, egg: "ゆで卵 1個", side: "もやしナムル", note: "糖質オフでボリューミー！", methods: ["主菜: 豆腐とひき肉を炒める", "調理: 豆板醤と鶏ガラスープでピリ辛に仕上げる"] }
+        { 
+          type: "鶏むね肉", 
+          name: "鶏むね肉と3種キノコのペッパーポン酢", 
+          mainIng: "鶏むね肉 1枚（約250g）、しめじ 1/2パック、エリンギ 1本", 
+          soup: { name: "豆腐スープ", detail: "水 200ml, 絹豆腐 50g, 鶏ガラスープの素 小さじ1" }, 
+          egg: "なし", 
+          side: "もずく酢（市販 1パック）", 
+          note: "高タンパク低脂質！ポン酢の酸味でさっぱり食べられます。", 
+          methods: [
+            "① 鶏むね肉1枚は一口大のそぎ切りにし、軽く塩コショウを振る。",
+            "② しめじ、エリンギは食べやすい大きさにほぐす・切る。",
+            "③ フライパンに油を薄く引き、鶏むね肉を並べて中火で両面焼く。",
+            "④ キノコを投入し、ポン酢大さじ2を回しかけて蓋をして2分蒸し焼きにする。"
+          ] 
+        },
+        { 
+          type: "魚メイン", 
+          name: "生鮭とキノコの旨塩焼き", 
+          mainIng: "生鮭 1切れ、まいたけ 1/2パック", 
+          soup: { name: "わかめスープ", detail: "水 200ml, 乾燥わかめ ひとつまみ, 中華だし 小さじ1" }, 
+          egg: "ゆで卵 1個（★週前半の卵枠）", 
+          side: "納豆 1パック", 
+          note: "オメガ3脂肪酸と良質なタンパク質が摂れる魚メニュー。", 
+          methods: [
+            "① 生鮭1切れに軽く塩を振り、水気を拭き取る。",
+            "② ホイルの上に鮭とまいたけをのせ、ごま油を数滴垂らす。",
+            "③ オーブントースターまたはグリルで約8〜10分、火が通るまで香ばしく焼く。"
+          ] 
+        },
+        { 
+          type: "肉メイン", 
+          name: "豚ロースとキャベツの生姜炒め", 
+          mainIng: "豚ロース薄切り 120g、キャベツ 1/8玉", 
+          soup: { name: "中華スープ", detail: "水 200ml, 醤油・鶏ガラ 各小さじ1/2" }, 
+          egg: "なし", 
+          side: "キムチ（小皿1杯）", 
+          note: "ビタミンB1が豊富で疲労回復に効果的！", 
+          methods: [
+            "① 豚ロースは食べやすい長さに切り、キャベツはざく切りにする。",
+            "② すりおろし生姜小さじ1、醤油・みりん各大さじ1を混ぜて合わせダレを作る。",
+            "③ フライパンで豚肉を炒め、火が通ったらキャベツを加えて強火で炒め合わせる。",
+            "④ 合わせダレを回しかけ、汁気が飛ぶまでさっと炒める。"
+          ] 
+        },
+        { 
+          type: "麺類・パスタ", 
+          name: "ツナと大葉の和風おろしパスタ", 
+          mainIng: "パスタ 80g、ツナ缶 1個（ノンオイル）、大根 5cm、大葉 3枚", 
+          soup: { name: "お吸い物", detail: "お湯 200ml, 和風顆粒だし 小さじ1/2, お麩 3個" }, 
+          egg: "温泉卵 1個（★週半ばの卵枠）", 
+          side: "冷やしトマト 1/2個", 
+          note: "市販の温泉卵をトッピングして手軽に満足感アップ！", 
+          methods: [
+            "① パスタ80gを表示時間通りに茹でてザルにあげる。",
+            "② 大根はおろして軽く水気を切り、大葉は千切りにする。",
+            "③ 茹でたパスタにツナ、大根おろし、麺つゆ大さじ1.5を和える。",
+            "④ 器ルに盛り付け、大葉と市販の温泉卵をのせる。"
+          ] 
+        },
+        { 
+          type: "鶏もも肉", 
+          name: "鶏もも肉のネギ塩焼き", 
+          mainIng: "鶏もも肉 120g、長ネギ 1/4本", 
+          soup: { name: "野菜スープ", detail: "水 200ml, 玉ねぎスライス少々, コンソメ 小さじ1/2" }, 
+          egg: "なし", 
+          side: "きゅうりの塩昆布和え", 
+          note: "ジューシーで食べ応え抜群！ネギ塩ダレが食欲をそそります。", 
+          methods: [
+            "① 鶏もも肉の余分な脂や皮を取り除き、一口大に切る。長ネギはみじん切りにする。",
+            "② 長ネギ、ごま油小さじ1、レモン汁小さじ1/2、塩少々を混ぜてネギ塩ダレを作る。",
+            "③ フライパンで鶏肉を皮目からこんがり焼き、火を通す。",
+            "④ 器に盛り、上から特製ネギ塩ダレをたっぷりかける。"
+          ] 
+        },
+        { 
+          type: "うどん・麺類", 
+          name: "温かいおろし肉うどん", 
+          mainIng: "冷凍うどん 1玉、豚バラまたは豚コマ 60g、大根おろし少々", 
+          soup: { name: "自家製だしつゆ", detail: "めんつゆ（3倍濃縮）大さじ2 ＋ 水 250ml" }, 
+          egg: "なし（お肉と大根おろしでさっぱり）", 
+          side: "ほうれん草のお浸し", 
+          note: "消化が良く温まるスピードメニュー。", 
+          methods: [
+            "① 小鍋に水250mlとめんつゆを入れて火にかけ、豚肉を煮る。",
+            "② 別鍋で冷凍うどんをレンジまたは茹でて解凍する。",
+            "③ 温かいうどんを器に入れ、①のスープと豚肉をかけ、大根おろしをトッピングする。"
+          ] 
+        },
+        { 
+          type: "野菜・ヘルシー", 
+          name: "豆腐と豚ひき肉のピリ辛麻婆", 
+          mainIng: "木綿豆腐 1丁（300g）、豚ひき肉 60g", 
+          soup: { name: "中華スープ", detail: "水 200ml, 鶏ガラスープの素 小さじ1" }, 
+          egg: "ゆで卵 1個（★週末の卵枠）", 
+          side: "もやしナムル", 
+          note: "糖質オフでもボリューム満点！", 
+          methods: [
+            "① 木綿豆腐は食べやすいサイコロ状に切る。",
+            "② フライパンにごま油を熱し、豚ひき肉を炒めて色が変わったら豆板醤小さじ1/2を加える。",
+            "③ 水100ml、醤油・鶏ガラスープの素各大さじ1/2を加え、豆腐を入れて弱火で3分煮込む。",
+            "④ 水溶き片栗粉でとろみをつけて仕上げる。"
+          ] 
+        }
       ];
 
       let res = [];
@@ -583,10 +671,12 @@
       const activeMenuObj = getActiveWeeklyMenu();
       const recipe = activeMenuObj.menu[idx % activeMenuObj.menu.length];
       document.getElementById('recipeTitle').innerText = `📅 [${recipe.fullDay}]：${recipe.main}`;
-      document.getElementById('recipeDesc').innerText = `セット：${recipe.soup.name} ＋ ${recipe.egg} ＋ ${recipe.side}`;
+      document.getElementById('recipeDesc').innerHTML = `💡 主材料: <b>${recipe.mainIng}</b><br>🥣 スープ: ${recipe.soup.name}（${recipe.soup.detail}）<br>🥚 卵枠: <b>${recipe.egg}</b> ／ 副菜: ${recipe.side}`;
       
       let methodsHtml = recipe.methods.map(m => `<div>${m}</div>`).join('');
-      document.getElementById('mainRecipeHowtoBox').innerHTML = `${methodsHtml}<div style="color:#fbbf24; margin-top:4px;"><b>【ポイント】</b> ${recipe.note}</div>`;
+      document.getElementById('mainRecipeHowtoBox').innerHTML = `${methodsHtml}<div style="color:#fbbf24; margin-top:6px;"><b>【ポイント】</b> ${recipe.note}</div>`;
+      // 初期状態で詳細手順を開いた状態にする
+      document.getElementById('mainRecipeHowtoBox').style.display = 'block';
     }
 
     function toggleMainRecipeHowto() {
@@ -777,7 +867,7 @@
           if(n && v) { c.name = n.value; c.videoId = v.value.trim(); }
         });
       });
-      localStorage.setItem('custom_courses_data_v27', JSON.stringify(courses));
+      localStorage.setItem('custom_courses_data_v30', JSON.stringify(courses));
       alert("保存しました！"); closeVideoModal(); populateCourseOptions();
     }
 
@@ -801,33 +891,37 @@
       container.innerHTML = '';
       const activeMenuObj = getActiveWeeklyMenu();
       const evalBox = document.getElementById('recipeEvalBox');
-      if(evalBox) evalBox.innerHTML = `📊 <b>パーソナル献立プラン</b><br>・モード：<b>${activeMenuObj.title}</b>`;
+      if(evalBox) evalBox.innerHTML = `📊 <b>パーソナル献立プラン（節約・卵削減＆詳細手順付き）</b>`;
 
       activeMenuObj.menu.forEach((item) => {
+        let methodsHtml = item.methods.map(m => `<div>${m}</div>`).join('');
         const card = document.createElement('div');
         card.className = 'recipe-card-week';
         card.innerHTML = `
           <h3 style="color:#fbbf24; font-size:0.95rem;">📅 [${item.fullDay}] ${item.main}</h3>
-          <p style="font-size:0.82rem; color:#cbd5e1; margin-top:2px;">💡 ジャンル: <b>${item.type}</b></p>
+          <p style="font-size:0.82rem; color:#cbd5e1; margin-top:2px;">💡 主材料: <b>${item.mainIng}</b></p>
           <div style="font-size:0.78rem; color:#38bdf8; margin-top:4px; background:#0f172a; padding:6px; border-radius:6px;">
-            🥣 セット：${item.soup.name} ＋ ${item.egg} ＋ ${item.side}
+            🥣 スープ: ${item.soup.name}（${item.soup.detail}） ／ 卵枠: <b>${item.egg}</b> ／ 副菜: ${item.side}
+          </div>
+          <div style="font-size:0.8rem; color:#e2e8f0; margin-top:6px; padding-top:6px; border-top:1px dashed #334155; line-height:1.6;">
+            ${methodsHtml}
+            <div style="color:#fbbf24; margin-top:4px;"><b>【ポイント】</b> ${item.note}</div>
           </div>
         `;
         container.appendChild(card);
       });
     }
 
-    // 🛒 買い物リスト専用のシンプルかつ綺麗なフォーマット（レシピの説明文を含めない）
     function generateShoppingList() {
       const activeMenuObj = getActiveWeeklyMenu();
-      let listText = "🛒 【今週の買い物・食材リスト】\n";
+      let listText = "🛒 【今週の買い物・節約食材リスト】\n";
       activeMenuObj.menu.forEach(item => {
-        listText += `・[${item.fullDay}] 主材料: ${item.mainIng} / スープ: ${item.soup.name}(${item.soup.detail}) / 卵: ${item.egg} / 副菜: ${item.side}\n`;
+        listText += `・[${item.fullDay}] 主材料: ${item.mainIng} / スープ: ${item.soup.name}(${item.soup.detail}) / 卵枠: ${item.egg} / 副菜: ${item.side}\n`;
       });
 
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(listText).then(() => {
-          alert("📋 買い物リスト（食材のみ）をクリップボードにコピーしました！");
+          alert("📋 買い物リストをコピーしました！");
         }).catch(() => {
           fallbackCopyText(listText);
         });
