@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>カラダログ - 体重記録と運動・献立ノート</title>
+  <title>体重・運動・献立ログ</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
@@ -414,10 +414,10 @@
         { id: "m_REST", name: "🟢 【朝の休息日】", videoId: "", type: "rest", targetMuscle: "リフレッシュ", comment: "🌿 休息日（ストレッチや深呼吸で体を休めましょう）" }
       ],
       night: [
-        { id: "n_B", name: "⚡ 夜A：地獄のプランク＆体幹強化", videoId: "o5vb430_m38", type: "power", targetMuscle: "体幹軸・腹横筋", comment: "🔥 静音でしっかり効く体幹強化・引き締め定番コース" },
-        { id: "n_KINNIKUN", name: "💪 夜B：【10分】なかやまきんに君 世界一楽な筋トレ", videoId: "2O_G6d_fP78", type: "power", targetMuscle: "全身の筋肉・基礎代謝", comment: "😁 正しいフォームでじっくり筋肉を追い込み、夜の代謝維持と筋力アップに効果的" },
-        { id: "n_BULGARIAN", name: "🍑 夜C：【10分】ブルガリアンスクワット＆下半身強化", videoId: "LTsAhtk4QQM", type: "stamina", targetMuscle: "お尻・太もも全体", comment: "🏋️ 下半身の大筋肉を強烈に刺激し、基礎代謝を底上げして痩せやすい身体を作る" },
-        { id: "n_BACK", name: "🦅 夜D：【6分】背中美人・バックエクステンション＆背中トレ", videoId: "VboGgLR4l7A", type: "agi", targetMuscle: "広背筋・脊柱起立筋・姿勢", comment: "✨ デスクワークで凝り固まった背中をほぐしつつ、背面の大きな筋肉を鍛えて消費カロリーUP" },
+        { id: "n_A", name: "⚡ 夜A：体を芯から鍛えるプランクメニュー（お腹痩せ＆姿勢改善）", videoId: "6gHwh1eZ0yY", type: "power", targetMuscle: "体幹軸・お腹全体・姿勢", comment: "🔥 ハイプランクからロッキング・ワンレッグまで、お腹周りを徹底的に引き締める体幹コース" },
+        { id: "n_KINNIKUN", name: "💪 夜B：【なかやまきんに君】世界一浅いスクワット＆背筋", videoId: "n5Sl3zSvIUQ", type: "power", targetMuscle: "下半身・背中・手軽さ", comment: "😁 無理なく毎日続けられる、きんに君流の世界一ラクで効果的なスクワット＆背筋" },
+        { id: "n_BULGARIAN", name: "🍑 夜C：【なかやまきんに君】全身10種目10分トレーニング", videoId: "dXQ7xgqqX44", type: "stamina", targetMuscle: "全身の引き締め・有酸素", comment: "🏋️ 痩せたい部位BEST5を網羅したきんに君の本格全身10分ルーティン" },
+        { id: "n_BACK", name: "🦅 夜D：【6分】下腹キープ＆腹筋ストレッチ", videoId: "VboGgLR4l7A", type: "agi", targetMuscle: "下腹・腹直筋・ストレッチ", comment: "✨ 寝たまま足を上げてしっかり下腹をいじめつつ、夜のリラックスストレッチで締める" },
         { id: "n_REST", name: "🌙 【夜の休息日】", videoId: "", type: "rest", targetMuscle: "疲労回復", comment: "🛀 リセット（湯船に浸かってしっかり疲労回復しましょう）" }
       ]
     };
@@ -469,7 +469,7 @@
     }
 
     function getActiveCourses() {
-      const saved = localStorage.getItem('custom_courses_data_v35');
+      const saved = localStorage.getItem('custom_courses_data_v37');
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
@@ -480,8 +480,8 @@
     }
 
     function resetCustomVideos() {
-      localStorage.removeItem('custom_courses_data_v35');
-      localStorage.removeItem('custom_courses_data_v34');
+      localStorage.removeItem('custom_courses_data_v37');
+      localStorage.removeItem('custom_courses_data_v36');
       alert("最新版に初期化しました！");
       closeVideoModal();
       populateCourseOptions();
@@ -858,7 +858,7 @@
           if(n && v) { c.name = n.value; c.videoId = v.value.trim(); }
         });
       });
-      localStorage.setItem('custom_courses_data_v35', JSON.stringify(courses));
+      localStorage.setItem('custom_courses_data_v37', JSON.stringify(courses));
       alert("保存しました！"); closeVideoModal(); populateCourseOptions();
     }
 
