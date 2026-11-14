@@ -308,7 +308,7 @@
     <div class="recipe-box">
       <div class="recipe-title" id="recipeTitle">💡 本日の定食</div>
       <div id="recipeDesc">メニュー読み込み中...</div>
-      <button class="howto-toggle-btn" onclick="toggleMainRecipeHowto()">📖 詳細な調理手順・分量を見る</button>
+      <button class="howto-toggle-btn" onclick="toggleMainRecipeHowto()">📖 詳しい手順を見る</button>
       <div class="recipe-howto-box" id="mainRecipeHowtoBox"></div>
     </div>
 
@@ -469,7 +469,7 @@
     }
 
     function getActiveCourses() {
-      const saved = localStorage.getItem('custom_courses_data_v30');
+      const saved = localStorage.getItem('custom_courses_data_v31');
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
@@ -480,8 +480,8 @@
     }
 
     function resetCustomVideos() {
+      localStorage.removeItem('custom_courses_data_v31');
       localStorage.removeItem('custom_courses_data_v30');
-      localStorage.removeItem('custom_courses_data_v29');
       alert("最新版に初期化しました！");
       closeVideoModal();
       populateCourseOptions();
@@ -495,7 +495,6 @@
       return Math.floor((pastDays + firstDay.getDay() + 1) / 7);
     }
 
-    // 🍳 卵を2日に1回に抑え、すべてのメニューに「詳しい分量と調理手順」を記載した献立プール
     function getDynamicWeightModeMenus() {
       const w = getWeekBaseIndex();
       const pool = [
@@ -519,7 +518,7 @@
           name: "生鮭とキノコの旨塩焼き", 
           mainIng: "生鮭 1切れ、まいたけ 1/2パック", 
           soup: { name: "わかめスープ", detail: "水 200ml, 乾燥わかめ ひとつまみ, 中華だし 小さじ1" }, 
-          egg: "ゆで卵 1個（★週前半の卵枠）", 
+          egg: "ゆで卵 1個", 
           side: "納豆 1パック", 
           note: "オメガ3脂肪酸と良質なタンパク質が摂れる魚メニュー。", 
           methods: [
@@ -548,14 +547,14 @@
           name: "ツナと大葉の和風おろしパスタ", 
           mainIng: "パスタ 80g、ツナ缶 1個（ノンオイル）、大根 5cm、大葉 3枚", 
           soup: { name: "お吸い物", detail: "お湯 200ml, 和風顆粒だし 小さじ1/2, お麩 3個" }, 
-          egg: "温泉卵 1個（★週半ばの卵枠）", 
+          egg: "温泉卵 1個", 
           side: "冷やしトマト 1/2個", 
           note: "市販の温泉卵をトッピングして手軽に満足感アップ！", 
           methods: [
             "① パスタ80gを表示時間通りに茹でてザルにあげる。",
             "② 大根はおろして軽く水気を切り、大葉は千切りにする。",
             "③ 茹でたパスタにツナ、大根おろし、麺つゆ大さじ1.5を和える。",
-            "④ 器ルに盛り付け、大葉と市販の温泉卵をのせる。"
+            "④ 器に盛り付け、大葉と市販の温泉卵をのせる。"
           ] 
         },
         { 
@@ -578,7 +577,7 @@
           name: "温かいおろし肉うどん", 
           mainIng: "冷凍うどん 1玉、豚バラまたは豚コマ 60g、大根おろし少々", 
           soup: { name: "自家製だしつゆ", detail: "めんつゆ（3倍濃縮）大さじ2 ＋ 水 250ml" }, 
-          egg: "なし（お肉と大根おろしでさっぱり）", 
+          egg: "なし", 
           side: "ほうれん草のお浸し", 
           note: "消化が良く温まるスピードメニュー。", 
           methods: [
@@ -592,7 +591,7 @@
           name: "豆腐と豚ひき肉のピリ辛麻婆", 
           mainIng: "木綿豆腐 1丁（300g）、豚ひき肉 60g", 
           soup: { name: "中華スープ", detail: "水 200ml, 鶏ガラスープの素 小さじ1" }, 
-          egg: "ゆで卵 1個（★週末の卵枠）", 
+          egg: "ゆで卵 1個", 
           side: "もやしナムル", 
           note: "糖質オフでもボリューム満点！", 
           methods: [
@@ -675,8 +674,8 @@
       
       let methodsHtml = recipe.methods.map(m => `<div>${m}</div>`).join('');
       document.getElementById('mainRecipeHowtoBox').innerHTML = `${methodsHtml}<div style="color:#fbbf24; margin-top:6px;"><b>【ポイント】</b> ${recipe.note}</div>`;
-      // 初期状態で詳細手順を開いた状態にする
-      document.getElementById('mainRecipeHowtoBox').style.display = 'block';
+      // 初期状態は非表示（見たい時だけボタンで開く）
+      document.getElementById('mainRecipeHowtoBox').style.display = 'none';
     }
 
     function toggleMainRecipeHowto() {
@@ -867,7 +866,7 @@
           if(n && v) { c.name = n.value; c.videoId = v.value.trim(); }
         });
       });
-      localStorage.setItem('custom_courses_data_v30', JSON.stringify(courses));
+      localStorage.setItem('custom_courses_data_v31', JSON.stringify(courses));
       alert("保存しました！"); closeVideoModal(); populateCourseOptions();
     }
 
@@ -891,7 +890,7 @@
       container.innerHTML = '';
       const activeMenuObj = getActiveWeeklyMenu();
       const evalBox = document.getElementById('recipeEvalBox');
-      if(evalBox) evalBox.innerHTML = `📊 <b>パーソナル献立プラン（節約・卵削減＆詳細手順付き）</b>`;
+      if(evalBox) evalBox.innerHTML = `📊 <b>今週のパーソナル献立一覧</b>`;
 
       activeMenuObj.menu.forEach((item) => {
         let methodsHtml = item.methods.map(m => `<div>${m}</div>`).join('');
@@ -903,7 +902,8 @@
           <div style="font-size:0.78rem; color:#38bdf8; margin-top:4px; background:#0f172a; padding:6px; border-radius:6px;">
             🥣 スープ: ${item.soup.name}（${item.soup.detail}） ／ 卵枠: <b>${item.egg}</b> ／ 副菜: ${item.side}
           </div>
-          <div style="font-size:0.8rem; color:#e2e8f0; margin-top:6px; padding-top:6px; border-top:1px dashed #334155; line-height:1.6;">
+          <button class="howto-toggle-btn" onclick="toggleModalRecipeHowto(this)">📖 詳しい手順を見る</button>
+          <div class="recipe-howto-box" style="display:none; font-size:0.8rem; color:#e2e8f0; margin-top:6px; padding-top:6px; border-top:1px dashed #334155; line-height:1.6;">
             ${methodsHtml}
             <div style="color:#fbbf24; margin-top:4px;"><b>【ポイント】</b> ${item.note}</div>
           </div>
@@ -912,9 +912,14 @@
       });
     }
 
+    function toggleModalRecipeHowto(btn) {
+      const box = btn.nextElementSibling;
+      box.style.display = box.style.display === 'block' ? 'none' : 'block';
+    }
+
     function generateShoppingList() {
       const activeMenuObj = getActiveWeeklyMenu();
-      let listText = "🛒 【今週の買い物・節約食材リスト】\n";
+      let listText = "🛒 【今週の買い物リスト】\n";
       activeMenuObj.menu.forEach(item => {
         listText += `・[${item.fullDay}] 主材料: ${item.mainIng} / スープ: ${item.soup.name}(${item.soup.detail}) / 卵枠: ${item.egg} / 副菜: ${item.side}\n`;
       });
