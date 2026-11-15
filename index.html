@@ -238,22 +238,22 @@
   <div class="card avatar-card">
     <div class="card-title" style="border-bottom: none; padding-bottom: 0;">
       <span>🌐 プログレス状況</span>
-      <span class="status-badge" id="bmiStatusBadge">分析中...</span>
+      <span class="status-badge" id="bmiStatusBadge">READY</span>
     </div>
     
     <div class="coach-speech-bubble" id="coachSpeechBubble">
-      💬 (AIコーチのアドバイスをロード中...)
+      💬 体重を記録すると、目標までの進捗とアドバイスが表示されます！
     </div>
 
     <div class="top-goal-bar">
-      <div class="top-goal-item">🎯 目標体重: <span class="top-goal-val" id="topTargetWeightVal">70.0 kg</span></div>
-      <div class="top-goal-item">⏳ 達成期間: <span class="top-goal-val" id="topTargetPeriodVal">5 か月</span></div>
+      <div class="top-goal-item">🎯 目標体重: <span class="top-goal-val" id="topTargetWeightVal">--.- kg</span></div>
+      <div class="top-goal-item">⏳ 達成期間: <span class="top-goal-val" id="topTargetPeriodVal">- か月</span></div>
     </div>
 
     <div class="cyber-dashboard-grid">
       <div class="stat-node">
         <div class="stat-label">現在の体重</div>
-        <div class="stat-value" id="currentWeightVal">77.5 kg</div>
+        <div class="stat-value" id="currentWeightVal">--.- kg</div>
       </div>
 
       <div class="ring-progress-wrapper">
@@ -275,14 +275,14 @@
 
       <div class="stat-node">
         <div class="stat-label">目標まで</div>
-        <div class="stat-value" id="diffWeightText" style="color: #34d399;">-7.5 kg</div>
+        <div class="stat-value" id="diffWeightText" style="color: #34d399;">--.- kg</div>
         <div style="font-size: 0.68rem; color: #94a3b8; margin-top: 2px;">差分</div>
       </div>
     </div>
 
     <div class="weight-analogy-box" id="weightAnalogyBox">
       <div class="analogy-title">💡 体重・軽さ換算</div>
-      <div id="analogyText">体重を記録すると重さの例えが更新されます。</div>
+      <div id="analogyText">下のフォームから体重を入力し、「🍽️ 献立」から目標体重を設定すると自動で計算されます。</div>
     </div>
   </div>
 
@@ -321,7 +321,7 @@
     <input type="date" id="logDate" onchange="loadDateWeightData()">
 
     <label id="weightLabel">体重 (kg)</label>
-    <input type="number" id="weight" step="0.1" placeholder="例: 77.5" onchange="saveCurrentWeightInput()">
+    <input type="number" id="weight" step="0.1" placeholder="例: 65.0" onchange="saveCurrentWeightInput()">
 
     <label>運動コース選択 <span style="font-size:0.72rem; color:#38bdf8; font-weight:normal;">(安定再生版✨)</span></label>
     <select id="workoutCourse" onchange="onCourseChange()"></select>
@@ -380,11 +380,11 @@
       <div class="goal-input-grid">
         <div>
           <label style="margin-top:0; color:#fbbf24;">🎯 目標体重 (kg)</label>
-          <input type="number" id="targetWeightInput" step="0.1" placeholder="例: 70.0" oninput="saveGoalParams()">
+          <input type="number" id="targetWeightInput" step="0.1" placeholder="例: 60.0" oninput="saveGoalParams()">
         </div>
         <div>
           <label style="margin-top:0; color:#fbbf24;">⏳ 達成期間 (か月)</label>
-          <input type="number" id="targetPeriodInput" min="1" max="12" placeholder="例: 5" oninput="saveGoalParams()">
+          <input type="number" id="targetPeriodInput" min="1" max="12" placeholder="例: 3" oninput="saveGoalParams()">
         </div>
       </div>
       <button class="btn-submit" onclick="generateShoppingList()" style="background: linear-gradient(135deg, #3b82f6, #2563eb); margin-bottom: 14px; padding: 12px; font-size: 0.9rem;">🛒 今週の買い物リストを自動作成してコピー</button>
@@ -469,7 +469,7 @@
     }
 
     function getActiveCourses() {
-      const saved = localStorage.getItem('custom_courses_data_v37');
+      const saved = localStorage.getItem('custom_courses_data_v38');
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
@@ -480,8 +480,8 @@
     }
 
     function resetCustomVideos() {
+      localStorage.removeItem('custom_courses_data_v38');
       localStorage.removeItem('custom_courses_data_v37');
-      localStorage.removeItem('custom_courses_data_v36');
       alert("最新版に初期化しました！");
       closeVideoModal();
       populateCourseOptions();
@@ -793,44 +793,53 @@
     function updateAvatarDisplay() {
       const logData = getStoredLogs();
       let latestW = null;
+      let startW = null;
       Object.keys(logData).sort().forEach(d => {
         const w = logData[d].nightWeight || logData[d].morningWeight || logData[d].weight;
-        if(w) latestW = w;
+        if(w) {
+          if(startW === null) startW = w;
+          latestW = w;
+        }
       });
 
-      const currentW = latestW || 77.5;
-      const targetW = parseFloat(localStorage.getItem('user_target_weight')) || 70.0;
-      const targetP = parseFloat(localStorage.getItem('user_target_period')) || 5;
+      const targetW = parseFloat(localStorage.getItem('user_target_weight'));
+      const targetP = parseFloat(localStorage.getItem('user_target_period'));
 
-      document.getElementById('topTargetWeightVal').innerText = `${targetW.toFixed(1)} kg`;
-      document.getElementById('topTargetPeriodVal').innerText = `${targetP} か月`;
-      document.getElementById('currentWeightVal').innerText = `${currentW.toFixed(1)} kg`;
+      document.getElementById('topTargetWeightVal').innerText = targetW ? `${targetW.toFixed(1)} kg` : `--.- kg`;
+      document.getElementById('topTargetPeriodVal').innerText = targetP ? `${targetP} か月` : `- か月`;
+      document.getElementById('currentWeightVal').innerText = latestW ? `${latestW.toFixed(1)} kg` : `--.- kg`;
 
-      const diff = currentW - targetW;
       const diffEl = document.getElementById('diffWeightText');
-      if(diff > 0) {
-        diffEl.innerText = `-${diff.toFixed(1)} kg`;
-        diffEl.style.color = "#34d399";
+      if (latestW && targetW) {
+        const diff = latestW - targetW;
+        if(diff > 0) {
+          diffEl.innerText = `-${diff.toFixed(1)} kg`;
+          diffEl.style.color = "#34d399";
+        } else {
+          diffEl.innerText = `🎉 達成！`;
+          diffEl.style.color = "#fbbf24";
+        }
+        const totalDiff = Math.max(1, (startW || latestW) - targetW);
+        const progressPercent = diff <= 0 ? 100 : Math.min(100, Math.max(0, Math.round((1 - (diff / totalDiff)) * 100)));
+        document.getElementById('percentVal').innerText = `${progressPercent}%`;
+        document.getElementById('ringProgressFill').style.strokeDashoffset = 283 - (283 * progressPercent / 100);
+        document.getElementById('bmiStatusBadge').innerText = "ACTIVE";
+
+        const bottleCount = Math.max(0, Math.round(diff * 1000 / 500));
+        document.getElementById('analogyText').innerHTML = `
+          ・現在の体重は <b>${latestW.toFixed(1)} kg</b> です。<br>
+          ・目標達成まであと <b>500mlペットボトル 約 ${bottleCount} 本分（${Math.max(0, diff).toFixed(1)}kg）</b> です！ 🥤
+        `;
+        document.getElementById('coachSpeechBubble').innerHTML = `
+          💬「現在の体重は <b>${latestW.toFixed(1)}kg</b> です！目標の${targetW.toFixed(1)}kgまであと <b>-${Math.max(0, diff).toFixed(1)}kg</b>。マイペースに進めていきましょう🔥」
+        `;
       } else {
-        diffEl.innerText = `🎉 達成！`;
-        diffEl.style.color = "#fbbf24";
+        diffEl.innerText = `--.- kg`;
+        diffEl.style.color = "#94a3b8";
+        document.getElementById('percentVal').innerText = `0%`;
+        document.getElementById('ringProgressFill').style.strokeDashoffset = 283;
+        document.getElementById('bmiStatusBadge').innerText = "READY";
       }
-
-      const progressPercent = Math.min(100, Math.max(0, Math.round((1 - (diff / 10)) * 100)));
-      document.getElementById('percentVal').innerText = `${progressPercent}%`;
-      document.getElementById('ringProgressFill').style.strokeDashoffset = 283 - (283 * progressPercent / 100);
-
-      document.getElementById('bmiStatusBadge').innerText = currentW >= 25 ? "STATUS: OVERLOAD" : "STATUS: OPTIMAL";
-
-      const bottleCount = Math.round(diff * 2000 / 500);
-      document.getElementById('analogyText').innerHTML = `
-        ・現在の体重は <b>【大型犬約2.2頭分 🐕】</b> に相当！<br>
-        ・目標達成まであと <b>500mlペットボトル 約 ${bottleCount} 本分（${diff.toFixed(1)}kg）</b> です！ 🥤
-      `;
-
-      document.getElementById('coachSpeechBubble').innerHTML = `
-        💬「現在の体重は <b>${currentW}kg</b> です！目標の${targetW}kgまであと <b>-${diff.toFixed(1)}kg</b>。マイペースに進めていきましょう🔥」
-      `;
     }
 
     function openVideoModal() {
@@ -858,7 +867,7 @@
           if(n && v) { c.name = n.value; c.videoId = v.value.trim(); }
         });
       });
-      localStorage.setItem('custom_courses_data_v37', JSON.stringify(courses));
+      localStorage.setItem('custom_courses_data_v38', JSON.stringify(courses));
       alert("保存しました！"); closeVideoModal(); populateCourseOptions();
     }
 
@@ -1002,9 +1011,9 @@
         let nClass = '';
         if(dayData.night?.done) {
           if(dayData.night.isRest || dayData.night.courseName?.includes('休息')) {
-            nIcon = '🛀'; mClass = 'n-rest';
+            nIcon = '🛀'; nClass = 'n-rest';
           } else {
-            nIcon = '🌃'; mClass = 'n-done';
+            nIcon = '🌃'; nClass = 'n-done';
           }
         }
 
@@ -1030,25 +1039,37 @@
     function renderWeightChart(labels, morningWeights, nightWeights) {
       const ctx = document.getElementById('weightChart').getContext('2d');
       if (weightChartInstance) weightChartInstance.destroy();
-      const targetW = parseFloat(localStorage.getItem('user_target_weight')) || 70.0;
+      const targetW = parseFloat(localStorage.getItem('user_target_weight'));
 
-      if(labels.length === 0) {
-        labels = ["11/8", "11/9", "11/10", "11/11"];
-        morningWeights = [78.0, 77.8, 77.6, 77.5];
-        nightWeights = [78.3, 78.0, 77.8, 77.5];
+      const datasets = [
+        { label: '朝体重', data: morningWeights, borderColor: '#ff5722', borderWidth: 3, tension: 0.2, spanGaps: true },
+        { label: '夜体重', data: nightWeights, borderColor: '#3b82f6', borderWidth: 3, tension: 0.2, spanGaps: true }
+      ];
+
+      if (targetW && labels.length > 0) {
+        datasets.push({
+          label: '目標',
+          data: new Array(labels.length).fill(targetW),
+          borderColor: '#10b981',
+          borderDash: [5, 5],
+          borderWidth: 2,
+          pointRadius: 0
+        });
       }
 
       weightChartInstance = new Chart(ctx, {
         type: 'line',
         data: {
           labels: labels,
-          datasets: [
-            { label: '朝体重', data: morningWeights, borderColor: '#ff5722', borderWidth: 3, tension: 0.2, spanGaps: true },
-            { label: '夜体重', data: nightWeights, borderColor: '#3b82f6', borderWidth: 3, tension: 0.2, spanGaps: true },
-            { label: '目標', data: new Array(labels.length).fill(targetW), borderColor: '#10b981', borderDash: [5,5], borderWidth: 2, pointRadius: 0 }
-          ]
+          datasets: datasets
         },
-        options: { responsive: true, maintainAspectRatio: false }
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: { beginAtZero: false }
+          }
+        }
       });
     }
 
