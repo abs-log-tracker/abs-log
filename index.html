@@ -469,7 +469,7 @@
     }
 
     function getActiveCourses() {
-      const saved = localStorage.getItem('custom_courses_data_v38');
+      const saved = localStorage.getItem('custom_courses_data_v39');
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
@@ -480,8 +480,8 @@
     }
 
     function resetCustomVideos() {
+      localStorage.removeItem('custom_courses_data_v39');
       localStorage.removeItem('custom_courses_data_v38');
-      localStorage.removeItem('custom_courses_data_v37');
       alert("最新版に初期化しました！");
       closeVideoModal();
       populateCourseOptions();
@@ -867,7 +867,7 @@
           if(n && v) { c.name = n.value; c.videoId = v.value.trim(); }
         });
       });
-      localStorage.setItem('custom_courses_data_v38', JSON.stringify(courses));
+      localStorage.setItem('custom_courses_data_v39', JSON.stringify(courses));
       alert("保存しました！"); closeVideoModal(); populateCourseOptions();
     }
 
@@ -1011,9 +1011,9 @@
         let nClass = '';
         if(dayData.night?.done) {
           if(dayData.night.isRest || dayData.night.courseName?.includes('休息')) {
-            nIcon = '🛀'; nClass = 'n-rest';
+            nIcon = '🛀'; mClass = 'n-rest';
           } else {
-            nIcon = '🌃'; nClass = 'n-done';
+            nIcon = '🌃'; mClass = 'n-done';
           }
         }
 
