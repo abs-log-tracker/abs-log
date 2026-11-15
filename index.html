@@ -41,14 +41,14 @@
       flex-wrap: wrap;
       gap: 10px;
       background: var(--card-bg-gradient);
-      padding: 14px 18px;
+      padding: 14px 16px;
       border-radius: 16px;
       border: 1px solid var(--border-color);
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
     }
 
     .app-header h1 {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       background: linear-gradient(90deg, #ff7a45, #ffd700);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -61,7 +61,7 @@
 
     .menu-link-btn {
       background: #1e293b; border: 1px solid var(--border-highlight); color: var(--accent-gold);
-      padding: 6px 10px; border-radius: 8px; font-size: 0.73rem; font-weight: bold; cursor: pointer; text-decoration: none;
+      padding: 6px 9px; border-radius: 8px; font-size: 0.72rem; font-weight: bold; cursor: pointer; text-decoration: none;
     }
 
     .card {
@@ -106,7 +106,7 @@
     .top-goal-bar {
       display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;
       background: rgba(15, 23, 42, 0.85); padding: 10px; border-radius: 10px; border: 1px solid #1e3a8a;
-      font-size: 0.8rem; text-align: center;
+      font-size: 0.8rem; text-align: center; cursor: pointer;
     }
     .top-goal-item { color: #93c5fd; }
     .top-goal-val { font-weight: bold; color: #fbbf24; font-size: 0.95rem; }
@@ -223,6 +223,9 @@
     
     .custom-video-item { background: #0f172a; padding: 12px; border-radius: 10px; margin-bottom: 12px; border: 1px solid #1e293b; }
     .goal-input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: #0f172a; padding: 12px; border-radius: 12px; border: 1px solid #1e3a8a; margin-bottom: 14px; }
+
+    .help-section { background: #0f172a; border-radius: 12px; padding: 14px; margin-bottom: 12px; border: 1px solid #1e293b; font-size: 0.85rem; color: #e2e8f0; line-height: 1.6; }
+    .help-section h3 { color: #38bdf8; font-size: 0.95rem; margin-bottom: 6px; }
   </style>
 </head>
 <body>
@@ -230,6 +233,7 @@
   <div class="app-header">
     <h1 id="appTitleHeader" onclick="triggerSecretDebug()">🔥 体重・運動・献立ログ</h1>
     <div class="header-btns">
+      <button class="menu-link-btn" onclick="openHelpModal()" style="color:#38bdf8;">📖 使い方</button>
       <button class="menu-link-btn" onclick="openVideoModal()">⚙️ 設定</button>
       <button class="menu-link-btn" onclick="openRecipeModal()">🍽️ 献立</button>
     </div>
@@ -242,10 +246,10 @@
     </div>
     
     <div class="coach-speech-bubble" id="coachSpeechBubble">
-      💬 体重を記録すると、目標までの進捗とアドバイスが表示されます！
+      💬 まずは右上の「⚙️ 設定」から目標体重・期間を入力し、日々の体重を記録してみましょう！
     </div>
 
-    <div class="top-goal-bar">
+    <div class="top-goal-bar" onclick="openVideoModal()" title="タップして目標を設定">
       <div class="top-goal-item">🎯 目標体重: <span class="top-goal-val" id="topTargetWeightVal">--.- kg</span></div>
       <div class="top-goal-item">⏳ 達成期間: <span class="top-goal-val" id="topTargetPeriodVal">- か月</span></div>
     </div>
@@ -282,7 +286,7 @@
 
     <div class="weight-analogy-box" id="weightAnalogyBox">
       <div class="analogy-title">💡 体重・軽さ換算</div>
-      <div id="analogyText">下のフォームから体重を入力し、「🍽️ 献立」から目標体重を設定すると自動で計算されます。</div>
+      <div id="analogyText">右上の「⚙️ 設定」から目標体重を登録し、下のフォームから体重を記録すると自動で計算されます。</div>
     </div>
   </div>
 
@@ -361,14 +365,64 @@
     <div class="stamp-grid" id="stampGrid"></div>
   </div>
 
-  <!-- ⚙️ 動画設定 モーダル -->
+  <!-- 📖 使い方ガイド モーダル -->
+  <div class="modal" id="helpModal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeHelpModal()">✕ 閉じる</button>
+      <h2 style="color: #38bdf8; font-size: 1.15rem; margin-bottom: 12px;">📖 アプリの使い方ガイド</h2>
+      
+      <div class="help-section">
+        <h3>1. 最初に目標を設定しよう</h3>
+        右上の <b>「⚙️ 設定」</b>（または上の目標体重バー）をタップして、<b>「🎯 目標体重 (kg)」</b> と <b>「⏳ 達成期間 (か月)」</b> を入力します。入力すると自動で保存され、画面上部の達成率リングと残り重量が計算されます。
+      </div>
+
+      <div class="help-section">
+        <h3>2. 毎日の体重＆運動の記録方法</h3>
+        ① <b>「🌅 朝用メニュー」</b> または <b>「🌃 夜用メニュー」</b> を選びます。<br>
+        ② その日の <b>体重 (kg)</b> を入力します（入力した時点で自動保存されます）。<br>
+        ③ 運動コースを選び、動画を見ながらトレーニングします。<br>
+        ④ 運動が終わったら <b>「☑️ ここを押して完走認証する」</b> を押し、オレンジ色の <b>「💮 記録してスタンプ獲得」</b> を押すとカレンダーにスタンプが付きます！（お休みの日は「休息日」を選べばそのままスタンプを押せます）
+      </div>
+
+      <div class="help-section">
+        <h3>3. 動画のカスタマイズ・差し替え</h3>
+        <b>「⚙️ 設定」</b> 画面の下部では、各コースのタイトルやYouTube動画ID（URLの <code>v=</code> の後ろにある11桁の英数字）を書き換えて、自分好みのトレーニング動画に変更できます。
+      </div>
+
+      <div class="help-section">
+        <h3>4. 今週の献立＆買い物リスト</h3>
+        曜日タブ（土〜金）をタップすると、その日の推奨メニューと作り方が見られます。右上の <b>「🍽️ 献立」</b> からは1週間分の献立一覧の確認と、<b>買い物リストの一括コピー</b> が可能です。
+      </div>
+
+      <div class="help-section" style="border-color: #3b82f6;">
+        <h3>🔒 データの保存について</h3>
+        記録した体重やスタンプのデータは、<b>お使いのスマホ・ブラウザ本体の中だけ</b>に保存されます。外部のサーバーへ送信されたり、他の人に見られたりすることは一切ありませんので安心してご利用ください。
+      </div>
+    </div>
+  </div>
+
+  <!-- ⚙️ 目標・動画設定 モーダル -->
   <div class="modal" id="videoModal">
     <div class="modal-content">
       <button class="modal-close" onclick="closeVideoModal()">✕ 閉じる</button>
-      <h2 style="color: var(--accent-gold); font-size: 1.1rem; margin-bottom: 6px;">⚙️ 動画設定</h2>
+      <h2 style="color: var(--accent-gold); font-size: 1.1rem; margin-bottom: 10px;">⚙️ 目標・動画設定</h2>
+      
+      <div style="font-size:0.85rem; color:#93c5fd; font-weight:bold; margin-bottom:6px;">🎯 目標設定（入力で自動保存）</div>
+      <div class="goal-input-grid">
+        <div>
+          <label style="margin-top:0; color:#fbbf24;">目標体重 (kg)</label>
+          <input type="number" id="targetWeightInput" step="0.1" placeholder="例: 60.0" oninput="saveGoalParams()">
+        </div>
+        <div>
+          <label style="margin-top:0; color:#fbbf24;">達成期間 (か月)</label>
+          <input type="number" id="targetPeriodInput" min="1" max="12" placeholder="例: 3" oninput="saveGoalParams()">
+        </div>
+      </div>
+
+      <div style="font-size:0.85rem; color:#93c5fd; font-weight:bold; margin-bottom:6px;">🎬 運動コース動画のカスタマイズ</div>
       <div id="videoCustomList"></div>
-      <button class="btn-submit" onclick="saveCustomVideos()" style="margin-top: 10px; padding: 10px; font-size: 0.9rem;">💾 保存</button>
-      <button class="btn-submit" onclick="resetCustomVideos()" style="margin-top: 8px; padding: 8px; font-size: 0.85rem; background: #475569;">🔄 初期化</button>
+      <button class="btn-submit" onclick="saveCustomVideos()" style="margin-top: 10px; padding: 10px; font-size: 0.9rem;">💾 動画設定を保存</button>
+      <button class="btn-submit" onclick="resetCustomVideos()" style="margin-top: 8px; padding: 8px; font-size: 0.85rem; background: #475569;">🔄 動画を初期設定に戻す</button>
     </div>
   </div>
 
@@ -376,19 +430,9 @@
   <div class="modal" id="recipeModal">
     <div class="modal-content">
       <button class="modal-close" onclick="closeRecipeModal()">✕ 閉じる</button>
-      <h2 style="color: var(--accent-gold); font-size: 1.15rem; margin-bottom: 6px;">🍽️ 目標設定＆献立一覧</h2>
-      <div class="goal-input-grid">
-        <div>
-          <label style="margin-top:0; color:#fbbf24;">🎯 目標体重 (kg)</label>
-          <input type="number" id="targetWeightInput" step="0.1" placeholder="例: 60.0" oninput="saveGoalParams()">
-        </div>
-        <div>
-          <label style="margin-top:0; color:#fbbf24;">⏳ 達成期間 (か月)</label>
-          <input type="number" id="targetPeriodInput" min="1" max="12" placeholder="例: 3" oninput="saveGoalParams()">
-        </div>
-      </div>
-      <button class="btn-submit" onclick="generateShoppingList()" style="background: linear-gradient(135deg, #3b82f6, #2563eb); margin-bottom: 14px; padding: 12px; font-size: 0.9rem;">🛒 今週の買い物リストを自動作成してコピー</button>
-      <div class="recipe-eval-box" id="recipeEvalBox">📊 体重データを分析中...</div>
+      <h2 style="color: var(--accent-gold); font-size: 1.15rem; margin-bottom: 10px;">🍽️ 今週の献立＆買い物リスト</h2>
+      <button class="btn-submit" onclick="generateShoppingList()" style="background: linear-gradient(135deg, #3b82f6, #2563eb); margin-top: 4px; margin-bottom: 14px; padding: 12px; font-size: 0.9rem;">🛒 今週の買い物リストを自動作成してコピー</button>
+      <div class="recipe-eval-box" id="recipeEvalBox">📊 今週のパーソナル献立一覧</div>
       <div id="weekRecipeList"></div>
     </div>
   </div>
@@ -469,7 +513,7 @@
     }
 
     function getActiveCourses() {
-      const saved = localStorage.getItem('custom_courses_data_v39');
+      const saved = localStorage.getItem('custom_courses_data_v40');
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
@@ -480,9 +524,9 @@
     }
 
     function resetCustomVideos() {
+      localStorage.removeItem('custom_courses_data_v40');
       localStorage.removeItem('custom_courses_data_v39');
-      localStorage.removeItem('custom_courses_data_v38');
-      alert("最新版に初期化しました！");
+      alert("動画を初期設定に戻しました！");
       closeVideoModal();
       populateCourseOptions();
     }
@@ -554,17 +598,17 @@
           ] 
         },
         { 
-          type: "鶏もも肉", 
-          name: "鶏もも肉のネギ塩焼き", 
-          mainIng: "鶏もも肉 120g、長ネギ 1/4本", 
+          type: "鶏むね肉", 
+          name: "鶏むね肉と長ネギの旨塩焼き", 
+          mainIng: "鶏むね肉 1枚（約250g）、長ネギ 1/2本", 
           soup: { name: "野菜スープ", detail: "水 200ml, 玉ねぎスライス少々, コンソメ 小さじ1/2" }, 
           side: "きゅうりの塩昆布和え", 
-          note: "ジューシーで食べ応え抜群！ネギ塩ダレが食欲をそそります。", 
+          note: "斜め切りネギと一緒に焼くだけ！ごま油と鶏ガラ・リンゴ酢のタレが絡んで絶品。", 
           methods: [
-            "① 鶏もも肉の余分な脂や皮を取り除き、一口大に切る。長ネギはみじん切りにする。",
-            "② 長ネギ、ごま油小さじ1、レモン汁小さじ1/2、塩少々を混ぜてネギ塩ダレを作る。",
-            "③ フライパンで鶏肉を皮目からこんがり焼き、火を通す。",
-            "④ 器に盛り、上から特製ネギ塩ダレをたっぷりかける。"
+            "① 鶏むね肉はそぎ切りにして軽く塩コショウを振り、片栗粉を薄くまぶす。長ネギは1cm幅の斜め切りにする。",
+            "② 小皿にごま油小さじ1、鶏ガラスープの素小さじ1、リンゴ酢（またはお酢）小さじ1/2、塩・黒コショウ少々を混ぜておく。",
+            "③ フライパンに油を薄く引き、鶏むね肉を並べて焼き、裏返したら長ネギも加えて一緒に焼き色をつける。",
+            "④ 火が通ったら②のタレを回しかけ、全体にさっと絡める。"
           ] 
         },
         { 
@@ -842,21 +886,34 @@
       }
     }
 
+    function openHelpModal() { document.getElementById('helpModal').style.display = 'block'; }
+    function closeHelpModal() { document.getElementById('helpModal').style.display = 'none'; }
+
     function openVideoModal() {
+      document.getElementById('targetWeightInput').value = localStorage.getItem('user_target_weight') || '';
+      document.getElementById('targetPeriodInput').value = localStorage.getItem('user_target_period') || '';
+
       const listEl = document.getElementById('videoCustomList');
       listEl.innerHTML = '';
       const courses = getActiveCourses();
       ['morning', 'night'].forEach(timeKey => {
-        let html = `<h3 style="color:#60a5fa; font-size:0.9rem; margin:10px 0;">${timeKey === 'morning' ? '朝用' : '夜用'}</h3>`;
+        let html = `<h3 style="color:#60a5fa; font-size:0.9rem; margin:10px 0;">${timeKey === 'morning' ? '🌅 朝用メニュー' : '🌃 夜用メニュー'}</h3>`;
         courses[timeKey].forEach((c, idx) => {
           if(c.type === 'rest') return;
-          html += `<div class="custom-video-item"><label>名</label><input type="text" id="c_name_${timeKey}_${idx}" value="${c.name}"><label>ID</label><input type="text" id="c_vid_${timeKey}_${idx}" value="${c.videoId}"></div>`;
+          html += `<div class="custom-video-item"><label style="margin-top:0;">コース名</label><input type="text" id="c_name_${timeKey}_${idx}" value="${c.name}"><label>YouTube動画ID</label><input type="text" id="c_vid_${timeKey}_${idx}" value="${c.videoId}"></div>`;
         });
         listEl.innerHTML += html;
       });
       document.getElementById('videoModal').style.display = 'block';
     }
     function closeVideoModal() { document.getElementById('videoModal').style.display = 'none'; }
+    
+    function saveGoalParams() {
+      localStorage.setItem('user_target_weight', document.getElementById('targetWeightInput').value);
+      localStorage.setItem('user_target_period', document.getElementById('targetPeriodInput').value);
+      renderApp();
+    }
+
     function saveCustomVideos() {
       const courses = getActiveCourses();
       ['morning', 'night'].forEach(timeKey => {
@@ -867,23 +924,15 @@
           if(n && v) { c.name = n.value; c.videoId = v.value.trim(); }
         });
       });
-      localStorage.setItem('custom_courses_data_v39', JSON.stringify(courses));
-      alert("保存しました！"); closeVideoModal(); populateCourseOptions();
+      localStorage.setItem('custom_courses_data_v40', JSON.stringify(courses));
+      alert("設定を保存しました！"); closeVideoModal(); populateCourseOptions();
     }
 
     function openRecipeModal() {
-      document.getElementById('targetWeightInput').value = localStorage.getItem('user_target_weight') || '';
-      document.getElementById('targetPeriodInput').value = localStorage.getItem('user_target_period') || '';
       renderRecipeModalContent();
       document.getElementById('recipeModal').style.display = 'block';
     }
     function closeRecipeModal() { document.getElementById('recipeModal').style.display = 'none'; }
-    function saveGoalParams() {
-      localStorage.setItem('user_target_weight', document.getElementById('targetWeightInput').value);
-      localStorage.setItem('user_target_period', document.getElementById('targetPeriodInput').value);
-      renderRecipeModalContent();
-      renderApp();
-    }
 
     function renderRecipeModalContent() {
       const container = document.getElementById('weekRecipeList');
