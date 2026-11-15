@@ -138,7 +138,14 @@
       background: rgba(15, 23, 42, 0.85); border: 1px dashed #3b82f6; border-radius: 12px; padding: 12px;
       font-size: 0.83rem; color: #cbd5e1; text-align: left; line-height: 1.6;
     }
-    .analogy-title { font-weight: bold; color: #00f0ff; margin-bottom: 2px; }
+    .analogy-header {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;
+    }
+    .analogy-title { font-weight: bold; color: #00f0ff; }
+    .analogy-shuffle-btn {
+      background: #1e293b; border: 1px solid #334155; color: #93c5fd; font-size: 0.7rem;
+      padding: 2px 8px; border-radius: 6px; cursor: pointer; font-weight: bold;
+    }
 
     .menu-week-calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 12px; }
     .menu-day-btn {
@@ -285,7 +292,10 @@
     </div>
 
     <div class="weight-analogy-box" id="weightAnalogyBox">
-      <div class="analogy-title">💡 体重・軽さ換算</div>
+      <div class="analogy-header">
+        <div class="analogy-title">💡 体重・軽さ換算</div>
+        <button class="analogy-shuffle-btn" onclick="shuffleAnalogy()">↻ 別の例え</button>
+      </div>
       <div id="analogyText">右上の「⚙️ 設定」から目標体重を登録し、下のフォームから体重を記録すると自動で計算されます。</div>
     </div>
   </div>
@@ -469,6 +479,7 @@
     let secretTapCount = 0;
     let secretTapTimer = null;
     let debugWeekOffset = parseInt(localStorage.getItem('debug_week_offset_v4') || '0', 10);
+    let analogySeed = 0;
 
     function triggerSecretDebug() {
       secretTapCount++;
@@ -513,7 +524,7 @@
     }
 
     function getActiveCourses() {
-      const saved = localStorage.getItem('custom_courses_data_v40');
+      const saved = localStorage.getItem('custom_courses_data_v41');
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
@@ -524,8 +535,8 @@
     }
 
     function resetCustomVideos() {
+      localStorage.removeItem('custom_courses_data_v41');
       localStorage.removeItem('custom_courses_data_v40');
-      localStorage.removeItem('custom_courses_data_v39');
       alert("動画を初期設定に戻しました！");
       closeVideoModal();
       populateCourseOptions();
@@ -834,6 +845,56 @@
       renderApp();
     }
 
+    function getWeightAnalogyLines(currentW, diff) {
+      const currentPool = [
+        `・現在の体重（${currentW.toFixed(1)}kg）は、<b>ボーリングの球（15ポンド）約 ${(currentW / 6.8).toFixed(1)} 個分 🎳</b> に相当！`,
+        `・現在の体重（${currentW.toFixed(1)}kg）は、<b>10kgのお米袋 約 ${(currentW / 10).toFixed(1)} 袋分 🌾</b> に相当！`,
+        `・現在の体重（${currentW.toFixed(1)}kg）は、<b>大型犬（ゴールデンレトリバー）約 ${(currentW / 32).toFixed(1)} 頭分 🐕</b> に相当！`,
+        `・現在の体重（${currentW.toFixed(1)}kg）は、<b>生後1歳頃のパンダの赤ちゃん 約 ${(currentW / 30).toFixed(1)} 頭分 🐼</b> に相当！`,
+        `・現在の体重（${currentW.toFixed(1)}kg）は、<b>スーパーの大玉スイカ 約 ${(currentW / 6).toFixed(1)} 玉分 🍉</b> に相当！`
+      ];
+
+      let diffPool = [];
+      if (diff <= 0) {
+        diffPool = [`・🎉 <b>目標体重クリアおめでとうございます！</b> 今のベストコンディションをキープしましょう✨`];
+      } else if (diff < 1.5) {
+        diffPool = [
+          `・目標まであと <b>スマホ（約200g）約 ${Math.round(diff * 1000 / 200)} 台分（${diff.toFixed(1)}kg）</b> です！ラストスパート📱`,
+          `・目標まであと <b>単行本（約300g）約 ${Math.round(diff * 1000 / 300)} 冊分（${diff.toFixed(1)}kg）</b> です！あと少し📚`,
+          `・目標まであと <b>500mlペットボトル 約 ${Math.round(diff * 1000 / 500)} 本分（${diff.toFixed(1)}kg）</b> です！🥤`
+        ];
+      } else if (diff < 4.0) {
+        diffPool = [
+          `・目標まであと <b>ノートPC（約1.5kg）約 ${(diff / 1.5).toFixed(1)} 台分（${diff.toFixed(1)}kg）</b> です！💻`,
+          `・目標まであと <b>食パン1斤（約350g）約 ${Math.round(diff * 1000 / 350)} 斤分（${diff.toFixed(1)}kg）</b> です！🍞`,
+          `・目標まであと <b>2Lペットボトル 約 ${(diff / 2).toFixed(1)} 本分（${diff.toFixed(1)}kg）</b> です！💧`
+        ];
+      } else if (diff < 8.0) {
+        diffPool = [
+          `・目標まであと <b>スーパーの大玉スイカ（約6kg）約 ${(diff / 6).toFixed(1)} 玉分（${diff.toFixed(1)}kg）</b> です！🍉`,
+          `・目標まであと <b>ボウリングの球（12ポンド＝約5.4kg）約 ${(diff / 5.4).toFixed(1)} 個分（${diff.toFixed(1)}kg）</b> です！🎳`,
+          `・目標まであと <b>5kgのお米袋 約 ${(diff / 5).toFixed(1)} 袋分（${diff.toFixed(1)}kg）</b> です！🌾`,
+          `・目標まであと <b>500mlペットボトル 約 ${Math.round(diff * 1000 / 500)} 本分（${diff.toFixed(1)}kg）</b> です！🥤`
+        ];
+      } else {
+        diffPool = [
+          `・目標まであと <b>10kgのお米袋 約 ${(diff / 10).toFixed(1)} 袋分（${diff.toFixed(1)}kg）</b> です！コツコツ減らそう🌾`,
+          `・目標まであと <b>小型犬（柴犬約10kg）約 ${(diff / 10).toFixed(1)} 匹分（${diff.toFixed(1)}kg）</b> です！🐕`,
+          `・目標まであと <b>スーパーの大玉スイカ（約6kg）約 ${(diff / 6).toFixed(1)} 玉分（${diff.toFixed(1)}kg）</b> です！🍉`,
+          `・目標まであと <b>機内持ち込みスーツケース（約10kg）約 ${(diff / 10).toFixed(1)} 個分（${diff.toFixed(1)}kg）</b> です！🧳`
+        ];
+      }
+
+      const cLine = currentPool[analogySeed % currentPool.length];
+      const dLine = diffPool[analogySeed % diffPool.length];
+      return `${cLine}<br>${dLine}`;
+    }
+
+    function shuffleAnalogy() {
+      analogySeed++;
+      updateAvatarDisplay();
+    }
+
     function updateAvatarDisplay() {
       const logData = getStoredLogs();
       let latestW = null;
@@ -869,11 +930,7 @@
         document.getElementById('ringProgressFill').style.strokeDashoffset = 283 - (283 * progressPercent / 100);
         document.getElementById('bmiStatusBadge').innerText = "ACTIVE";
 
-        const bottleCount = Math.max(0, Math.round(diff * 1000 / 500));
-        document.getElementById('analogyText').innerHTML = `
-          ・現在の体重は <b>${latestW.toFixed(1)} kg</b> です。<br>
-          ・目標達成まであと <b>500mlペットボトル 約 ${bottleCount} 本分（${Math.max(0, diff).toFixed(1)}kg）</b> です！ 🥤
-        `;
+        document.getElementById('analogyText').innerHTML = getWeightAnalogyLines(latestW, diff);
         document.getElementById('coachSpeechBubble').innerHTML = `
           💬「現在の体重は <b>${latestW.toFixed(1)}kg</b> です！目標の${targetW.toFixed(1)}kgまであと <b>-${Math.max(0, diff).toFixed(1)}kg</b>。マイペースに進めていきましょう🔥」
         `;
@@ -924,7 +981,7 @@
           if(n && v) { c.name = n.value; c.videoId = v.value.trim(); }
         });
       });
-      localStorage.setItem('custom_courses_data_v40', JSON.stringify(courses));
+      localStorage.setItem('custom_courses_data_v41', JSON.stringify(courses));
       alert("設定を保存しました！"); closeVideoModal(); populateCourseOptions();
     }
 
