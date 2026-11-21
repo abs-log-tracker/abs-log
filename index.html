@@ -195,6 +195,14 @@
       border-radius: 10px; color: #fff; font-size: 0.95rem; outline: none;
     }
 
+    .delete-log-row {
+      display: flex; gap: 8px; margin-top: 8px;
+    }
+    .btn-delete-slot, .btn-delete-day {
+      flex: 1; background: #1e1b2e; border: 1px solid #7f1d1d; color: #fca5a5;
+      padding: 7px 8px; border-radius: 8px; font-size: 0.74rem; font-weight: bold; cursor: pointer;
+    }
+
     .video-container {
       position: relative; width: 100%; padding-top: 56.25%; background: #000; border-radius: 12px; overflow: hidden; margin-top: 14px; border: 1px solid var(--border-highlight);
     }
@@ -370,6 +378,11 @@
 
     <label id="weightLabel">体重 (kg)</label>
     <input type="number" id="weight" step="0.1" placeholder="例: 65.0" onchange="saveCurrentWeightInput()">
+
+    <div class="delete-log-row">
+      <button type="button" class="btn-delete-slot" onclick="deleteSelectedModeData()">🗑️ 選択日（朝/夜）を削除</button>
+      <button type="button" class="btn-delete-day" onclick="deleteSelectedDayAllData()">🗑️ 選択日の全記録を削除</button>
+    </div>
 
     <label>運動コース選択 <span style="font-size:0.72rem; color:#38bdf8; font-weight:normal;">(安定再生版✨)</span></label>
     <select id="workoutCourse" onchange="onCourseChange()"></select>
@@ -617,6 +630,53 @@
       localStorage.setItem('abs_workout_logs', JSON.stringify(dataObj));
     }
 
+    function deleteSelectedModeData() {
+      const date = document.getElementById('logDate').value;
+      if (!date) return;
+      const modeLabel = currentTimeMode === 'morning' ? '朝' : '夜';
+      if (!confirm(`${date} の「${modeLabel}」の体重とスタンプを削除しますか？`)) return;
+
+      const logData = getStoredLogs();
+      if (!logData[date]) return;
+
+      if (currentTimeMode === 'morning') {
+        delete logData[date].morning;
+        delete logData[date].morningWeight;
+        delete logData[date].weight;
+      } else {
+        delete logData[date].night;
+        delete logData[date].nightWeight;
+      }
+
+      const hasAny =
+        logData[date].morning || logData[date].night ||
+        logData[date].morningWeight || logData[date].nightWeight || logData[date].weight;
+      if (!hasAny) {
+        delete logData[date];
+      }
+
+      saveStoredLogs(logData);
+      loadDateWeightData();
+      renderApp();
+      alert(`${date} の「${modeLabel}」の記録を削除しました。`);
+    }
+
+    function deleteSelectedDayAllData() {
+      const date = document.getElementById('logDate').value;
+      if (!date) return;
+      if (!confirm(`${date} の体重・スタンプ記録をすべて削除しますか？`)) return;
+
+      const logData = getStoredLogs();
+      if (logData[date]) {
+        delete logData[date];
+        saveStoredLogs(logData);
+      }
+
+      loadDateWeightData();
+      renderApp();
+      alert(`${date} の記録をすべて削除しました。`);
+    }
+
     function getActiveCourses() {
       const saved = localStorage.getItem('custom_courses_data_v45');
       if (saved) {
@@ -644,7 +704,6 @@
       return Math.floor((pastDays + firstDay.getDay() + 1) / 7);
     }
 
-    // 土曜購入前提：土〜月（前半3日）で生肉・生魚を使い切り、火〜金は麺類（うどん・そば・スパゲッティ）や保存食を組み合わせる定番メニュー
     function getDynamicBalancedMenus() {
       const w = getWeekBaseIndex();
 
