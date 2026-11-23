@@ -147,6 +147,21 @@
       padding: 2px 8px; border-radius: 6px; cursor: pointer; font-weight: bold;
     }
 
+    .season-banner {
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      border-radius: 10px;
+      padding: 8px 12px;
+      margin-bottom: 10px;
+      font-size: 0.78rem;
+      color: #a7f3d0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
     .menu-week-calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 12px; }
     .menu-day-btn {
       background-color: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 8px 2px;
@@ -181,6 +196,57 @@
     .recipe-box, .video-comment-box { background: #0f172a; padding: 12px; border-radius: 8px; margin-bottom: 14px; font-size: 0.85rem; border: 1px solid #1e293b; }
     .recipe-box { border-left: 4px solid var(--accent-gold); }
     .video-comment-box { border-left: 4px solid var(--accent-color); }
+
+    .leftover-box {
+      background: #0f172a;
+      border: 1px solid #38bdf8;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+    .leftover-title {
+      font-size: 0.95rem;
+      font-weight: bold;
+      color: #38bdf8;
+      margin-bottom: 6px;
+    }
+    .leftover-sub {
+      font-size: 0.76rem;
+      color: #94a3b8;
+      margin-bottom: 8px;
+    }
+    .leftover-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .chip-btn {
+      background: #1e293b;
+      border: 1px solid #475569;
+      color: #e2e8f0;
+      padding: 4px 9px;
+      border-radius: 14px;
+      font-size: 0.74rem;
+      cursor: pointer;
+    }
+    .chip-btn:active {
+      background: #0284c7;
+      color: #fff;
+    }
+    .leftover-input-row {
+      display: flex;
+      gap: 8px;
+    }
+    .leftover-result-card {
+      background: #131c2e;
+      border: 1px solid #334155;
+      border-left: 4px solid #10b981;
+      border-radius: 10px;
+      padding: 12px;
+      margin-top: 12px;
+      font-size: 0.82rem;
+    }
 
     .time-tabs { display: flex; gap: 10px; margin-bottom: 14px; }
     .time-tab {
@@ -344,9 +410,11 @@
 
   <div class="card">
     <div class="card-title">
-      <span>📅 今週のバランスごはん</span>
+      <span>📅 今週の旬バランスごはん</span>
       <span id="weekPatternLabel" style="font-size: 0.7rem; color: #38bdf8; text-align: right; max-width: 55%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
     </div>
+
+    <div class="season-banner" id="seasonBanner"></div>
 
     <div class="serving-bar">
       <span class="serving-label">🍽️ 分量の人数指定</span>
@@ -442,13 +510,9 @@
       </div>
 
       <div class="help-section">
-        <h3>3. 動画のカスタマイズ・差し替え</h3>
-        <b>⚙️ 設定</b> 画面の下部では、各コースのタイトルやYouTube動画IDを書き換えて、自分好みのトレーニング動画に変更できます。
-      </div>
-
-      <div class="help-section">
-        <h3>4. 今週の献立＆買い物リスト</h3>
-        「何人分か」を入力すると、その人数に合わせて材料・分量が自動計算されます。生肉は期限が短いため前半（土〜月）に使い切り、後半は麺類や保存性の高い食材を組み合わせた構成になっています。
+        <h3>3. 旬の献立＆余り食材レシピ機能</h3>
+        ・カレンダーの季節に合わせて、その時期の旬の野菜・魚を自動で取り入れた1週間献立を表示します。<br>
+        ・<b>🍽️ 献立</b> ボタン内の「余った食材からレシピ提案」では、冷蔵庫にある食材を入れると指定人数分のレシピ・サラダ・汁物を自動組み立てします。
       </div>
 
       <div class="help-section" style="border-color: #3b82f6;">
@@ -483,11 +547,11 @@
     </div>
   </div>
 
-  <!-- 🍽️ 献立一覧・買い物リスト モーダル -->
+  <!-- 🍽️ 献立一覧・買い物リスト・余り食材レシピ モーダル -->
   <div class="modal" id="recipeModal">
     <div class="modal-content">
       <button class="modal-close" onclick="closeRecipeModal()">✕ 閉じる</button>
-      <h2 style="color: var(--accent-gold); font-size: 1.15rem; margin-bottom: 10px;">🍽️ 今週の献立＆買い物リスト</h2>
+      <h2 style="color: var(--accent-gold); font-size: 1.15rem; margin-bottom: 10px;">🍽️ 今週の旬献立＆余り食材レシピ</h2>
 
       <div class="serving-bar">
         <span class="serving-label">🍽️ 何人分の分量を表示しますか？</span>
@@ -499,8 +563,29 @@
         </div>
       </div>
 
+      <!-- 🧊 余った食材からレシピ自動組み立て機能 -->
+      <div class="leftover-box">
+        <div class="leftover-title">🧊 余った食材からレシピ自動組み立て</div>
+        <div class="leftover-sub">スペースや「、」区切りで複数入力できます。登録レシピ＋汎用組み立てで指定人数分の献立を作ります。</div>
+        <div class="leftover-chips">
+          <button type="button" class="chip-btn" onclick="appendLeftoverChip('キャベツ')">+ キャベツ</button>
+          <button type="button" class="chip-btn" onclick="appendLeftoverChip('大根')">+ 大根</button>
+          <button type="button" class="chip-btn" onclick="appendLeftoverChip('長ネギ')">+ 長ネギ</button>
+          <button type="button" class="chip-btn" onclick="appendLeftoverChip('鶏肉')">+ 鶏肉</button>
+          <button type="button" class="chip-btn" onclick="appendLeftoverChip('豚肉')">+ 豚肉</button>
+          <button type="button" class="chip-btn" onclick="appendLeftoverChip('豆腐')">+ 豆腐</button>
+          <button type="button" class="chip-btn" onclick="appendLeftoverChip('しめじ')">+ しめじ</button>
+          <button type="button" class="chip-btn" onclick="appendLeftoverChip('ツナ缶')">+ ツナ缶</button>
+        </div>
+        <div class="leftover-input-row">
+          <input type="text" id="leftoverInput" placeholder="例: キャベツ 豚肉 長ネギ" style="padding:10px; font-size:0.88rem;">
+          <button type="button" onclick="suggestLeftoverRecipes()" style="background:#0284c7; color:#fff; border:none; border-radius:10px; padding:0 14px; font-weight:bold; font-size:0.85rem; white-space:nowrap; cursor:pointer;">🍳 提案する</button>
+        </div>
+        <div id="leftoverResultArea"></div>
+      </div>
+
       <button class="btn-submit" onclick="generateShoppingList()" style="background: linear-gradient(135deg, #3b82f6, #2563eb); margin-top: 4px; margin-bottom: 14px; padding: 12px; font-size: 0.9rem;">🛒 指定人数分の買い物リストをコピー</button>
-      <div class="recipe-eval-box" id="recipeEvalBox">📊 今週のバランスごはん一覧</div>
+      <div class="recipe-eval-box" id="recipeEvalBox">📊 今週の旬バランスごはん一覧</div>
       <div id="weekRecipeList"></div>
     </div>
   </div>
@@ -558,6 +643,9 @@
       renderSelectedMenu(selectedSatDayIdx);
       if (document.getElementById('recipeModal').style.display === 'block') {
         renderRecipeModalContent();
+        if (document.getElementById('leftoverInput').value.trim()) {
+          suggestLeftoverRecipes();
+        }
       }
     }
 
@@ -574,6 +662,9 @@
       renderSelectedMenu(selectedSatDayIdx);
       if (document.getElementById('recipeModal').style.display === 'block') {
         renderRecipeModalContent();
+        if (document.getElementById('leftoverInput').value.trim()) {
+          suggestLeftoverRecipes();
+        }
       }
     }
 
@@ -696,6 +787,160 @@
       populateCourseOptions();
     }
 
+    function getCurrentSeasonInfo() {
+      const now = new Date();
+      now.setDate(now.getDate() + (debugWeekOffset * 7));
+      const month = now.getMonth() + 1;
+
+      if (month >= 3 && month <= 5) {
+        return {
+          key: "spring",
+          label: "🌸 春の旬モード（3〜5月）",
+          ingredients: "春キャベツ・新玉ねぎ・アスパラ・あさり・サワラ",
+          seasonalFish: {
+            name: "【旬】サワラの照り焼きムニエル定食",
+            mainItems: [
+              { name: "サワラ切り身（旬）", qty: 1, unit: "切れ" },
+              { name: "醤油・みりん・酒", qty: 1, unit: "大さじ" },
+              { name: "バター", qty: 5, unit: "g" }
+            ],
+            soup: {
+              label: "新玉ねぎとわかめの味噌汁",
+              items: [
+                { name: "新玉ねぎ（旬）", qty: 0.25, unit: "個" },
+                { name: "乾燥わかめ", qty: 1.5, unit: "g" },
+                { name: "味噌", qty: 1, unit: "大さじ" }
+              ]
+            },
+            salad: {
+              label: "春キャベツとツナのふんわりサラダ",
+              items: [
+                { name: "春キャベツ（旬）", qty: 0.15, unit: "玉" },
+                { name: "ツナ缶", qty: 0.25, unit: "缶" }
+              ]
+            },
+            note: "春が旬のサワラ・新玉ねぎ・春キャベツを取り入れた季節定食です。",
+            methods: [
+              "① 春キャベツは千切りにしてツナと和え、サラダを作る。",
+              "② サワラに薄く片栗粉をまぶし、フライパンで両面を香ばしく焼く。",
+              "③ 醤油・みりん・酒・バターを加えて絡める。"
+            ]
+          },
+          seasonalSideVeg: { name: "春キャベツ（旬）", qty: 0.15, unit: "玉" }
+        };
+      } else if (month >= 6 && month <= 8) {
+        return {
+          key: "summer",
+          label: "🌻 夏の旬モード（6〜8月）",
+          ingredients: "トマト・きゅうり・なす・ピーマン・オクラ",
+          seasonalFish: {
+            name: "【旬】豚しゃぶとなす・トマトのさっぱり香味定食",
+            mainItems: [
+              { name: "豚しゃぶ用薄切り肉", qty: 120, unit: "g" },
+              { name: "なす（旬）", qty: 0.5, unit: "本" },
+              { name: "ぽん酢・ごま油", qty: 1, unit: "大さじ" }
+            ],
+            soup: {
+              label: "オクラと豆腐のすまし汁",
+              items: [
+                { name: "オクラ（旬）", qty: 1.5, unit: "本" },
+                { name: "絹豆腐", qty: 75, unit: "g" },
+                { name: "和風顆粒だし", qty: 0.5, unit: "小さじ" }
+              ]
+            },
+            salad: {
+              label: "完熟トマトときゅうりのさっぱりサラダ",
+              items: [
+                { name: "トマト（旬）", qty: 0.5, unit: "個" },
+                { name: "きゅうり（旬）", qty: 0.5, unit: "本" }
+              ]
+            },
+            note: "夏野菜（なす・オクラ・トマト・きゅうり）と豚しゃぶで暑い日でも食べやすい構成です。",
+            methods: [
+              "① トマトときゅうりを角切りにしてサラダを用意する。",
+              "② なすは薄切りにして焼き、豚肉はさっと茹でて冷水にとり水気を切る。",
+              "③ 皿に盛り付けてぽん酢と少量の香りごま油をかける。"
+            ]
+          },
+          seasonalSideVeg: { name: "きゅうり（旬）", qty: 0.5, unit: "本" }
+        };
+      } else if (month >= 9 && month <= 10) {
+        return {
+          key: "autumn",
+          label: "🍁 秋の旬モード（9〜10月）",
+          ingredients: "秋鮭・しめじ・まいたけ・さつまいも・れんこん",
+          seasonalFish: {
+            name: "【旬】秋鮭ときのこのバター醤油ホイル焼き風定食",
+            mainItems: [
+              { name: "秋鮭切り身（旬）", qty: 1, unit: "切れ" },
+              { name: "しめじ・まいたけ（旬）", qty: 0.3, unit: "パック" },
+              { name: "バター", qty: 8, unit: "g" },
+              { name: "醤油", qty: 1, unit: "小さじ" }
+            ],
+            soup: {
+              label: "さつまいもと玉ねぎの味噌汁",
+              items: [
+                { name: "さつまいも（旬）", qty: 40, unit: "g" },
+                { name: "玉ネギ", qty: 0.2, unit: "個" },
+                { name: "味噌", qty: 1, unit: "大さじ" }
+              ]
+            },
+            salad: {
+              label: "れんこんとキャベツのシャキシャキサラダ",
+              items: [
+                { name: "れんこん（旬）", qty: 30, unit: "g" },
+                { name: "キャベツ", qty: 0.12, unit: "玉" }
+              ]
+            },
+            note: "秋鮭・きのこ・さつまいも・れんこんなど秋の旬食材をたっぷり組み合わせた定食です。",
+            methods: [
+              "① 薄切りにしたれんこんをさっと茹でてキャベツと合わせ、サラダを作る。",
+              "② フライパンで秋鮭ときのこを蒸し焼きにし、バターと醤油を絡める。"
+            ]
+          },
+          seasonalSideVeg: { name: "しめじ（旬）", qty: 0.25, unit: "パック" }
+        };
+      } else {
+        return {
+          key: "winter",
+          label: "❄️ 晩秋〜冬の旬モード（11〜2月）",
+          ingredients: "大根・白菜・長ネギ・ほうれん草・ブロッコリー・生鮭",
+          seasonalFish: {
+            name: "【旬】生鮭と白菜・しめじのバター醤油蒸し焼き定食",
+            mainItems: [
+              { name: "生鮭切り身（旬）", qty: 1, unit: "切れ" },
+              { name: "白菜（旬）", qty: 1, unit: "枚" },
+              { name: "しめじ", qty: 0.25, unit: "パック" },
+              { name: "バター", qty: 8, unit: "g" },
+              { name: "醤油", qty: 1, unit: "小さじ" }
+            ],
+            soup: {
+              label: "大根と人参のほっこり具だくさん汁",
+              items: [
+                { name: "大根（旬）", qty: 3, unit: "cm" },
+                { name: "人参", qty: 0.25, unit: "本" },
+                { name: "和風顆粒だし", qty: 0.5, unit: "小さじ" }
+              ]
+            },
+            salad: {
+              label: "ほうれん草とツナの冬野菜サラダ",
+              items: [
+                { name: "ほうれん草（旬）", qty: 0.25, unit: "束" },
+                { name: "ツナ缶", qty: 0.25, unit: "缶" }
+              ]
+            },
+            note: "今の時期に美味しい生鮭・白菜・大根・ほうれん草を取り入れた旬の定食です。",
+            methods: [
+              "① ほうれん草は茹でて水気を絞り、ツナと合わせてサラダにする。",
+              "② フライパンに白菜・しめじ・生鮭を並べて少量の酒（分量外）を振り、蓋をして蒸し焼きにする。",
+              "③ 火が通ったらバターと醤油を回しかけて仕上げる。"
+            ]
+          },
+          seasonalSideVeg: { name: "大根（旬）", qty: 3, unit: "cm" }
+        };
+      }
+    }
+
     function getWeekBaseIndex() {
       const now = new Date();
       now.setDate(now.getDate() + (debugWeekOffset * 7));
@@ -706,13 +951,13 @@
 
     function getDynamicBalancedMenus() {
       const w = getWeekBaseIndex();
+      const season = getCurrentSeasonInfo();
 
       const satPool = [
         {
-          name: "豚ロースの黄金生姜焼き＆キャベツ山盛り",
+          name: "豚ロースの黄金生姜焼き定食",
           mainItems: [
             { name: "豚ロース生姜焼き用肉", qty: 130, unit: "g" },
-            { name: "キャベツ", qty: 0.15, unit: "玉" },
             { name: "醤油・みりん・酒", qty: 1, unit: "大さじ" },
             { name: "おろし生姜", qty: 1, unit: "小さじ" }
           ],
@@ -724,26 +969,26 @@
               { name: "味噌", qty: 1, unit: "大さじ" }
             ]
           },
-          side: {
-            label: "ミニトマトと枝豆",
+          salad: {
+            label: "キャベツとミニトマトのシャキシャキサラダ",
             items: [
+              { name: "キャベツ", qty: 0.15, unit: "玉" },
               { name: "ミニトマト", qty: 3, unit: "個" },
-              { name: "むき枝豆", qty: 20, unit: "g" }
+              { name: "ドレッシング（またはオリーブ油・塩）", qty: 1, unit: "大さじ" }
             ]
           },
-          note: "土曜購入の生肉は前半でしっかり消費。ご飯が進む定番の甘辛生姜焼きとたっぷり野菜のバランス定食です。",
+          note: "土曜購入の生肉は前半にしっかり消費。甘辛生姜焼き＋味噌汁＋毎日サラダで栄養バランス抜群です。",
           methods: [
-            "① キャベツは千切りにし、おろし生姜・醤油・みりん・酒を混ぜて合わせダレを作っておく。",
-            "② フライパンに油を薄く熱し、豚肉を並べて中火で両面に香ばしい焼き色をつける。",
-            "③ 余分な脂をキッチンペーパーで軽く拭き取り、合わせダレを回しかけて絡める。",
-            "④ キャベツを敷いた皿に盛り付け、残ったタレをかける。"
+            "① キャベツは千切りにし、ミニトマトと合わせて皿に盛り、サラダを用意する。",
+            "② おろし生姜・醤油・みりん・酒を混ぜて合わせダレを作っておく。",
+            "③ フライパンに油を薄く熱し、豚肉を並べて中火で両面に香ばしい焼き色をつける。",
+            "④ 合わせダレを回しかけて絡め、器に盛り付ける。"
           ]
         },
         {
-          name: "鶏もも肉とゴロゴロ野菜の照り焼き",
+          name: "鶏もも肉と野菜の甘辛照り焼き定食",
           mainItems: [
             { name: "鶏もも肉", qty: 150, unit: "g" },
-            { name: "ピーマン", qty: 1, unit: "個" },
             { name: "しめじ", qty: 0.25, unit: "パック" },
             { name: "醤油・みりん・酒", qty: 1, unit: "大さじ" }
           ],
@@ -755,17 +1000,19 @@
               { name: "味噌", qty: 1, unit: "大さじ" }
             ]
           },
-          side: {
-            label: "冷奴（ねぎ・しょうが添え）",
+          salad: {
+            label: "レタスとコーン・きゅうりのグリーンサラダ",
             items: [
-              { name: "絹豆腐", qty: 75, unit: "g" }
+              { name: "レタス", qty: 1.5, unit: "枚" },
+              { name: "きゅうり", qty: 0.5, unit: "本" },
+              { name: "コーン", qty: 20, unit: "g" }
             ]
           },
-          note: "土曜日のメインにぴったりの甘辛照り焼き。野菜も一緒に炒めて栄養バランスを整えます。",
+          note: "土曜日の定番照り焼き。毎日サラダを添えることで野菜の彩りと食物繊維もしっかり補給できます。",
           methods: [
-            "① 鶏もも肉は一口大に切り、ピーマンは乱切り、しめじは石づきを取ってほぐす。",
-            "② フライパンに油を熱し、鶏もも肉を皮目から焼いてこんがり焼き色をつける。",
-            "③ 裏返して野菜を加え、全体に火が通ったら醤油・みりん・酒を絡める。"
+            "① レタス・きゅうり・コーンを合わせてサラダを用意する。",
+            "② 鶏もも肉は一口大に切り、しめじは石づきを取ってほぐす。",
+            "③ フライパンに油を熱し、鶏もも肉を皮目から焼いて焼き色をつけ、しめじと調味料を絡める。"
           ]
         }
       ];
@@ -775,7 +1022,7 @@
           name: "長ネギの豚肉巻き（串打ち甘辛照り焼き）",
           mainItems: [
             { name: "豚ロース肉（または生姜焼き用）", qty: 130, unit: "g" },
-            { name: "長ネギ", qty: 0.5, unit: "本" },
+            { name: "長ネギ（旬）", qty: 0.5, unit: "本" },
             { name: "片栗粉", qty: 1, unit: "小さじ" },
             { name: "醤油・みりん・酒", qty: 1, unit: "大さじ" }
           ],
@@ -787,19 +1034,18 @@
               { name: "顆粒コンソメ", qty: 0.5, unit: "小さじ" }
             ]
           },
-          side: {
-            label: "ほうれん草のごま和え",
+          salad: {
+            label: "ブロッコリーとゆで卵のサラダ",
             items: [
-              { name: "ほうれん草", qty: 0.33, unit: "束" },
-              { name: "すりごま・醤油", qty: 1, unit: "小さじ" }
+              { name: "ブロッコリー（旬）", qty: 0.25, unit: "株" },
+              { name: "卵", qty: 0.5, unit: "個" }
             ]
           },
-          note: "日曜日の定番！長ネギを巻いて串打ちすることで焼くときに崩れにくく、中のネギが甘く仕上がります。",
+          note: "日曜日は長ネギを巻いた串打ち肉巻き！ブロッコリーと卵のサラダで食べ応えも栄養も満点です。",
           methods: [
-            "① 長ネギは豚肉の幅に合わせて切り、豚肉でくるっと巻いて串（2本平行だと安定）に刺す。",
-            "② 表面に薄く片栗粉をまぶし、フライパンに油を熱して転がしながら焼き色をつける。",
-            "③ 水大さじ1〜2（人数に応じて調整）を加えて蓋をし、2〜3分蒸し焼きにして中まで火を通す。",
-            "④ 蓋を外し、醤油・みりん・酒を合わせたタレを絡めて照りを出す。"
+            "① 長ネギは豚肉の幅に合わせて切り、豚肉でくるっと巻いて串に刺す。",
+            "② 表面に薄く片栗粉をまぶし、フライパンで転がしながら焼き色をつけ、水少量を足して蒸し焼きにする。",
+            "③ 蓋を外して醤油・みりん・酒を絡め、ブロッコリーと卵のサラダを添える。"
           ]
         },
         {
@@ -812,57 +1058,29 @@
           soup: {
             label: "白菜とベーコンのスープ",
             items: [
-              { name: "白菜", qty: 1, unit: "枚" },
+              { name: "白菜（旬）", qty: 1, unit: "枚" },
               { name: "ハーフベーコン", qty: 1, unit: "枚" },
               { name: "顆粒コンソメ", qty: 0.5, unit: "小さじ" }
             ]
           },
-          side: {
-            label: "千切りキャベツ＆トマト",
+          salad: {
+            label: "千切りキャベツとトマトのサラダ",
             items: [
               { name: "キャベツ", qty: 0.15, unit: "玉" },
-              { name: "ミニトマト", qty: 2, unit: "個" }
+              { name: "ミニトマト", qty: 3, unit: "個" }
             ]
           },
-          note: "片栗粉でコーティングして焼くことでしっとりと仕上がり、甘酢ダレがよく絡みます。",
+          note: "片栗粉をまぶして焼くことで鶏むね肉もしっとり。甘酢ダレとさっぱりサラダがよく合います。",
           methods: [
-            "① 鶏むね肉は一口大のそぎ切りにして下味をつけ、片栗粉をまぶす。",
-            "② フライパンに少し多めの油を熱し、両面をこんがり焼き上げる。",
-            "③ 余分な油を拭き、醤油・酢・砂糖を合わせた甘酢ダレを絡めて仕上げる。"
+            "① キャベツとミニトマトでサラダを作る。",
+            "② 鶏むね肉をそぎ切りにして下味と片栗粉をつけ、フライパンで両面を焼く。",
+            "③ 余分な油を拭き、醤油・酢・砂糖を合わせた甘酢ダレを絡める。"
           ]
         }
       ];
 
       const monPool = [
-        {
-          name: "生鮭のバター醤油ムニエル＆温野菜",
-          mainItems: [
-            { name: "生鮭切り身", qty: 1, unit: "切れ" },
-            { name: "ブロッコリー", qty: 0.25, unit: "株" },
-            { name: "バター", qty: 8, unit: "g" },
-            { name: "醤油", qty: 1, unit: "小さじ" }
-          ],
-          soup: {
-            label: "大根と人参の具だくさん汁",
-            items: [
-              { name: "大根", qty: 3, unit: "cm" },
-              { name: "人参", qty: 0.25, unit: "本" },
-              { name: "和風顆粒だし", qty: 0.5, unit: "小さじ" }
-            ]
-          },
-          side: {
-            label: "納豆（1パック）",
-            items: [
-              { name: "納豆", qty: 1, unit: "パック" }
-            ]
-          },
-          note: "月曜までに生鮮の切り身魚を使い切る流れ。バターと醤油の香ばしさでご飯も進みます。",
-          methods: [
-            "① 鮭に軽く塩コショウと薄力粉（分量外）をまぶし、ブロッコリーは小房に分ける。",
-            "② フライパンに油を熱し、鮭の両面をこんがり焼く（途中ブロッコリーも入れて蒸し焼きに）。",
-            "③ 火が通ったらバターと醤油を加え、全体に絡めて香りを立たせる。"
-          ]
-        },
+        season.seasonalFish,
         {
           name: "豚ひき肉と豆腐のコク旨麻婆定食",
           mainItems: [
@@ -879,26 +1097,26 @@
               { name: "鶏ガラスープの素", qty: 1, unit: "小さじ" }
             ]
           },
-          side: {
-            label: "もやしとニラのナムル",
+          salad: {
+            label: "きゅうりとトマトの中華風サラダ",
             items: [
-              { name: "もやし", qty: 0.5, unit: "袋" },
-              { name: "ごま油・鶏ガラ", qty: 0.5, unit: "小さじ" }
+              { name: "きゅうり", qty: 0.5, unit: "本" },
+              { name: "ミニトマト", qty: 3, unit: "個" },
+              { name: "ごま油・酢・醤油", qty: 1, unit: "小さじ" }
             ]
           },
-          note: "月曜までにひき肉を使い切り。ピリ辛の麻婆ダレと豆腐で食べ応え満点の定食です。",
+          note: "月曜までにひき肉を使い切り！ピリ辛の麻婆豆腐にさっぱり中華サラダを合わせると後味もスッキリ。",
           methods: [
-            "① 木綿豆腐は食べやすい大きさに切り、長ネギはみじん切りにする。",
-            "② フライパンにごま油と豆板醤・長ネギを入れて香りを出し、豚ひき肉を炒める。",
-            "③ 肉に火が通ったら水100ml（1人分目安）と調味料を加え、豆腐を入れて3分ほど煮込む。",
-            "④ 水溶き片栗粉でとろみをつけ、仕上げにごま油を少し垂らす。"
+            "① きゅうりとミニトマトでサラダを用意する。",
+            "② フライパンにごま油・豆板醤・長ネギを入れて香りを出し、豚ひき肉と木綿豆腐を煮込む。",
+            "③ 調味料で味を整え、水溶き片栗粉でとろみをつける。"
           ]
         }
       ];
 
       const tuePool = [
         {
-          name: "【うどん】具だくさん肉うどん（油揚げ・ネギ）",
+          name: "【麺・うどん】具だくさん油揚げ＆長ネギうどん",
           mainItems: [
             { name: "ゆでうどん（または冷凍うどん）", qty: 1, unit: "玉" },
             { name: "油揚げ", qty: 0.5, unit: "枚" },
@@ -911,24 +1129,85 @@
               { name: "水", qty: 250, unit: "ml" }
             ]
           },
-          side: {
-            label: "温玉または冷奴",
+          salad: {
+            label: "大根と水菜のシャキシャキサラダ",
             items: [
-              { name: "絹豆腐", qty: 75, unit: "g" }
+              season.seasonalSideVeg,
+              { name: "水菜（またはレタス）", qty: 0.25, unit: "束" }
             ]
           },
-          note: "火曜からは生肉に頼らずうどん・豆腐・油揚げで手軽にバランス良く。温まる定番の一杯です。",
+          note: "火曜日はうどん。旬野菜入りサラダを添えて野菜もしっかり摂れる構成です（水曜はおかず系にして麺が連続しないようにします）。",
           methods: [
-            "① 油揚げは短冊切り、長ネギは斜め薄切りにする。",
-            "② 鍋に水とめんつゆを入れて火にかけ、油揚げと長ネギを加えてひと煮立ちさせる。",
-            "③ 下茹でまたはレンジ解凍したうどんを器に盛り、熱々のつゆと具をかける。"
+            "① 野菜を切ってサラダを用意する。",
+            "② 鍋に水・めんつゆ・油揚げ・長ネギを入れて温め、うどんを合わせる。"
           ]
         }
       ];
 
       const wedPool = [
         {
-          name: "【そば】長ネギと油揚げのあったかかけそば",
+          name: "サバ水煮缶と大根のコク旨みそ煮定食",
+          mainItems: [
+            { name: "サバ水煮缶", qty: 0.5, unit: "缶" },
+            { name: "大根（旬）", qty: 5, unit: "cm" },
+            { name: "味噌・みりん・酒", qty: 1, unit: "大さじ" }
+          ],
+          soup: {
+            label: "わかめとネギのすまし汁",
+            items: [
+              { name: "乾燥わかめ", qty: 1.5, unit: "g" },
+              { name: "和風顆粒だし", qty: 0.5, unit: "小さじ" }
+            ]
+          },
+          salad: {
+            label: "ブロッコリーとコーンのサラダ",
+            items: [
+              { name: "ブロッコリー（旬）", qty: 0.25, unit: "株" },
+              { name: "コーン", qty: 20, unit: "g" }
+            ]
+          },
+          note: "水曜日は麺類を休んでサバ缶のみそ煮定食に！保存しやすい食材と旬野菜サラダでバランスを整えます。",
+          methods: [
+            "① ブロッコリーとコーンでサラダを用意する。",
+            "② 大根とサバ水煮缶（汁ごと）、味噌・みりん・酒を鍋に入れて煮込む。"
+          ]
+        }
+      ];
+
+      const thuPool = [
+        {
+          name: "【麺・スパゲッティ】ツナとしめじの和風パスタ",
+          mainItems: [
+            { name: "スパゲッティ", qty: 90, unit: "g" },
+            { name: "ツナ缶", qty: 0.5, unit: "缶" },
+            { name: "しめじ", qty: 0.25, unit: "パック" },
+            { name: "醤油・みりん", qty: 1, unit: "大さじ" }
+          ],
+          soup: {
+            label: "玉ネギとコンソメのスープ",
+            items: [
+              { name: "玉ネギ", qty: 0.2, unit: "個" },
+              { name: "顆粒コンソメ", qty: 0.5, unit: "小さじ" }
+            ]
+          },
+          salad: {
+            label: "グリーンリーフとミニトマトのサラダ",
+            items: [
+              { name: "レタス（またはグリーンリーフ）", qty: 1.5, unit: "枚" },
+              { name: "ミニトマト", qty: 3, unit: "個" }
+            ]
+          },
+          note: "木曜日は和風スパゲッティ！生野菜サラダとスープを添えて一皿偏りを防ぎます。",
+          methods: [
+            "① レタスとミニトマトでサラダを用意する。",
+            "② スパゲッティを茹で、しめじとツナ・醤油・みりんと炒め合わせる。"
+          ]
+        }
+      ];
+
+      const friPool = [
+        {
+          name: "【麺・そば】長ネギと油揚げのあったかかけそば",
           mainItems: [
             { name: "そば（乾麺またはゆで麺）", qty: 1, unit: "束" },
             { name: "油揚げ", qty: 0.5, unit: "枚" },
@@ -941,79 +1220,17 @@
               { name: "水", qty: 250, unit: "ml" }
             ]
           },
-          side: {
-            label: "納豆（1パック）",
+          salad: {
+            label: "きゅうりとわかめのさっぱりサラダ",
             items: [
-              { name: "納豆", qty: 1, unit: "パック" }
+              { name: "きゅうり", qty: 0.5, unit: "本" },
+              { name: "乾燥わかめ", qty: 1, unit: "g" }
             ]
           },
-          note: "水曜日はそばでさっぱり＆ほっこり。納豆を添えるとタンパク質も補えて満足度が上がります。",
+          note: "金曜日はそば＋さっぱりサラダで週末へ。麺類が連続しないよう献立を組んでいます。",
           methods: [
-            "① そばを表示時間通りに茹でて湯切りする。",
-            "② 別鍋で水とめんつゆ、油揚げ、長ネギを温める。",
-            "③ 器にそばを入れ、温かいそばつゆを注いでネギを散らす。"
-          ]
-        }
-      ];
-
-      const thuPool = [
-        {
-          name: "【スパゲッティ】ツナとキノコ・ほうれん草の和風パスタ",
-          mainItems: [
-            { name: "スパゲッティ", qty: 90, unit: "g" },
-            { name: "ツナ缶", qty: 0.5, unit: "缶" },
-            { name: "しめじ", qty: 0.25, unit: "パック" },
-            { name: "ほうれん草", qty: 0.25, unit: "束" },
-            { name: "醤油・みりん", qty: 1, unit: "大さじ" }
-          ],
-          soup: {
-            label: "コンソメ野菜スープ",
-            items: [
-              { name: "玉ネギ", qty: 0.2, unit: "個" },
-              { name: "顆粒コンソメ", qty: 0.5, unit: "小さじ" }
-            ]
-          },
-          side: {
-            label: "ミニトマトサラダ",
-            items: [
-              { name: "ミニトマト", qty: 3, unit: "個" }
-            ]
-          },
-          note: "木曜日はストックしやすいツナ缶とキノコ・パスタで手早く満足ランチ＆ディナーに！",
-          methods: [
-            "① スパゲッティを茹でる。しめじはほぐし、ほうれん草は食べやすく切る。",
-            "② フライパンに油を熱してしめじとほうれん草を炒め、油を切ったツナを加える。",
-            "③ 茹で上がったパスタと醤油・みりんを合わせて手早く炒め合わせる。"
-          ]
-        }
-      ];
-
-      const friPool = [
-        {
-          name: "サバ水煮缶と大根のコク旨みそ煮定食",
-          mainItems: [
-            { name: "サバ水煮缶", qty: 0.5, unit: "缶" },
-            { name: "大根", qty: 5, unit: "cm" },
-            { name: "味噌・みりん・酒", qty: 1, unit: "大さじ" }
-          ],
-          soup: {
-            label: "わかめとネギのすまし汁",
-            items: [
-              { name: "乾燥わかめ", qty: 1.5, unit: "g" },
-              { name: "和風顆粒だし", qty: 0.5, unit: "小さじ" }
-            ]
-          },
-          side: {
-            label: "冷奴またはお浸し",
-            items: [
-              { name: "絹豆腐", qty: 75, unit: "g" }
-            ]
-          },
-          note: "金曜日は日持ちするサバ缶と大根でしっかりごはん。週末に向けて胃腸と栄養を整えます。",
-          methods: [
-            "① 大根はいちょう切りまたは半月切りにしてレンジや下茹でで柔らかくする。",
-            "② 鍋にサバ水煮缶（汁ごと）、大根、味噌・みりん・酒を入れて中火で煮詰める。",
-            "③ 味が絡んだら器に盛り付ける。"
+            "① きゅうりと戻したわかめでサラダを用意する。",
+            "② そばを茹でて湯切りし、温めたつゆ・油揚げ・長ネギと合わせる。"
           ]
         }
       ];
@@ -1028,7 +1245,131 @@
         { day: "金", fullDay: "金曜日", main: friPool[0].name, ...friPool[0] }
       ];
 
-      return { title: "⚖️ 土〜月生肉・麺類ありバランス献立", menu: weekMenus };
+      return { title: "⚖️ 旬反映・麺不連続・毎日サラダ献立", season: season, menu: weekMenus };
+    }
+
+    const leftoverRecipeTemplates = [
+      {
+        title: "豚肉とキャベツのコク旨みそ炒め定食",
+        keywords: ["豚", "豚肉", "豚ロース", "キャベツ", "味噌"],
+        mainItems: [
+          { name: "豚肉（ロース・こま切れ等）", qty: 120, unit: "g" },
+          { name: "キャベツ", qty: 0.15, unit: "玉" },
+          { name: "味噌・みりん・酒", qty: 1, unit: "大さじ" }
+        ],
+        salad: "きゅうりとミニトマトのさっぱりサラダ",
+        soup: "豆腐とわかめの味噌汁",
+        steps: "① 豚肉を中火で炒め、ざく切りにしたキャベツを加えて強火でさっと炒め合わせる。② 味噌・みりん・酒を絡めて仕上げる。"
+      },
+      {
+        title: "鶏肉と長ネギ・しめじの照り焼き炒め定食",
+        keywords: ["鶏", "鶏肉", "鶏もも", "鶏むね", "長ネギ", "ねぎ", "しめじ", "きのこ"],
+        mainItems: [
+          { name: "鶏肉（もも・むね・味付け鶏など）", qty: 140, unit: "g" },
+          { name: "長ネギ", qty: 0.5, unit: "本" },
+          { name: "しめじ", qty: 0.25, unit: "パック" },
+          { name: "醤油・みりん・酒", qty: 1, unit: "大さじ" }
+        ],
+        salad: "千切りキャベツとコーンのサラダ",
+        soup: "大根と油揚げの味噌汁",
+        steps: "① 鶏肉を皮目から焼き、斜め切りにした長ネギとしめじを加えて蒸し焼きにする。② 調味料を回しかけて香ばしく絡める。"
+      },
+      {
+        title: "大根とツナのほっこり煮物定食",
+        keywords: ["大根", "ツナ", "ツナ缶"],
+        mainItems: [
+          { name: "大根", qty: 5, unit: "cm" },
+          { name: "ツナ缶", qty: 0.5, unit: "缶" },
+          { name: "醤油・みりん・和風だし", qty: 1, unit: "大さじ" }
+        ],
+        salad: "レタスとミニトマトのグリーンサラダ",
+        soup: "わかめと豆腐のすまし汁",
+        steps: "① 大根をいちょう切りにして柔らかくなるまで煮る。② ツナ缶（汁ごと）と調味料を加えて5分ほど煮含める。"
+      },
+      {
+        title: "豆腐と野菜のあんかけ炒め定食",
+        keywords: ["豆腐", "木綿豆腐", "絹豆腐", "白菜", "キャベツ", "しめじ", "長ネギ"],
+        mainItems: [
+          { name: "木綿豆腐（水切り済み）", qty: 150, unit: "g" },
+          { name: "余り野菜（白菜・キャベツ・ネギ等）", qty: 100, unit: "g" },
+          { name: "醤油・鶏ガラスープの素・片栗粉", qty: 1, unit: "小さじ" }
+        ],
+        salad: "きゅうりとわかめの酢の物風サラダ",
+        soup: "玉ネギとコンソメのスープ",
+        steps: "① 一口大に切った豆腐をフライパンで焼き色がつくまで焼く。② 野菜とスープを加えて煮立たせ、水溶き片栗粉でとろみをつける。"
+      },
+      {
+        title: "キャベツとツナの和風シャキシャキ炒め定食",
+        keywords: ["キャベツ", "ツナ", "ツナ缶", "しめじ"],
+        mainItems: [
+          { name: "キャベツ", qty: 0.2, unit: "玉" },
+          { name: "ツナ缶", qty: 0.5, unit: "缶" },
+          { name: "醤油・ごま油", qty: 1, unit: "小さじ" }
+        ],
+        salad: "ミニトマトとブロッコリーのサラダ",
+        soup: "大根とわかめの味噌汁",
+        steps: "① キャベツをざく切りにし、ツナ缶のオイルで強火でさっと炒める。② 仕上げに鍋肌から醤油を回しかける。"
+      }
+    ];
+
+    function appendLeftoverChip(word) {
+      const input = document.getElementById('leftoverInput');
+      const current = input.value.trim();
+      if (!current) {
+        input.value = word;
+      } else if (!current.includes(word)) {
+        input.value = `${current} ${word}`;
+      }
+    }
+
+    function suggestLeftoverRecipes() {
+      const raw = document.getElementById('leftoverInput').value.trim();
+      const area = document.getElementById('leftoverResultArea');
+      if (!raw) {
+        area.innerHTML = `<div style="color:#fbbf24; font-size:0.8rem; margin-top:8px;">※ 余っている食材を入力してからボタンを押してください。</div>`;
+        return;
+      }
+
+      const tokens = raw.split(/[\s、,・]+/).filter(Boolean);
+      const servings = getServings();
+
+      const scored = leftoverRecipeTemplates.map(tpl => {
+        let score = 0;
+        tokens.forEach(t => {
+          if (tpl.keywords.some(k => k.includes(t) || t.includes(k))) {
+            score += 2;
+          }
+        });
+        return { tpl, score };
+      }).filter(x => x.score > 0).sort((a, b) => b.score - a.score);
+
+      let html = '';
+
+      if (scored.length > 0) {
+        scored.slice(0, 2).forEach(({ tpl }) => {
+          const scaledList = buildScaledIngredients(tpl.mainItems, servings).join('、');
+          html += `
+            <div class="leftover-result-card">
+              <div style="font-weight:bold; color:#34d399; font-size:0.9rem;">✨ ${tpl.title}（${servings}人分）</div>
+              <div style="margin-top:4px; color:#e2e8f0;"><b>材料：</b>${scaledList}</div>
+              <div style="margin-top:3px; color:#93c5fd;">🥗 サラダ：${tpl.salad} ／ 🥣 汁物：${tpl.soup}</div>
+              <div style="margin-top:4px; color:#cbd5e1; font-size:0.78rem;"><b>手順：</b>${tpl.steps}</div>
+            </div>
+          `;
+        });
+      }
+
+      const joinedTokens = tokens.join('・');
+      html += `
+        <div class="leftover-result-card" style="border-left-color:#38bdf8;">
+          <div style="font-weight:bold; color:#38bdf8; font-size:0.9rem;">🍳 【自動組み立て】${joinedTokens}の香ばし和風炒め定食（${servings}人分）</div>
+          <div style="margin-top:4px; color:#e2e8f0;"><b>材料：</b>${joinedTokens} 合わせて${formatQty(180, servings, 'g')}、醤油・みりん・酒 各${formatQty(1, servings, '大さじ')}、おろし生姜（またはにんにく）少々</div>
+          <div style="margin-top:3px; color:#93c5fd;">🥗 サラダ：キャベツとミニトマトのサラダ ／ 🥣 汁物：わかめと豆腐の味噌汁</div>
+          <div style="margin-top:4px; color:#cbd5e1; font-size:0.78rem;"><b>手順：</b>① 食べやすい大きさに切った「${joinedTokens}」を油を熱したフライパンで中火で炒める。② 火が通ったら醤油・みりん・酒を絡めて皿に盛り、サラダ・味噌汁を添える。</div>
+        </div>
+      `;
+
+      area.innerHTML = html;
     }
 
     let currentTimeMode = "morning";
@@ -1076,6 +1417,11 @@
       const activeMenuObj = getActiveWeeklyMenu();
       document.getElementById('weekPatternLabel').innerText = activeMenuObj.title;
 
+      const banner = document.getElementById('seasonBanner');
+      if (banner && activeMenuObj.season) {
+        banner.innerHTML = `<span><b>${activeMenuObj.season.label}</b></span><span>旬の食材：${activeMenuObj.season.ingredients}</span>`;
+      }
+
       activeMenuObj.menu.forEach((item, idx) => {
         const btn = document.createElement('div');
         btn.className = `menu-day-btn ${idx === selectedSatDayIdx ? 'active' : ''} ${idx === todayIdx ? 'today' : ''}`;
@@ -1092,17 +1438,17 @@
 
       const mainIngText = buildScaledIngredients(recipe.mainItems, servings).join('、');
       const soupIngText = buildScaledIngredients(recipe.soup.items, servings).join('、');
-      const sideIngText = buildScaledIngredients(recipe.side.items, servings).join('、');
+      const saladIngText = buildScaledIngredients(recipe.salad.items, servings).join('、');
 
       document.getElementById('recipeTitle').innerText = `📅 [${recipe.fullDay}]：${recipe.main}（${servings}人分）`;
-      document.getElementById('recipeDesc').innerHTML = `🥣 汁物: <b>${recipe.soup.label}</b> ／ 🥗 副菜: <b>${recipe.side.label}</b>`;
+      document.getElementById('recipeDesc').innerHTML = `🥗 サラダ: <b>${recipe.salad.label}</b> ／ 🥣 汁物: <b>${recipe.soup.label}</b>`;
 
       document.getElementById('mainIngredientBox').innerHTML = `
         <div style="font-weight:bold; color:#38bdf8;">🛒 材料と分量（${servings}人分）</div>
         <ul>
           <li><b>メイン：</b>${mainIngText}</li>
-          <li><b>${recipe.soup.label}：</b>${soupIngText}</li>
-          <li><b>${recipe.side.label}：</b>${sideIngText}</li>
+          <li><b>🥗 ${recipe.salad.label}：</b>${saladIngText}</li>
+          <li><b>🥣 ${recipe.soup.label}：</b>${soupIngText}</li>
         </ul>
       `;
 
@@ -1417,12 +1763,12 @@
       const activeMenuObj = getActiveWeeklyMenu();
       const servings = getServings();
       const evalBox = document.getElementById('recipeEvalBox');
-      if(evalBox) evalBox.innerHTML = `📊 <b>今週のバランス定番ごはん一覧（${servings}人分）</b>`;
+      if(evalBox) evalBox.innerHTML = `📊 <b>今週の旬バランス定番ごはん一覧（${servings}人分）</b><br><span style="font-size:0.76rem;">${activeMenuObj.season.label}：${activeMenuObj.season.ingredients}</span>`;
 
       activeMenuObj.menu.forEach((item) => {
         const mainIngText = buildScaledIngredients(item.mainItems, servings).join('、');
         const soupIngText = buildScaledIngredients(item.soup.items, servings).join('、');
-        const sideIngText = buildScaledIngredients(item.side.items, servings).join('、');
+        const saladIngText = buildScaledIngredients(item.salad.items, servings).join('、');
         const methodsHtml = item.methods.map(m => `<div>${m}</div>`).join('');
 
         const card = document.createElement('div');
@@ -1431,8 +1777,8 @@
           <h3 style="color:#fbbf24; font-size:0.95rem;">📅 [${item.fullDay}] ${item.main}</h3>
           <div style="font-size:0.8rem; color:#e2e8f0; margin-top:6px; background:#131c2e; padding:8px; border-radius:8px; border:1px solid #1e293b;">
             <div><b>メイン（${servings}人分）：</b>${mainIngText}</div>
-            <div style="margin-top:3px;"><b>${item.soup.label}：</b>${soupIngText}</div>
-            <div style="margin-top:3px;"><b>${item.side.label}：</b>${sideIngText}</div>
+            <div style="margin-top:3px;"><b>🥗 ${item.salad.label}：</b>${saladIngText}</div>
+            <div style="margin-top:3px;"><b>🥣 ${item.soup.label}：</b>${soupIngText}</div>
           </div>
           <button class="howto-toggle-btn" onclick="toggleModalRecipeHowto(this)">📖 詳しい手順を見る</button>
           <div class="recipe-howto-box" style="display:none; font-size:0.8rem; color:#e2e8f0; margin-top:6px; padding-top:6px; border-top:1px dashed #334155; line-height:1.6;">
@@ -1452,12 +1798,12 @@
     function generateShoppingList() {
       const activeMenuObj = getActiveWeeklyMenu();
       const servings = getServings();
-      let listText = `🛒 【今週の買い物リスト（${servings}人分）】\n`;
+      let listText = `🛒 【今週の旬バランス買い物リスト（${servings}人分）】\n`;
       activeMenuObj.menu.forEach(item => {
         const mainIngText = buildScaledIngredients(item.mainItems, servings).join('、');
         const soupIngText = buildScaledIngredients(item.soup.items, servings).join('、');
-        const sideIngText = buildScaledIngredients(item.side.items, servings).join('、');
-        listText += `・[${item.fullDay}] ${item.main}\n  メイン: ${mainIngText}\n  ${item.soup.label}: ${soupIngText} / ${item.side.label}: ${sideIngText}\n`;
+        const saladIngText = buildScaledIngredients(item.salad.items, servings).join('、');
+        listText += `・[${item.fullDay}] ${item.main}\n  メイン: ${mainIngText}\n  サラダ(${item.salad.label}): ${saladIngText} / 汁物(${item.soup.label}): ${soupIngText}\n`;
       });
 
       if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -1546,9 +1892,9 @@
         let nClass = '';
         if(dayData.night?.done) {
           if(dayData.night.isRest || dayData.night.courseName?.includes('休息')) {
-            nIcon = '🛀'; mClass = 'n-rest';
+            nIcon = '🛀'; nClass = 'n-rest';
           } else {
-            nIcon = '🌃'; mClass = 'n-done';
+            nIcon = '🌃'; nClass = 'n-done';
           }
         }
 
