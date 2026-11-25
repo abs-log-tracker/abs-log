@@ -68,7 +68,6 @@
       padding: 6px 9px; border-radius: 8px; font-size: 0.72rem; font-weight: bold; cursor: pointer; text-decoration: none;
     }
 
-    /* 📌 ショートカットジャンプバー */
     .shortcut-bar {
       display: flex;
       gap: 6px;
@@ -304,7 +303,7 @@
     }
     .time-tab.active { background: linear-gradient(135deg, #ff5722, #ea580c); color: #fff; border-color: #f97316; }
 
-    .body-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 12px; }
+    .body-tabs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-bottom: 12px; }
     .body-tab {
       padding: 9px 4px; text-align: center; background: #1a2234; border: 1px solid var(--border-highlight);
       border-radius: 9px; font-weight: bold; font-size: 0.78rem; color: var(--text-dim); cursor: pointer;
@@ -399,13 +398,12 @@
     </div>
   </div>
 
-  <!-- 📌 セクション移動ショートカットバー -->
+  <!-- 📌 セクション移動ショートカットバー（献立を除外した6ボタン） -->
   <nav class="shortcut-bar" aria-label="セクションショートカット">
     <button type="button" class="shortcut-btn active" data-target="sec-progress" onclick="jumpToSection('sec-progress', this)">🌐 状況</button>
     <button type="button" class="shortcut-btn" data-target="sec-challenge" onclick="jumpToSection('sec-challenge', this)">🎯 プチ課題</button>
-    <button type="button" class="shortcut-btn" data-target="sec-meal" onclick="jumpToSection('sec-meal', this)">📅 献立</button>
     <button type="button" class="shortcut-btn" data-target="sec-workout" onclick="jumpToSection('sec-workout', this)">🌅 朝夜記録</button>
-    <button type="button" class="shortcut-btn" data-target="sec-bodymake" onclick="jumpToSection('sec-bodymake', this)">💪 部位別</button>
+    <button type="button" class="shortcut-btn" data-target="sec-bodymake" onclick="jumpToSection('sec-bodymake', this)">💪 部位別調整</button>
     <button type="button" class="shortcut-btn" data-target="sec-chart" onclick="jumpToSection('sec-chart', this)">📈 グラフ</button>
     <button type="button" class="shortcut-btn" data-target="sec-calendar" onclick="jumpToSection('sec-calendar', this)">💮 カレンダー</button>
   </nav>
@@ -544,10 +542,10 @@
     <button class="btn-submit" id="btnSubmit" onclick="saveLog()" disabled>🔒 動画完走でスタンプGET 💮</button>
   </div>
 
-  <!-- 💪 部位別・ボディメイク動画（朝夜とは別枠） -->
+  <!-- 🎯 部位別・見た目調整トレ（朝夜とは別枠） -->
   <div class="card" id="sec-bodymake" style="border: 1px solid #0284c7;">
     <div class="card-title" style="color: #38bdf8;">
-      <span>💪 部位別・ボディメイク（背中・下半身・姿勢）</span>
+      <span>🎯 部位別・見た目調整トレ</span>
       <span style="font-size: 0.7rem; color: #94a3b8;">追加トレ用</span>
     </div>
 
@@ -555,6 +553,7 @@
       <div class="body-tab active" id="bodyTabBack" onclick="switchBodyTab('back')">🦅 背中・肩</div>
       <div class="body-tab" id="bodyTabLower" onclick="switchBodyTab('lower')">🦵 下半身・お尻</div>
       <div class="body-tab" id="bodyTabPosture" onclick="switchBodyTab('posture')">🧍 姿勢・巻き肩</div>
+      <div class="body-tab" id="bodyTabAbsPush" onclick="switchBodyTab('abspush')">🔥 腕立て・腹筋</div>
     </div>
 
     <select id="bodyMakeSelect" onchange="onBodyMakeChange()"></select>
@@ -608,8 +607,8 @@
       </div>
 
       <div class="help-section">
-        <h3>3. 部位別・ボディメイク枠の使い方</h3>
-        ・朝夜のスタンプとは別に、<b>背中・肩／下半身・お尻／姿勢・巻き肩</b>の見た目を引き締める動画をいつでも再生できます。<br>
+        <h3>3. 部位別・見た目調整トレの使い方</h3>
+        ・朝夜のスタンプとは別に、<b>背中・肩／下半身・お尻／姿勢・巻き肩／腕立て・腹筋</b>の動画をいつでも再生できます。<br>
         ・<b>🍽️ 献立</b> ボタン内の「余った食材からレシピ提案」では、冷蔵庫にある食材を入れると指定人数分のレシピ・サラダ・汁物を自動組み立てします。
       </div>
 
@@ -716,7 +715,6 @@
       const sectionIds = [
         'sec-progress',
         'sec-challenge',
-        'sec-meal',
         'sec-workout',
         'sec-bodymake',
         'sec-chart',
@@ -797,6 +795,29 @@
           target: "巻き肩・猫背・下腹の出っ張り改善",
           comment: "体重が変わらなくても前傾姿勢や反り腰を直すだけで、下腹の出っ張りが引っ込み立ち姿が変わります。"
         }
+      ],
+      abspush: [
+        {
+          id: "bm_push_1",
+          name: "🔥 初心者向け腕立て伏せ・大胸筋の効かせ方（uFit・3分）",
+          videoId: "Fq9BDy_NHEk",
+          target: "胸板（大胸筋）・二の腕・上半身の厚み",
+          comment: "腕だけでなく胸にしっかり効かせるためのフォーム確認用動画です。10〜15回×3セットの目安と合わせてどうぞ。"
+        },
+        {
+          id: "bm_abs_1",
+          name: "⚡ 自宅でできる簡単腹筋トレーニング（5分）",
+          videoId: "HSQMVkcdAhQ",
+          target: "腹直筋・お腹周りの引き締め",
+          comment: "丸めて縮める腹筋の動きを確認したいときの5分動画です。"
+        },
+        {
+          id: "bm_abspush_1",
+          name: "💪 腹筋＋大胸筋を鍛えて上半身を整える（uFit・5分）",
+          videoId: "j441QZc8wsI",
+          target: "腹筋・大胸筋・上半身シルエット",
+          comment: "胸と腹筋をまとめて刺激して、上半身のメリハリをつける5分メニューです。"
+        }
       ]
     };
 
@@ -807,6 +828,7 @@
       document.getElementById('bodyTabBack').classList.toggle('active', tabKey === 'back');
       document.getElementById('bodyTabLower').classList.toggle('active', tabKey === 'lower');
       document.getElementById('bodyTabPosture').classList.toggle('active', tabKey === 'posture');
+      document.getElementById('bodyTabAbsPush').classList.toggle('active', tabKey === 'abspush');
       populateBodyMakeSelect();
     }
 
