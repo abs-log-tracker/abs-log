@@ -21,6 +21,10 @@
       --cyber-cyan: #00f0ff;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
     body {
@@ -34,7 +38,7 @@
 
     .app-header {
       text-align: center;
-      margin-bottom: 16px;
+      margin-bottom: 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -64,9 +68,54 @@
       padding: 6px 9px; border-radius: 8px; font-size: 0.72rem; font-weight: bold; cursor: pointer; text-decoration: none;
     }
 
+    /* 📌 ショートカットジャンプバー */
+    .shortcut-bar {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 8px 10px;
+      margin-bottom: 14px;
+      background: rgba(15, 23, 42, 0.92);
+      border: 1px solid #1e3a8a;
+      border-radius: 12px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      position: sticky;
+      top: 6px;
+      z-index: 100;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+    }
+    .shortcut-bar::-webkit-scrollbar { display: none; }
+
+    .shortcut-btn {
+      flex: 0 0 auto;
+      background: #131c2e;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+    .shortcut-btn:hover {
+      border-color: #38bdf8;
+      color: #fff;
+    }
+    .shortcut-btn.active {
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      border-color: #7dd3fc;
+      color: #fff;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.35);
+    }
+
     .card {
       background: var(--card-bg-gradient); border-radius: 16px; padding: 18px; margin-bottom: 16px;
       border: 1px solid var(--border-color); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+      scroll-margin-top: 58px;
     }
 
     .card-title {
@@ -255,6 +304,13 @@
     }
     .time-tab.active { background: linear-gradient(135deg, #ff5722, #ea580c); color: #fff; border-color: #f97316; }
 
+    .body-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 12px; }
+    .body-tab {
+      padding: 9px 4px; text-align: center; background: #1a2234; border: 1px solid var(--border-highlight);
+      border-radius: 9px; font-weight: bold; font-size: 0.78rem; color: var(--text-dim); cursor: pointer;
+    }
+    .body-tab.active { background: linear-gradient(135deg, #0284c7, #0369a1); color: #fff; border-color: #38bdf8; }
+
     label { display: block; font-size: 0.85rem; color: var(--text-dim); margin-top: 12px; margin-bottom: 6px; font-weight: 500; }
     input[type="date"], input[type="number"], select, input[type="text"], textarea {
       width: 100%; padding: 12px; background-color: #0f172a; border: 1px solid var(--border-highlight);
@@ -343,7 +399,18 @@
     </div>
   </div>
 
-  <div class="card avatar-card">
+  <!-- 📌 セクション移動ショートカットバー -->
+  <nav class="shortcut-bar" aria-label="セクションショートカット">
+    <button type="button" class="shortcut-btn active" data-target="sec-progress" onclick="jumpToSection('sec-progress', this)">🌐 状況</button>
+    <button type="button" class="shortcut-btn" data-target="sec-challenge" onclick="jumpToSection('sec-challenge', this)">🎯 プチ課題</button>
+    <button type="button" class="shortcut-btn" data-target="sec-meal" onclick="jumpToSection('sec-meal', this)">📅 献立</button>
+    <button type="button" class="shortcut-btn" data-target="sec-workout" onclick="jumpToSection('sec-workout', this)">🌅 朝夜記録</button>
+    <button type="button" class="shortcut-btn" data-target="sec-bodymake" onclick="jumpToSection('sec-bodymake', this)">💪 部位別</button>
+    <button type="button" class="shortcut-btn" data-target="sec-chart" onclick="jumpToSection('sec-chart', this)">📈 グラフ</button>
+    <button type="button" class="shortcut-btn" data-target="sec-calendar" onclick="jumpToSection('sec-calendar', this)">💮 カレンダー</button>
+  </nav>
+
+  <div class="card avatar-card" id="sec-progress">
     <div class="card-title" style="border-bottom: none; padding-bottom: 0;">
       <span>🌐 プログレス状況</span>
       <span class="status-badge" id="bmiStatusBadge">READY</span>
@@ -397,7 +464,7 @@
     </div>
   </div>
 
-  <div class="card" style="border: 1px solid #f59e0b;">
+  <div class="card" id="sec-challenge" style="border: 1px solid #f59e0b;">
     <div class="card-title" style="color: #f59e0b; margin-bottom: 8px; padding-bottom: 6px;">
       <span>🎯 本日のプチ筋トレ課題</span>
       <button onclick="generateDailyChallenge()" style="background:none; border:none; color:#94a3b8; font-size:0.75rem; cursor:pointer;">↻ 変更</button>
@@ -408,7 +475,7 @@
     <button id="challengeCompleteBtn" onclick="completeDailyChallenge()" style="margin-top: 10px; width: 100%; background: #059669; color: white; border: none; padding: 7px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.8rem;">✓ 課題クリア！</button>
   </div>
 
-  <div class="card">
+  <div class="card" id="sec-meal">
     <div class="card-title">
       <span>📅 今週の旬バランスごはん</span>
       <span id="weekPatternLabel" style="font-size: 0.7rem; color: #38bdf8; text-align: right; max-width: 55%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
@@ -434,6 +501,12 @@
       <div class="ingredient-list-box" id="mainIngredientBox"></div>
       <button class="howto-toggle-btn" onclick="toggleMainRecipeHowto()">📖 詳しい手順を見る</button>
       <div class="recipe-howto-box" id="mainRecipeHowtoBox"></div>
+    </div>
+  </div>
+
+  <div class="card" id="sec-workout">
+    <div class="card-title">
+      <span>🌅 朝・夜の体重＆運動記録</span>
     </div>
 
     <div class="time-tabs">
@@ -471,12 +544,37 @@
     <button class="btn-submit" id="btnSubmit" onclick="saveLog()" disabled>🔒 動画完走でスタンプGET 💮</button>
   </div>
 
-  <div class="card">
+  <!-- 💪 部位別・ボディメイク動画（朝夜とは別枠） -->
+  <div class="card" id="sec-bodymake" style="border: 1px solid #0284c7;">
+    <div class="card-title" style="color: #38bdf8;">
+      <span>💪 部位別・ボディメイク（背中・下半身・姿勢）</span>
+      <span style="font-size: 0.7rem; color: #94a3b8;">追加トレ用</span>
+    </div>
+
+    <div class="body-tabs">
+      <div class="body-tab active" id="bodyTabBack" onclick="switchBodyTab('back')">🦅 背中・肩</div>
+      <div class="body-tab" id="bodyTabLower" onclick="switchBodyTab('lower')">🦵 下半身・お尻</div>
+      <div class="body-tab" id="bodyTabPosture" onclick="switchBodyTab('posture')">🧍 姿勢・巻き肩</div>
+    </div>
+
+    <select id="bodyMakeSelect" onchange="onBodyMakeChange()"></select>
+
+    <div class="video-comment-box" style="border-left-color: #38bdf8; margin-top: 12px;">
+      <div style="font-weight: bold; color: #38bdf8; margin-bottom: 4px;" id="bodyMakeTitle">---</div>
+      <div style="font-size: 0.8rem; color: #fbbf24; font-weight: bold; margin-bottom: 4px;" id="bodyMakeTarget">---</div>
+      <div id="bodyMakeDesc" style="font-size: 0.83rem; color: #e2e8f0;">---</div>
+    </div>
+
+    <div class="video-container" id="bodyMakeVideoWrapper"></div>
+    <a href="#" id="bodyMakeExternalLink" class="external-video-btn" target="_blank" style="background: #0284c7;">▶️ YouTubeアプリでこの動画を開く</a>
+  </div>
+
+  <div class="card" id="sec-chart">
     <div class="card-title"><span>📈 体重推移グラフ</span></div>
     <div class="chart-container"><canvas id="weightChart"></canvas></div>
   </div>
 
-  <div class="card">
+  <div class="card" id="sec-calendar">
     <div class="card-title"><span>💮 スタンプカレンダー</span></div>
     <div class="month-selector">
       <button class="month-btn" onclick="changeMonth(-1)">◀ 前月</button>
@@ -510,8 +608,8 @@
       </div>
 
       <div class="help-section">
-        <h3>3. 旬の献立＆余り食材レシピ機能</h3>
-        ・カレンダーの季節に合わせて、その時期の旬の野菜・魚を自動で取り入れた1週間献立を表示します。<br>
+        <h3>3. 部位別・ボディメイク枠の使い方</h3>
+        ・朝夜のスタンプとは別に、<b>背中・肩／下半身・お尻／姿勢・巻き肩</b>の見た目を引き締める動画をいつでも再生できます。<br>
         ・<b>🍽️ 献立</b> ボタン内の「余った食材からレシピ提案」では、冷蔵庫にある食材を入れると指定人数分のレシピ・サラダ・汁物を自動組み立てします。
       </div>
 
@@ -602,6 +700,45 @@
 
   <script src="https://www.youtube.com/iframe_api"></script>
   <script>
+    function jumpToSection(targetId, btnEl) {
+      const el = document.getElementById(targetId);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      document.querySelectorAll('.shortcut-btn').forEach(b => b.classList.remove('active'));
+      if (btnEl) {
+        btnEl.classList.add('active');
+        btnEl.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      }
+    }
+
+    function syncActiveShortcutOnScroll() {
+      const sectionIds = [
+        'sec-progress',
+        'sec-challenge',
+        'sec-meal',
+        'sec-workout',
+        'sec-bodymake',
+        'sec-chart',
+        'sec-calendar'
+      ];
+      let currentId = sectionIds[0];
+      for (const id of sectionIds) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= 130) {
+          currentId = id;
+        }
+      }
+      document.querySelectorAll('.shortcut-btn').forEach(btn => {
+        const isMatch = btn.getAttribute('data-target') === currentId;
+        btn.classList.toggle('active', isMatch);
+      });
+    }
+
+    window.addEventListener('scroll', syncActiveShortcutOnScroll, { passive: true });
+
     const defaultCourseData = {
       morning: [
         { id: "m_A", name: "🌅 朝A：カズハ7分 腹筋＆ヒップ", videoId: "USJgKSLxDRc", type: "agi", targetMuscle: "お腹周り・腹直筋", comment: "✨ 姿勢改善と骨盤周りの代謝を引き上げる定番7分コース" },
@@ -618,6 +755,89 @@
         { id: "n_REST", name: "🌙 【夜の休息日】", videoId: "", type: "rest", targetMuscle: "疲労回復", comment: "🛀 リセット（湯船に浸かってしっかり疲労回復しましょう）" }
       ]
     };
+
+    const bodyMakeVideos = {
+      back: [
+        {
+          id: "bm_back_1",
+          name: "🦅 肩甲骨はがし＆背中・肩ライン（のがちゃんねる・6分）",
+          videoId: "WuMZ3Ejnv88",
+          target: "広背筋・肩甲骨周り・逆三角形シルエット",
+          comment: "背中の広がりと丸まった肩甲骨を動かし、上半身のシルエットをスッキリ見せる6分トレです。"
+        },
+        {
+          id: "bm_back_2",
+          name: "💺 座ったまま背中・肩・首エクササイズ（Yuuka Sagawa・6分）",
+          videoId: "SEzrLNj63UI",
+          target: "背中上部・肩の張り・首元スッキリ",
+          comment: "椅子に座ったままでも取り組める、肩幅・背中ラインを整えるエクササイズです。"
+        }
+      ],
+      lower: [
+        {
+          id: "bm_lower_1",
+          name: "🦵 正しいブルガリアンスクワット4つのポイント（今古賀翔・1分解説）",
+          videoId: "2JFyKWAjM6I",
+          target: "お尻（大殿筋）・太もも全体・代謝アップ",
+          comment: "片脚ずつ深く負荷をかけてお尻を引き上げ、全身の消費カロリーを底上げするフォーム解説です。"
+        },
+        {
+          id: "bm_lower_2",
+          name: "🔥 脂肪燃焼＆脚・お尻のライン作り比較（sexyfitness・10分）",
+          videoId: "yvwcK8BI25c",
+          target: "下半身全体・脂肪燃焼・ヒップアップ",
+          comment: "バックランジとブルガリアンスクワットの使い分けと、体脂肪を減らすポイントを解説しています。"
+        }
+      ],
+      posture: [
+        {
+          id: "bm_posture_1",
+          name: "🧍 巻き肩・猫背・ぽっこりお腹リセット（整体師藤田・15分）",
+          videoId: "2uESxfvEd3o",
+          target: "巻き肩・猫背・下腹の出っ張り改善",
+          comment: "体重が変わらなくても前傾姿勢や反り腰を直すだけで、下腹の出っ張りが引っ込み立ち姿が変わります。"
+        }
+      ]
+    };
+
+    let currentBodyTab = "back";
+
+    function switchBodyTab(tabKey) {
+      currentBodyTab = tabKey;
+      document.getElementById('bodyTabBack').classList.toggle('active', tabKey === 'back');
+      document.getElementById('bodyTabLower').classList.toggle('active', tabKey === 'lower');
+      document.getElementById('bodyTabPosture').classList.toggle('active', tabKey === 'posture');
+      populateBodyMakeSelect();
+    }
+
+    function populateBodyMakeSelect() {
+      const select = document.getElementById('bodyMakeSelect');
+      if (!select) return;
+      select.innerHTML = '';
+      const list = bodyMakeVideos[currentBodyTab] || [];
+      list.forEach(item => {
+        const opt = document.createElement('option');
+        opt.value = item.id;
+        opt.innerText = item.name;
+        select.appendChild(opt);
+      });
+      onBodyMakeChange();
+    }
+
+    function onBodyMakeChange() {
+      const select = document.getElementById('bodyMakeSelect');
+      const list = bodyMakeVideos[currentBodyTab] || [];
+      const selected = list.find(x => x.id === select.value) || list[0];
+      if (!selected) return;
+
+      document.getElementById('bodyMakeTitle').innerText = selected.name;
+      document.getElementById('bodyMakeTarget').innerText = `🎯 効く部位・効果: ${selected.target}`;
+      document.getElementById('bodyMakeDesc').innerText = selected.comment;
+      document.getElementById('bodyMakeExternalLink').href = `https://www.youtube.com/watch?v=${selected.videoId}`;
+
+      const wrapper = document.getElementById('bodyMakeVideoWrapper');
+      wrapper.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${selected.videoId}" title="${selected.name}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+    }
 
     let secretTapCount = 0;
     let secretTapTimer = null;
@@ -1961,6 +2181,7 @@
 
     generateDailyChallenge();
     populateCourseOptions();
+    populateBodyMakeSelect();
     renderMenuCalendar();
     renderSelectedMenu(selectedSatDayIdx);
     renderApp();
