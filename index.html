@@ -182,18 +182,17 @@
     .percent-val { font-size: 1.25rem; font-weight: 900; color: #00f0ff; text-shadow: 0 0 10px rgba(0,240,255,0.6); }
     .percent-sub { font-size: 0.62rem; color: #94a3b8; font-weight: bold; }
 
-    .weight-analogy-box {
-      background: rgba(15, 23, 42, 0.85); border: 1px dashed #3b82f6; border-radius: 12px; padding: 12px;
-      font-size: 0.83rem; color: #cbd5e1; text-align: left; line-height: 1.6;
+    .pace-guide-box {
+      background: rgba(15, 23, 42, 0.85); border: 1px solid #2563eb; border-radius: 12px; padding: 12px;
+      font-size: 0.82rem; color: #e2e8f0; text-align: left; line-height: 1.65;
     }
-    .analogy-header {
-      display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;
+    .pace-guide-header {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;
     }
-    .analogy-title { font-weight: bold; color: #00f0ff; }
-    .analogy-shuffle-btn {
-      background: #1e293b; border: 1px solid #334155; color: #93c5fd; font-size: 0.7rem;
-      padding: 2px 8px; border-radius: 6px; cursor: pointer; font-weight: bold;
-    }
+    .pace-guide-title { font-weight: bold; color: #38bdf8; }
+    .pace-line { margin-top: 3px; color: #cbd5e1; }
+    .pace-highlight { color: #fbbf24; font-weight: bold; }
+    .pace-good { color: #34d399; font-weight: bold; }
 
     .season-banner {
       background: rgba(16, 185, 129, 0.12);
@@ -403,7 +402,7 @@
     <button type="button" class="shortcut-btn active" data-target="sec-progress" onclick="jumpToSection('sec-progress', this)">🌐 状況</button>
     <button type="button" class="shortcut-btn" data-target="sec-challenge" onclick="jumpToSection('sec-challenge', this)">🎯 プチ課題</button>
     <button type="button" class="shortcut-btn" data-target="sec-workout" onclick="jumpToSection('sec-workout', this)">🌅 朝夜記録</button>
-    <button type="button" class="shortcut-btn" data-target="sec-bodymake" onclick="jumpToSection('sec-bodymake', this)">🔥 お腹・部位別</button>
+    <button type="button" class="shortcut-btn" data-target="sec-bodymake" onclick="jumpToSection('sec-bodymake', this)">📐 ライン調整</button>
     <button type="button" class="shortcut-btn" data-target="sec-chart" onclick="jumpToSection('sec-chart', this)">📈 グラフ</button>
     <button type="button" class="shortcut-btn" data-target="sec-calendar" onclick="jumpToSection('sec-calendar', this)">💮 カレンダー</button>
   </nav>
@@ -453,12 +452,12 @@
       </div>
     </div>
 
-    <div class="weight-analogy-box" id="weightAnalogyBox">
-      <div class="analogy-header">
-        <div class="analogy-title">💡 体重・軽さ換算</div>
-        <button class="analogy-shuffle-btn" onclick="shuffleAnalogy()">↻ 別の例え</button>
+    <div class="pace-guide-box" id="paceGuideBox">
+      <div class="pace-guide-header">
+        <div class="pace-guide-title">📊 進捗とペース目安</div>
+        <div style="font-size:0.72rem; color:#94a3b8;" id="baseWeightLabel">基準: --.- kg</div>
       </div>
-      <div id="analogyText">右上の「⚙️ 設定」から目標体重を登録し、下のフォームから体重を記録すると自動で計算されます。</div>
+      <div id="paceGuideText">右上の「⚙️ 設定」から目標体重を登録し、下のフォームから体重を記録すると目安が表示されます。</div>
     </div>
   </div>
 
@@ -542,11 +541,11 @@
     <button class="btn-submit" id="btnSubmit" onclick="saveLog()" disabled>🔒 動画完走でスタンプGET 💮</button>
   </div>
 
-  <!-- 🎯 部位別・見た目調整トレ（お腹痩せ重視・朝夜とは別枠） -->
+  <!-- 📐 お腹・ライン調整（朝夜とは別枠） -->
   <div class="card" id="sec-bodymake" style="border: 1px solid #0284c7;">
     <div class="card-title" style="color: #38bdf8;">
-      <span>🎯 部位別・見た目調整トレ</span>
-      <span style="font-size: 0.7rem; color: #94a3b8;">お腹痩せ強化</span>
+      <span>📐 お腹・ライン調整</span>
+      <span style="font-size: 0.7rem; color: #94a3b8;">お腹まわり中心</span>
     </div>
 
     <div class="body-tabs">
@@ -607,8 +606,8 @@
       </div>
 
       <div class="help-section">
-        <h3>3. 部位別・見た目調整トレの使い方</h3>
-        ・朝夜のスタンプとは別に、<b>下腹・ぽっこり／くびれ・横っ腹／腹筋・胸板／反り腰・背中</b>のお腹痩せ重視の動画をいつでも再生できます。<br>
+        <h3>3. お腹・ライン調整の使い方</h3>
+        ・朝夜のスタンプとは別に、<b>下腹・ぽっこり／くびれ・横っ腹／腹筋・胸板／反り腰・背中</b>のお腹まわり中心の動画をいつでも再生できます。<br>
         ・<b>🍽️ 献立</b> ボタン内の「余った食材からレシピ提案」では、冷蔵庫にある食材を入れると指定人数分のレシピ・サラダ・汁物を自動組み立てします。
       </div>
 
@@ -754,29 +753,28 @@
       ]
     };
 
-    // 🎯 部位別・見た目調整トレ（お腹痩せ重視の4タブ構成）
     const bodyMakeVideos = {
       lowerabs: [
         {
           id: "bm_lowerabs_1",
           name: "🔥 【1日5分だけ】自宅でできる簡単腹筋トレーニング（5分）",
           videoId: "HSQMVkcdAhQ",
-          target: "下腹（腹直筋下部）・ぽっこりお腹の引き締め",
+          target: "下腹（腹直筋下部）・ぽっこりお腹のライン調整",
           comment: "おへそを覗き込むように丸めて縮める動きで、下腹のぽっこりを集中的に引き締めます。"
         },
         {
           id: "bm_lowerabs_2",
-          name: "⚡ 【毎日3分】プランクサーキットで速攻お腹を引き締め！（Marina Takewaki・3分）",
+          name: "⚡ 【毎日3分】プランクサーキットでお腹を引き締め！（Marina Takewaki・3分）",
           videoId: "pBo_DjHqVws",
           target: "腹横筋（天然のコルセット）・下腹全体",
           comment: "お腹のインナーマッスルを3分間一気に刺激し、内側からウエストをへこませます。"
         },
         {
           id: "bm_lowerabs_3",
-          name: "⏱️ 【1分集中】お腹の脂肪・下腹引き締めエクササイズ（1分）",
+          name: "⏱️ 【1分集中】下腹・お腹まわりの引き締めエクササイズ（1分）",
           videoId: "5AMtBlNsVqs",
-          target: "下腹・お腹全体の脂肪燃焼スイッチ",
-          comment: "平日の忙しい夜でも1分だけサクッと追加できる、お腹集中メニューです。"
+          target: "下腹・お腹全体のライン調整",
+          comment: "平日の忙しい夜でも1分だけサクッと追加できる、お腹中心のメニューです。"
         }
       ],
       waist: [
@@ -789,10 +787,10 @@
         },
         {
           id: "bm_waist_2",
-          name: "🔥 【4分】お腹の脂肪をごっそり狙う集中腹筋（4分）",
+          name: "🔥 【4分】お腹まわりを集中引き締め腹筋（4分）",
           videoId: "KqNJNcvbVC8",
-          target: "脇腹・下腹・ウエスト全体の引き締め",
-          comment: "短時間でしっかり腹筋を追い込みたいとき用の4分集中メニューです。"
+          target: "脇腹・下腹・ウエスト全体のライン",
+          comment: "短時間でしっかり腹筋を動かしたいとき用の4分集中メニューです。"
         }
       ],
       abschest: [
@@ -824,7 +822,7 @@
           name: "🦅 肩甲骨はがし＆背中・肩ライン（のがちゃんねる・6分）",
           videoId: "WuMZ3Ejnv88",
           target: "広背筋・肩甲骨周り・逆三角形シルエット",
-          comment: "背中と肩甲骨を動かして代謝を上げ、後ろ姿とウエストの対比をキレイに見せます。"
+          comment: "背中と肩甲骨を動かして巡りを促し、後ろ姿とウエストの対比をキレイに見せます。"
         }
       ]
     };
@@ -872,7 +870,6 @@
     let secretTapCount = 0;
     let secretTapTimer = null;
     let debugWeekOffset = parseInt(localStorage.getItem('debug_week_offset_v4') || '0', 10);
-    let analogySeed = 0;
 
     function getServings() {
       const saved = parseInt(localStorage.getItem('menu_servings_count') || '2', 10);
@@ -1857,64 +1854,27 @@
       renderApp();
     }
 
-    function getWeightAnalogyLines(currentW, diff) {
-      const currentPool = [
-        `・現在の体重（${currentW.toFixed(1)}kg）は、<b>ボーリングの球（15ポンド）約 ${(currentW / 6.8).toFixed(1)} 個分 🎳</b> に相当！`,
-        `・現在の体重（${currentW.toFixed(1)}kg）は、<b>10kgのお米袋 約 ${(currentW / 10).toFixed(1)} 袋分 🌾</b> に相当！`,
-        `・現在の体重（${currentW.toFixed(1)}kg）は、<b>大型犬（ゴールデンレトリバー）約 ${(currentW / 32).toFixed(1)} 頭分 🐕</b> に相当！`,
-        `・現在の体重（${currentW.toFixed(1)}kg）は、<b>生後1歳頃のパンダの赤ちゃん 約 ${(currentW / 30).toFixed(1)} 頭分 🐼</b> に相当！`,
-        `・現在の体重（${currentW.toFixed(1)}kg）は、<b>スーパーの大玉スイカ 約 ${(currentW / 6).toFixed(1)} 玉分 🍉</b> に相当！`
-      ];
-
-      let diffPool = [];
-      if (diff <= 0) {
-        diffPool = [`・🎉 <b>目標体重クリアおめでとうございます！</b> 今のベストコンディションをキープしましょう✨`];
-      } else if (diff < 1.5) {
-        diffPool = [
-          `・目標まであと <b>スマホ（約200g）約 ${Math.round(diff * 1000 / 200)} 台分（${diff.toFixed(1)}kg）</b> です！ラストスパート📱`,
-          `・目標まであと <b>単行本（約300g）約 ${Math.round(diff * 1000 / 300)} 冊分（${diff.toFixed(1)}kg）</b> です！あと少し📚`,
-          `・目標まであと <b>500mlペットボトル 約 ${Math.round(diff * 1000 / 500)} 本分（${diff.toFixed(1)}kg）</b> です！🥤`
-        ];
-      } else if (diff < 4.0) {
-        diffPool = [
-          `・目標まであと <b>ノートPC（約1.5kg）約 ${(diff / 1.5).toFixed(1)} 台分（${diff.toFixed(1)}kg）</b> です！💻`,
-          `・目標まであと <b>食パン1斤（約350g）約 ${Math.round(diff * 1000 / 350)} 斤分（${diff.toFixed(1)}kg）</b> です！🍞`,
-          `・目標まであと <b>2Lペットボトル 約 ${(diff / 2).toFixed(1)} 本分（${diff.toFixed(1)}kg）</b> です！💧`
-        ];
-      } else if (diff < 8.0) {
-        diffPool = [
-          `・目標まであと <b>スーパーの大玉スイカ（約6kg）約 ${(diff / 6).toFixed(1)} 玉分（${diff.toFixed(1)}kg）</b> です！🍉`,
-          `・目標まであと <b>ボウリングの球（12ポンド＝約5.4kg）約 ${(diff / 5.4).toFixed(1)} 個分（${diff.toFixed(1)}kg）</b> です！🎳`,
-          `・目標まであと <b>5kgのお米袋 約 ${(diff / 5).toFixed(1)} 袋分（${diff.toFixed(1)}kg）</b> です！🌾`,
-          `・目標まであと <b>500mlペットボトル 約 ${Math.round(diff * 1000 / 500)} 本分（${diff.toFixed(1)}kg）</b> です！🥤`
-        ];
+    function getVisualChangeNote(lostKg) {
+      if (lostKg >= 5.0) {
+        return "ベルト穴やウエストの余裕など、見た目・服のサイズ感に変化が出やすいラインです。";
+      } else if (lostKg >= 2.0) {
+        return "むくみやフェイスライン・お腹周りの張りが落ち着きやすい段階です。";
+      } else if (lostKg > 0) {
+        return "まずは1〜2kgの土台作り段階。体重のブレに一喜一憂せず淡々と積み上げましょう。";
       } else {
-        diffPool = [
-          `・目標まであと <b>10kgのお米袋 約 ${(diff / 10).toFixed(1)} 袋分（${diff.toFixed(1)}kg）</b> です！コツコツ減らそう🌾`,
-          `・目標まであと <b>小型犬（柴犬約10kg）約 ${(diff / 10).toFixed(1)} 匹分（${diff.toFixed(1)}kg）</b> です！🐕`,
-          `・目標まであと <b>スーパーの大玉スイカ（約6kg）約 ${(diff / 6).toFixed(1)} 玉分（${diff.toFixed(1)}kg）</b> です！🍉`,
-          `・目標まであと <b>機内持ち込みスーツケース（約10kg）約 ${(diff / 10).toFixed(1)} 個分（${diff.toFixed(1)}kg）</b> です！🧳`
-        ];
+        return "記録を続けながら、まずは最初の-1.0kgを目標にリズムを作りましょう。";
       }
-
-      const cLine = currentPool[analogySeed % currentPool.length];
-      const dLine = diffPool[analogySeed % diffPool.length];
-      return `${cLine}<br>${dLine}`;
-    }
-
-    function shuffleAnalogy() {
-      analogySeed++;
-      updateAvatarDisplay();
     }
 
     function updateAvatarDisplay() {
       const logData = getStoredLogs();
       let latestW = null;
-      let startW = null;
+      let peakW = null;
+
       Object.keys(logData).sort().forEach(d => {
         const w = logData[d].nightWeight || logData[d].morningWeight || logData[d].weight;
-        if(w) {
-          if(startW === null) startW = w;
+        if (w) {
+          if (peakW === null || w > peakW) peakW = w;
           latestW = w;
         }
       });
@@ -1925,26 +1885,47 @@
       document.getElementById('topTargetWeightVal').innerText = targetW ? `${targetW.toFixed(1)} kg` : `--.- kg`;
       document.getElementById('topTargetPeriodVal').innerText = targetP ? `${targetP} か月` : `- か月`;
       document.getElementById('currentWeightVal').innerText = latestW ? `${latestW.toFixed(1)} kg` : `--.- kg`;
+      document.getElementById('baseWeightLabel').innerText = peakW ? `基準: ${peakW.toFixed(1)} kg` : `基準: --.- kg`;
 
       const diffEl = document.getElementById('diffWeightText');
       if (latestW && targetW) {
         const diff = latestW - targetW;
-        if(diff > 0) {
+        const baseStart = Math.max(peakW || latestW, targetW + 0.1);
+        const totalToLose = Math.max(0.1, baseStart - targetW);
+        const lostFromBase = Math.max(0, baseStart - latestW);
+
+        if (diff > 0) {
           diffEl.innerText = `-${diff.toFixed(1)} kg`;
           diffEl.style.color = "#34d399";
         } else {
           diffEl.innerText = `🎉 達成！`;
           diffEl.style.color = "#fbbf24";
         }
-        const totalDiff = Math.max(1, (startW || latestW) - targetW);
-        const progressPercent = diff <= 0 ? 100 : Math.min(100, Math.max(0, Math.round((1 - (diff / totalDiff)) * 100)));
+
+        const progressPercent = diff <= 0
+          ? 100
+          : Math.min(100, Math.max(0, Math.round((lostFromBase / totalToLose) * 100)));
+
         document.getElementById('percentVal').innerText = `${progressPercent}%`;
         document.getElementById('ringProgressFill').style.strokeDashoffset = 283 - (283 * progressPercent / 100);
         document.getElementById('bmiStatusBadge').innerText = "ACTIVE";
 
-        document.getElementById('analogyText').innerHTML = getWeightAnalogyLines(latestW, diff);
+        const remainKg = Math.max(0, diff);
+        let paceLine = "";
+        if (remainKg <= 0) {
+          paceLine = `<div class="pace-line">・ペース目安：<span class="pace-good">目標体重に到達しています！</span></div>`;
+        } else {
+          const minMonths = Math.max(1, Math.ceil(remainKg / 1.5));
+          const maxMonths = Math.max(minMonths, Math.ceil(remainKg / 1.0));
+          paceLine = `<div class="pace-line">・ペース目安：月1.0〜1.5kgペースなら <span class="pace-highlight">あと約${minMonths}〜${maxMonths}か月</span></div>`;
+        }
+
+        const lostLine = `<div class="pace-line">・基準（${baseStart.toFixed(1)}kg）からの変化：<span class="pace-good">-${lostFromBase.toFixed(1)}kg</span></div>`;
+        const visualLine = `<div class="pace-line">・変化の目安：${getVisualChangeNote(lostFromBase)}</div>`;
+
+        document.getElementById('paceGuideText').innerHTML = `${lostLine}${paceLine}${visualLine}`;
         document.getElementById('coachSpeechBubble').innerHTML = `
-          💬「現在の体重は <b>${latestW.toFixed(1)}kg</b> です！目標の${targetW.toFixed(1)}kgまであと <b>-${Math.max(0, diff).toFixed(1)}kg</b>。マイペースに進めていきましょう🔥」
+          💬「現在 <b>${latestW.toFixed(1)}kg</b>、目標まであと <b>-${remainKg.toFixed(1)}kg</b>。日々の増減は水分や食事でも動くので、流れで見ていきましょう」
         `;
       } else {
         diffEl.innerText = `--.- kg`;
