@@ -403,7 +403,7 @@
     <button type="button" class="shortcut-btn active" data-target="sec-progress" onclick="jumpToSection('sec-progress', this)">🌐 状況</button>
     <button type="button" class="shortcut-btn" data-target="sec-challenge" onclick="jumpToSection('sec-challenge', this)">🎯 プチ課題</button>
     <button type="button" class="shortcut-btn" data-target="sec-workout" onclick="jumpToSection('sec-workout', this)">🌅 朝夜記録</button>
-    <button type="button" class="shortcut-btn" data-target="sec-bodymake" onclick="jumpToSection('sec-bodymake', this)">💪 部位別調整</button>
+    <button type="button" class="shortcut-btn" data-target="sec-bodymake" onclick="jumpToSection('sec-bodymake', this)">🔥 お腹・部位別</button>
     <button type="button" class="shortcut-btn" data-target="sec-chart" onclick="jumpToSection('sec-chart', this)">📈 グラフ</button>
     <button type="button" class="shortcut-btn" data-target="sec-calendar" onclick="jumpToSection('sec-calendar', this)">💮 カレンダー</button>
   </nav>
@@ -542,18 +542,18 @@
     <button class="btn-submit" id="btnSubmit" onclick="saveLog()" disabled>🔒 動画完走でスタンプGET 💮</button>
   </div>
 
-  <!-- 🎯 部位別・見た目調整トレ（朝夜とは別枠） -->
+  <!-- 🎯 部位別・見た目調整トレ（お腹痩せ重視・朝夜とは別枠） -->
   <div class="card" id="sec-bodymake" style="border: 1px solid #0284c7;">
     <div class="card-title" style="color: #38bdf8;">
       <span>🎯 部位別・見た目調整トレ</span>
-      <span style="font-size: 0.7rem; color: #94a3b8;">追加トレ用</span>
+      <span style="font-size: 0.7rem; color: #94a3b8;">お腹痩せ強化</span>
     </div>
 
     <div class="body-tabs">
-      <div class="body-tab active" id="bodyTabBack" onclick="switchBodyTab('back')">🦅 背中・肩</div>
-      <div class="body-tab" id="bodyTabLower" onclick="switchBodyTab('lower')">🦵 下半身・お尻</div>
-      <div class="body-tab" id="bodyTabPosture" onclick="switchBodyTab('posture')">🧍 姿勢・巻き肩</div>
-      <div class="body-tab" id="bodyTabAbsPush" onclick="switchBodyTab('abspush')">🔥 腕立て・腹筋</div>
+      <div class="body-tab active" id="bodyTabLowerAbs" onclick="switchBodyTab('lowerabs')">🔥 下腹・ぽっこり</div>
+      <div class="body-tab" id="bodyTabWaist" onclick="switchBodyTab('waist')">⚡ くびれ・横っ腹</div>
+      <div class="body-tab" id="bodyTabAbsChest" onclick="switchBodyTab('abschest')">💪 腹筋・胸板</div>
+      <div class="body-tab" id="bodyTabPosture" onclick="switchBodyTab('posture')">🧍 反り腰・背中</div>
     </div>
 
     <select id="bodyMakeSelect" onchange="onBodyMakeChange()"></select>
@@ -608,7 +608,7 @@
 
       <div class="help-section">
         <h3>3. 部位別・見た目調整トレの使い方</h3>
-        ・朝夜のスタンプとは別に、<b>背中・肩／下半身・お尻／姿勢・巻き肩／腕立て・腹筋</b>の動画をいつでも再生できます。<br>
+        ・朝夜のスタンプとは別に、<b>下腹・ぽっこり／くびれ・横っ腹／腹筋・胸板／反り腰・背中</b>のお腹痩せ重視の動画をいつでも再生できます。<br>
         ・<b>🍽️ 献立</b> ボタン内の「余った食材からレシピ提案」では、冷蔵庫にある食材を入れると指定人数分のレシピ・サラダ・汁物を自動組み立てします。
       </div>
 
@@ -754,37 +754,61 @@
       ]
     };
 
+    // 🎯 部位別・見た目調整トレ（お腹痩せ重視の4タブ構成）
     const bodyMakeVideos = {
-      back: [
+      lowerabs: [
         {
-          id: "bm_back_1",
-          name: "🦅 肩甲骨はがし＆背中・肩ライン（のがちゃんねる・6分）",
-          videoId: "WuMZ3Ejnv88",
-          target: "広背筋・肩甲骨周り・逆三角形シルエット",
-          comment: "背中の広がりと丸まった肩甲骨を動かし、上半身のシルエットをスッキリ見せる6分トレです。"
+          id: "bm_lowerabs_1",
+          name: "🔥 【1日5分だけ】自宅でできる簡単腹筋トレーニング（5分）",
+          videoId: "HSQMVkcdAhQ",
+          target: "下腹（腹直筋下部）・ぽっこりお腹の引き締め",
+          comment: "おへそを覗き込むように丸めて縮める動きで、下腹のぽっこりを集中的に引き締めます。"
         },
         {
-          id: "bm_back_2",
-          name: "💺 座ったまま背中・肩・首エクササイズ（Yuuka Sagawa・6分）",
-          videoId: "SEzrLNj63UI",
-          target: "背中上部・肩の張り・首元スッキリ",
-          comment: "椅子に座ったままでも取り組める、肩幅・背中ラインを整えるエクササイズです。"
+          id: "bm_lowerabs_2",
+          name: "⚡ 【毎日3分】プランクサーキットで速攻お腹を引き締め！（Marina Takewaki・3分）",
+          videoId: "pBo_DjHqVws",
+          target: "腹横筋（天然のコルセット）・下腹全体",
+          comment: "お腹のインナーマッスルを3分間一気に刺激し、内側からウエストをへこませます。"
+        },
+        {
+          id: "bm_lowerabs_3",
+          name: "⏱️ 【1分集中】お腹の脂肪・下腹引き締めエクササイズ（1分）",
+          videoId: "5AMtBlNsVqs",
+          target: "下腹・お腹全体の脂肪燃焼スイッチ",
+          comment: "平日の忙しい夜でも1分だけサクッと追加できる、お腹集中メニューです。"
         }
       ],
-      lower: [
+      waist: [
         {
-          id: "bm_lower_1",
-          name: "🦵 正しいブルガリアンスクワット4つのポイント（今古賀翔・1分解説）",
-          videoId: "2JFyKWAjM6I",
-          target: "お尻（大殿筋）・太もも全体・代謝アップ",
-          comment: "片脚ずつ深く負荷をかけてお尻を引き上げ、全身の消費カロリーを底上げするフォーム解説です。"
+          id: "bm_waist_1",
+          name: "⚡ 【5分】11字腹筋とくびれを作るカズハ腹筋トレ（なるねぇ・5分）",
+          videoId: "UJgT78z1TIc",
+          target: "腹斜筋（脇腹）・お腹の縦線・くびれライン",
+          comment: "正面の縦線と横っ腹の引き締めを同時に狙う、見た目変化の出やすい5分トレです。"
         },
         {
-          id: "bm_lower_2",
-          name: "🔥 脂肪燃焼＆脚・お尻のライン作り比較（sexyfitness・10分）",
-          videoId: "yvwcK8BI25c",
-          target: "下半身全体・脂肪燃焼・ヒップアップ",
-          comment: "バックランジとブルガリアンスクワットの使い分けと、体脂肪を減らすポイントを解説しています。"
+          id: "bm_waist_2",
+          name: "🔥 【4分】お腹の脂肪をごっそり狙う集中腹筋（4分）",
+          videoId: "KqNJNcvbVC8",
+          target: "脇腹・下腹・ウエスト全体の引き締め",
+          comment: "短時間でしっかり腹筋を追い込みたいとき用の4分集中メニューです。"
+        }
+      ],
+      abschest: [
+        {
+          id: "bm_abschest_1",
+          name: "💪 【5分で完結】腹筋＋大胸筋を鍛えて上半身を整える（uFit・5分）",
+          videoId: "j441QZc8wsI",
+          target: "腹筋全体・大胸筋（胸板）・上半身メリハリ",
+          comment: "お腹を凹ませつつ胸板に厚みを持たせることで、相対的にお腹がスッキリ見えます。"
+        },
+        {
+          id: "bm_abschest_2",
+          name: "🔥 初心者向け腕立て伏せ・大胸筋の効かせ方（uFit・3分）",
+          videoId: "Fq9BDy_NHEk",
+          target: "胸板（大胸筋）・二の腕",
+          comment: "下ろすときに3秒かけると胸にしっかり効きます。10〜15回×3セットの目安と合わせてどうぞ。"
         }
       ],
       posture: [
@@ -792,43 +816,27 @@
           id: "bm_posture_1",
           name: "🧍 巻き肩・猫背・ぽっこりお腹リセット（整体師藤田・15分）",
           videoId: "2uESxfvEd3o",
-          target: "巻き肩・猫背・下腹の出っ張り改善",
-          comment: "体重が変わらなくても前傾姿勢や反り腰を直すだけで、下腹の出っ張りが引っ込み立ち姿が変わります。"
-        }
-      ],
-      abspush: [
-        {
-          id: "bm_push_1",
-          name: "🔥 初心者向け腕立て伏せ・大胸筋の効かせ方（uFit・3分）",
-          videoId: "Fq9BDy_NHEk",
-          target: "胸板（大胸筋）・二の腕・上半身の厚み",
-          comment: "腕だけでなく胸にしっかり効かせるためのフォーム確認用動画です。10〜15回×3セットの目安と合わせてどうぞ。"
+          target: "反り腰・巻き肩・下腹の出っ張り改善",
+          comment: "反り腰や猫背を直すと骨盤が立ち、体重が変わらなくても下腹の出っ張りがその場で引っ込みます。"
         },
         {
-          id: "bm_abs_1",
-          name: "⚡ 自宅でできる簡単腹筋トレーニング（5分）",
-          videoId: "HSQMVkcdAhQ",
-          target: "腹直筋・お腹周りの引き締め",
-          comment: "丸めて縮める腹筋の動きを確認したいときの5分動画です。"
-        },
-        {
-          id: "bm_abspush_1",
-          name: "💪 腹筋＋大胸筋を鍛えて上半身を整える（uFit・5分）",
-          videoId: "j441QZc8wsI",
-          target: "腹筋・大胸筋・上半身シルエット",
-          comment: "胸と腹筋をまとめて刺激して、上半身のメリハリをつける5分メニューです。"
+          id: "bm_posture_2",
+          name: "🦅 肩甲骨はがし＆背中・肩ライン（のがちゃんねる・6分）",
+          videoId: "WuMZ3Ejnv88",
+          target: "広背筋・肩甲骨周り・逆三角形シルエット",
+          comment: "背中と肩甲骨を動かして代謝を上げ、後ろ姿とウエストの対比をキレイに見せます。"
         }
       ]
     };
 
-    let currentBodyTab = "back";
+    let currentBodyTab = "lowerabs";
 
     function switchBodyTab(tabKey) {
       currentBodyTab = tabKey;
-      document.getElementById('bodyTabBack').classList.toggle('active', tabKey === 'back');
-      document.getElementById('bodyTabLower').classList.toggle('active', tabKey === 'lower');
+      document.getElementById('bodyTabLowerAbs').classList.toggle('active', tabKey === 'lowerabs');
+      document.getElementById('bodyTabWaist').classList.toggle('active', tabKey === 'waist');
+      document.getElementById('bodyTabAbsChest').classList.toggle('active', tabKey === 'abschest');
       document.getElementById('bodyTabPosture').classList.toggle('active', tabKey === 'posture');
-      document.getElementById('bodyTabAbsPush').classList.toggle('active', tabKey === 'abspush');
       populateBodyMakeSelect();
     }
 
